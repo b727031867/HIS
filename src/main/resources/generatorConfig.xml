@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--defaultModelType="flat" 大数据字段，不分表 -->
+    <context id="DB1" targetRuntime="MyBatis3Simple">
+        <!-- 自动识别数据库关键字，默认false，如果设置为true，根据SqlReservedWords中定义的关键字列表；
+        一般保留默认值，遇到数据库关键字（Java关键字），使用columnOverride覆盖 -->
+        <property name="autoDelimitKeywords" value="true"/>
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="utf-8"/>
+        <!--去掉注释-->
+        <!-- beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!-- 格式化java代码 -->
+        <property name="javaFormatter"
+                  value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+        <!-- 格式化XML代码 -->
+        <property name="xmlFormatter"
+                  value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!--不生成注释-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--需要配置数据库连接-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3307/his?useSSL=false&amp;&amp;serverTimezone=GMT%2B8&amp;characterEncoding=utf-8"
+                        userId="root"
+                        password="123GONG123">
+            <!--解决MySQL8.0会生成系统表的映射的问题-->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--指定entity生成的位置-->
+        <javaModelGenerator targetPackage="com.gxf.his.po"
+                            targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--sql映射文件生成的位置 mapper.xml-->
+        <sqlMapGenerator targetPackage="com.gxf.his.enmu"
+                         targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--指定DaoMapper生成的位置 mapper.java ANNOTATEDMAPPER表示使用注解，不产生xml-->
+        <javaClientGenerator type="ANNOTATEDMAPPER"
+                             targetPackage="com.gxf.his.mapper"
+                             targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--table是指定每个表的生成策略，%表示全部生成,flat表示不单独为主键生成类-->
+        <table tableName="entity_%" modelType="flat">
+            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
+        </table>
+        <!--<table tableName="entity_department"-->
+        <!--domainObjectName="Department" modelType="flat"/>-->
+        <!--<table tableName="entity_doctor" domainObjectName="Doctor"-->
+        <!--modelType="flat"/>-->
+        <!--<table tableName="entity_drug_store" domainObjectName="DrugStore"-->
+        <!--modelType="flat"/>-->
+        <!--<table tableName="entity_patient" domainObjectName="Patient"-->
+        <!--modelType="flat"/>-->
+        <!--<table tableName="entity_permission" domainObjectName="Permission"-->
+        <!--modelType="flat"/>-->
+        <!--<table tableName="entity_role" domainObjectName="Role"-->
+        <!--modelType="flat"/>-->
+        <!--<table tableName="entity_scheduling" domainObjectName="Scheduling"-->
+        <!--modelType="flat"/>-->
+        <!--<table tableName="entity_ticket" domainObjectName="Ticket"-->
+        <!--modelType="flat"/>-->
+        <!--<table tableName="entity_user" domainObjectName="User"-->
+        <!--modelType="flat"/>-->
+    </context>
+</generatorConfiguration>
