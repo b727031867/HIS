@@ -2,14 +2,14 @@ package com.gxf.his.mapper;
 
 import com.gxf.his.po.Permission;
 import java.util.List;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.type.JdbcType;
 
+import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.type.JdbcType;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
+@Mapper
 public interface PermissionMapper {
     @Delete({
         "delete from entity_permission",
@@ -37,6 +37,10 @@ public interface PermissionMapper {
         @Result(column="permission", property="permission", jdbcType=JdbcType.VARCHAR)
     })
     Permission selectByPrimaryKey(Integer permissionId);
+
+    @Select("SELECT * FROM entity_permission ep INNER JOIN ref_role_permission rrp WHERE rrp.role_id IN #{ids} " +
+            "AND ep.permission_id  = rrp.permission_id")
+    List<Permission> selectPermissionsByRoleIds(@Param("ids") List<Integer> ids);
 
     @Select({
         "select",

@@ -7,5 +7,10 @@ import java.util.List;
  * @date 2019-10-13
  */
 public interface PermissionService {
-    List<String> findByRoleId(List<Integer> roleIds);
+    /**
+     * 获取一组角色的权限字符串
+     * @param roleIds
+     * @return 权限字符串，用，分隔
+     */
+    List<String> findPermissionsByRoleId(List<Integer> roleIds);
 }

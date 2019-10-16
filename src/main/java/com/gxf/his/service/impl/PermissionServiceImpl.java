@@ -1,6 +1,8 @@
 package com.gxf.his.service.impl;
 
+import com.gxf.his.mapper.PermissionMapper;
 import com.gxf.his.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +13,14 @@ import java.util.List;
  */
 @Service
 public class PermissionServiceImpl implements PermissionService {
+
+    @Autowired
+    PermissionMapper permissionMapper;
+
+
     @Override
-    public List<String> findByRoleId(List<Integer> roleIds) {
+    public List<String> findPermissionsByRoleId(List<Integer> roleIds) {
+
         return null;
     }
 }
