@@ -21,7 +21,8 @@ public enum ServerResponseEnum {
     ACCOUNT_IS_DISABLED(13, "账号被禁用"),
     INCORRECT_CREDENTIALS(14, "账号或密码错误"),
     NOT_LOGIN_IN(15, "账号未登录"),
-    UNAUTHORIZED(16, "没有权限");
+    UNAUTHORIZED(16, "没有权限"),
+    REGISTERED_FAIL(17, "注册失败");
     Integer code;
     String message;
 }

@@ -19,7 +19,7 @@ public class Const {
    public final static int ENCRYPTION_NUM = 3;
 
    /**
-    * 是否生成16进制 ： true or false
+    * 盐和密文的编码方式 ： true【Hex编码】 or false【Base64编码】
     */
    public final static boolean DECIMAL = true;
 

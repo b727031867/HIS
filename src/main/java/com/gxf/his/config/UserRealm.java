@@ -6,14 +6,12 @@ import com.gxf.his.service.PermissionService;
 import com.gxf.his.service.RoleService;
 import com.gxf.his.service.UserService;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,15 +34,6 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     private PermissionService permissionService;
 
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        // 使用md5 算法进行加密
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");
-        // 设置散列次数： 意为加密几次
-        hashedCredentialsMatcher.setHashIterations(2);
-        return hashedCredentialsMatcher;
-    }
 
     /**
      * Authorization 授权

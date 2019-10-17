@@ -1,7 +1,9 @@
 package com.gxf.his.service.impl;
 
+import com.gxf.his.mapper.RoleMapper;
 import com.gxf.his.po.Role;
 import com.gxf.his.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +14,10 @@ import java.util.List;
  */
 @Service
 public class RoleServiceImpl implements RoleService {
+    @Autowired
+    private RoleMapper roleMapper;
     @Override
     public List<Role> findRolesByUserId(int userId) {
-        return null;
+        return roleMapper.selectRolesByUserId(userId);
     }
 }
