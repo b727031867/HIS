@@ -1,4 +1,4 @@
-## \u65E5\u5FD7\u914D\u7F6E - start
+## 日志配置 - start
 logging:
   file: HisLogs/myLog.log
   level:
@@ -10,7 +10,7 @@ logging:
           autoconfigure: DEBUG
   pattern:
     console: '%d{MM-dd HH:mm:ss}[%thread] %-5level %logger{50} - %msg%n'
-## \u65E5\u5FD7\u914D\u7F6E - end
+## 日志配置 - end
 
 
 ## mybatis配置 - start

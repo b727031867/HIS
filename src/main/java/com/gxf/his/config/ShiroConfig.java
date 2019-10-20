@@ -41,7 +41,7 @@ public class ShiroConfig {
         return userRealm;
     }
 
-    @Bean
+    @Bean("defaultSecurityManager")
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(userRealm());
@@ -58,14 +58,19 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        shiroFilterFactoryBean.setSuccessUrl("/");
+        shiroFilterFactoryBean.setLoginUrl("/user/login");
+        shiroFilterFactoryBean.setSuccessUrl("");
         // 有先后顺序
         Map<String, String> map = new LinkedHashMap<>();
         // 允许匿名访问
         map.put("/user/login", "anon");
-        // 允许匿名访问
+        // 允许通过的测试接口
         map.put("/user/save", "anon");
+        map.put("/user/savePatient", "anon");
+        map.put("/user/saveDoctor", "anon");
+
+        // 允许访问Druid的后台管理系统
+        map.put("/druid/**", "anon");
         // 进行身份认证后才能访问
         map.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
@@ -78,7 +83,7 @@ public class ShiroConfig {
      * @return 注解属性处理器
      */
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") DefaultSecurityManager securityManager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("defaultSecurityManager") DefaultSecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;

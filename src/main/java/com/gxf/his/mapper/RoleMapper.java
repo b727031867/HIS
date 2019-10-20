@@ -8,6 +8,7 @@ import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Mapper
 public interface RoleMapper {
     @Delete({
         "delete from entity_role",

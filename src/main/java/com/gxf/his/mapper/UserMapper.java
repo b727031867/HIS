@@ -77,8 +77,9 @@ public interface UserMapper {
             "user_status, user_create_date)",
             "values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, ",
             "#{userSalt,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, ",
-            "#{userStatus,jdbcType=TINYINT},#{user_create_date,jdbcType=TIMESTAMP})"
+            "#{userStatus,jdbcType=TINYINT},#{userCreateDate,jdbcType=TIMESTAMP})"
     })
+    @Options(useGeneratedKeys = true, keyProperty = "userId", keyColumn = "user_id")
     int insert(User record);
     //  ********************************删除方法********************************
     @Delete({
