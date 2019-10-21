@@ -1,6 +1,7 @@
 package com.gxf.his.controller;
 
 import com.gxf.his.Const;
+import com.gxf.his.config.RedisClient;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.Doctor;
 import com.gxf.his.po.Patient;
@@ -8,25 +9,25 @@ import com.gxf.his.po.User;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
+import com.gxf.his.uitls.JwtUtil;
 import com.gxf.his.vo.DoctorUserVo;
 import com.gxf.his.vo.PatientUserVo;
 import com.gxf.his.vo.ServerResponseVO;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 
 /**
  * @author 龚秀峰
@@ -35,15 +36,30 @@ import java.util.Date;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
+    public UserController(UserService service,
+                          RedisClient redis) {
+        this.redis = redis;
+        userService = service;
+    }
+
+    private RedisClient redis;
+
     private UserService userService;
+
+    /**
+     * 用户每隔多少时间需要重新登陆一次，单位：秒
+     **/
+    @Value("${config.refreshToken-expireTime}")
+    private String refreshTokenExpireTime;
+
     @Autowired
     private PatientService patientService;
     @Autowired
     private DoctorService doctorService;
-
 
 
     @PostMapping("/savePatient")
@@ -107,11 +123,48 @@ public class UserController {
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        Subject userSubject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
+        ServerResponseVO msg = new ServerResponseVO();
         try {
-            // 登录验证
-            userSubject.login(token);
+            // 清除可能存在的shiro权限信息缓存
+            if (redis.hasKey(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName)) {
+                redis.del(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName);
+            }
+            //根据用户名查询用户
+            User user =
+                    userService.findByUserName(userName);
+            if (user == null) {
+                logger.info("用户名不存在：" + userName);
+                throw new UnknownAccountException("用户名或密码错误！");
+            }
+            //账户是否有效,1有效，0无效
+            if (user.getUserStatus() == 0) {
+                logger.info("账户被锁定，账户的状态为：" + user.getUserStatus());
+                throw new LockedAccountException("账号已被锁定,请联系管理员！");
+            }
+            //当前账户的盐
+            logger.debug("查询到的用户的盐为：" + user.getUserSalt());
+            //加密次数
+            int hashIterations = 3;
+            //使用盐加密登陆密码
+            SimpleHash sh = new SimpleHash("md5", password,
+                    user.getUserSalt(), hashIterations);
+            //如果加密后和数据库中的密码一致，说明密码正确，签发token
+            if (sh.toHex().equals(user.getUserPassword())) {
+                HashMap<String, String> hashMap =
+                        new HashMap<>(16);
+                //设置RefreshToken，时间戳为当前时间戳，保存在Redis中
+                String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+                redis.set(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + userName,
+                        currentTimeMillis,
+                        Integer.parseInt(refreshTokenExpireTime));
+                //签发accessToken，时间戳为当前时间戳
+                String token = JwtUtil.sign(userName, currentTimeMillis);
+                hashMap.put("token", token);
+                msg.setData(hashMap);
+            } else {
+                logger.info("密码错误，登陆输入的密码加密后为：" + sh.toHex() + "   数据库中的密码:" + user.getUserPassword());
+                throw new UnknownAccountException();
+            }
             return ServerResponseVO.success();
         } catch (UnknownAccountException e) {
             return ServerResponseVO.error(ServerResponseEnum.ACCOUNT_NOT_EXIST);
@@ -119,10 +172,58 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.ACCOUNT_IS_DISABLED);
         } catch (IncorrectCredentialsException e) {
             return ServerResponseVO.error(ServerResponseEnum.INCORRECT_CREDENTIALS);
+        } catch (AuthenticationException e) {
+            logger.error("认证异常！异常信息为：" + e.getMessage());
+            msg.setMessage("用户名或密码错误");
+
         } catch (Throwable e) {
             e.printStackTrace();
             return ServerResponseVO.error(ServerResponseEnum.ERROR);
         }
+        return msg;
+    }
+
+
+    @GetMapping("/logout")
+    public ServerResponseVO logout(HttpServletRequest request) {
+        ServerResponseVO msg = new ServerResponseVO();
+        try {
+            String token = "";
+            // 获取头部信息
+            Enumeration<String> headerNames = request.getHeaderNames();
+            while (headerNames.hasMoreElements()) {
+                String key = headerNames.nextElement();
+                String value = request.getHeader(key);
+                if ("Authorization".equalsIgnoreCase(key)) {
+                    token = value;
+                }
+            }
+            logger.debug("调用注销接口，进行注销的token是：" + token);
+            // 校验token是否为空
+            if (StringUtils.isBlank(token)) {
+                logger.info("注销时，token为空");
+                msg.setData("注销：Token为空");
+            } else {
+                String userName = JwtUtil.getUsername(token);
+                logger.debug("注销时，token中获取的用户名为：" + userName);
+                if (StringUtils.isBlank(userName)) {
+                    msg.setData("token失效或不正确.");
+                } else {
+                    // 清除shiro权限信息缓存
+                    if (redis.hasKey(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName)) {
+                        redis.del(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName);
+                    }
+                    // 清除RefreshToken
+                    redis.del(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + userName);
+                }
+            }
+            msg.setCode(200);
+        } catch (Exception e) {
+            msg.setCode(500);
+            e.printStackTrace();
+            logger.error("注销异常： 原因为：" + e.getCause() + "信息为：" + e.getMessage());
+        }
+        return msg;
     }
 
 

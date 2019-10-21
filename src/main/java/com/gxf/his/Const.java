@@ -24,4 +24,19 @@ public class Const {
    public final static boolean DECIMAL = true;
 
    // ****************登录加密相关参数的结束****************
+
+   /**
+    * description: Shiro缓存前缀
+    */
+   public static final String REDIS_CONSTANT_SHIRO_CACHE_PREFIX = "shiro:cache:";
+
+   /**
+    * description: 用于认证的Token的前缀
+    */
+   public static final String REDIS_CONSTANT_ACCESS_TOKEN_PREFIX = "shiro:access_token:";
+
+   /**
+    * description: 用于刷新的Token的前缀
+    */
+   public static final String REDIS_CONSTANT_REFRESH_TOKEN_PREFIX = "shiro:refresh_token:";
 }
