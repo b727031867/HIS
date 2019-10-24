@@ -59,6 +59,20 @@ public interface DepartmentMapper {
     })
     List<Department> selectAll();
 
+    @Select({
+            "select",
+            "department_id, department_code, department_name, department_introduction, department_parent_id",
+            "from entity_department where department_parent_id = -1"
+    })
+    @Results({
+            @Result(column="department_id", property="departmentId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.INTEGER),
+            @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.INTEGER)
+    })
+    List<Department> selectAllFatherDepartment();
+
     @Update({
         "update entity_department",
         "set department_code = #{departmentCode,jdbcType=INTEGER},",

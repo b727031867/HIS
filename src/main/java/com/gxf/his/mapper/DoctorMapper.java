@@ -69,6 +69,8 @@ public interface DoctorMapper {
     })
     List<Doctor> selectAll();
 
+
+
     @Update({
         "update entity_doctor",
         "set employee_id = #{employeeId,jdbcType=VARCHAR},",

@@ -114,12 +114,13 @@ public class UserController {
                 return ServerResponseVO.error(ServerResponseEnum.REGISTERED_FAIL);
             }
         }
+
         return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
     }
 
     @PostMapping("/login")
-    public ServerResponseVO login(@RequestParam(value = "username") String userName,
-                                  @RequestParam(value = "password") String password) {
+    public ServerResponseVO login(@RequestParam(value = "userName") String userName,
+                                  @RequestParam(value = "userPassword") String password) {
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
@@ -144,9 +145,9 @@ public class UserController {
             //当前账户的盐
             logger.debug("查询到的用户的盐为：" + user.getUserSalt());
             //加密次数
-            int hashIterations = 3;
+            int hashIterations = Const.ENCRYPTION_NUM;
             //使用盐加密登陆密码
-            SimpleHash sh = new SimpleHash("md5", password,
+            SimpleHash sh = new SimpleHash(Const.ENCRYPTION, password,
                     user.getUserSalt(), hashIterations);
             //如果加密后和数据库中的密码一致，说明密码正确，签发token
             if (sh.toHex().equals(user.getUserPassword())) {
@@ -161,11 +162,13 @@ public class UserController {
                 String token = JwtUtil.sign(userName, currentTimeMillis);
                 hashMap.put("token", token);
                 msg.setData(hashMap);
+                msg.setMessage("登录成功");
+                msg.setCode(200);
             } else {
                 logger.info("密码错误，登陆输入的密码加密后为：" + sh.toHex() + "   数据库中的密码:" + user.getUserPassword());
                 throw new UnknownAccountException();
             }
-            return ServerResponseVO.success();
+            return msg;
         } catch (UnknownAccountException e) {
             return ServerResponseVO.error(ServerResponseEnum.ACCOUNT_NOT_EXIST);
         } catch (DisabledAccountException e) {
@@ -218,6 +221,7 @@ public class UserController {
                 }
             }
             msg.setCode(200);
+            msg.setMessage("注销成功");
         } catch (Exception e) {
             msg.setCode(500);
             e.printStackTrace();

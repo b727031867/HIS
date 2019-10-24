@@ -28,7 +28,10 @@ public enum ServerResponseEnum {
     USER_SELECT_FAIL(19,"用户查询失败"),
     PATIENT_SAVE_FAIL(40,"病人保存失败"),
     DOCTOR_SAVE_FAIL(50,"医生保存失败"),
-    PERMISSION_SELECT_FAIL(60,"权限查询失败");
+    PERMISSION_SELECT_FAIL(60,"权限查询失败"),
+    DEPARTMENTS_NOT_EXIST(70,"暂无此类型的科室"),
+    DEPARTMENT_SAVE_FAIL(71,"科室保存失败"),
+    DEPARTMENT_DELETE_FAIL(72,"科室删除失败");
     Integer code;
     String message;
 }

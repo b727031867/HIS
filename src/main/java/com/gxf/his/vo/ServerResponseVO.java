@@ -48,16 +48,18 @@ public class ServerResponseVO<T> implements Serializable {
 
     /**
      * 返回成功信息
-     * @param data      信息内容
-     * @param <T> 要返回的数据
+     *
+     * @param data 信息内容
+     * @param <T>  要返回的数据
      * @return 统一的响应返回数据
      */
-    public static<T> ServerResponseVO success(T data) {
+    public static <T> ServerResponseVO success(T data) {
         return new ServerResponseVO<>(ServerResponseEnum.SUCCESS, data);
     }
 
     /**
      * 返回成功信息
+     *
      * @return 统一的响应返回数据
      */
     public static ServerResponseVO success() {
@@ -66,10 +68,17 @@ public class ServerResponseVO<T> implements Serializable {
 
     /**
      * 返回错误信息
-     * @param responseCode      响应码
+     *
+     * @param responseCode 响应码
      * @return 统一的响应返回数据
      */
     public static ServerResponseVO error(ServerResponseEnum responseCode) {
         return new ServerResponseVO(responseCode);
+    }
+
+    @Override
+    public String toString() {
+        return "{code:\"" + this.code + "\",message:\"" + this.message + "\",data:\""+this.getData()+"\"}";
+
     }
 }

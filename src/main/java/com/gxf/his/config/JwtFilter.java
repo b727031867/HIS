@@ -3,7 +3,9 @@ package com.gxf.his.config;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.gxf.his.Const;
+import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.uitls.JwtUtil;
 import com.gxf.his.vo.ServerResponseVO;
 import org.apache.shiro.authc.AuthenticationException;
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * <p>Title: 实现自定义的Shiro的过滤器</p>
@@ -63,8 +67,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         //判断用户是否想要登陆
+        String msg;
         if (isLoginAttempt(request, response)) {
-            String msg;
             try {
                 this.executeLogin(request, response);
                 return true;
@@ -85,6 +89,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             return false;
         }
         logger.debug("Authorization字段为空！禁止访问");
+        msg = "未认证不许访问！";
+        this.response401(response, msg);
         return false;
     }
 
@@ -137,14 +143,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json; charset=utf-8");
         try (PrintWriter out = httpServletResponse.getWriter()) {
-            ServerResponseVO returnMsg = new ServerResponseVO<>();
-            returnMsg.setCode(401);
-            returnMsg.setMessage(msg);
-            GsonBuilder builder = new GsonBuilder();
-            builder.excludeFieldsWithoutExposeAnnotation();
-            Gson gson = builder.create();
-            String data = gson.toJson(returnMsg);
-            out.append(data);
+            out.append(ServerResponseVO.error(ServerResponseEnum.UNAUTHORIZED).toString());
         } catch (IOException e) {
             logger.error("返回响应信息出现IOException异常" + e.getMessage());
         }
