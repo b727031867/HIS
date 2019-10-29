@@ -31,7 +31,10 @@ public enum ServerResponseEnum {
     PERMISSION_SELECT_FAIL(60,"权限查询失败"),
     DEPARTMENTS_NOT_EXIST(70,"暂无此类型的科室"),
     DEPARTMENT_SAVE_FAIL(71,"科室保存失败"),
-    DEPARTMENT_DELETE_FAIL(72,"科室删除失败");
+    DEPARTMENT_DELETE_FAIL(72,"科室删除失败"),
+    SCHEDULING_SAVE_FAIL(80,"排班信息保存失败"),
+    SCHEDULING_DELETE_FAIL(81,"排班信息删除失败"),
+    SCHEDULING_UPDATE_FAIL(82,"排班信息更新失败");
     Integer code;
     String message;
 }
