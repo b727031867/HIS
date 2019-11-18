@@ -9,7 +9,7 @@ import java.io.Serializable;
  **/
 @Data
 public class Scheduling implements Serializable {
-    private Integer schedulingId;
+    private Long schedulingId;
 
     private Boolean schedulingType;
 

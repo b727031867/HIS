@@ -9,7 +9,7 @@ import java.util.List;
  * @date 2019-10-13
  */
 public interface RoleService {
-    List<Role> findRolesByUserId(int userId);
+    List<Role> findRolesByUserId(Long userId);
 
 
 }

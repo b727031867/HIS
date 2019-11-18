@@ -64,17 +64,26 @@ public class UserController {
 
     @PostMapping("/savePatient")
     public ServerResponseVO savePatient(PatientUserVo patientUserVo) {
-        if (StringUtils.isEmpty(patientUserVo.getUserName().trim()) || StringUtils.isEmpty(patientUserVo.getUserPassword().trim())) {
+        if (StringUtils.isEmpty(patientUserVo.getUserName().trim()) ||
+            StringUtils.isEmpty(patientUserVo.getUserPassword().trim()) ||
+            StringUtils.isEmpty(patientUserVo.getPatientPhone().trim()) ||
+            StringUtils.isEmpty(patientUserVo.getPatientName().trim()) ||
+            patientUserVo.getPatientAge() <= 0 ||
+            patientUserVo.getPatientAge() >= 150
+        ) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         User user = (User) doHashedCredentials(patientUserVo.getUserName(), patientUserVo.getUserPassword());
-        Integer userId = userService.addUser(user);
+        Long userId = userService.addUser(user);
         Patient patient = new Patient();
         patient.setPatientCard(patientUserVo.getPatientCard());
         patient.setPatientMedicareCard(patientUserVo.getPatientMedicareCard());
         patient.setPatientName(patientUserVo.getPatientName());
         patient.setPatientSex(patientUserVo.getPatientSex());
         patient.setUserId(userId);
+        patient.setPatientAge(patientUserVo.getPatientAge());
+        patient.setPatientIsMarriage(patientUserVo.getPatientIsMarriage());
+        patient.setPatientPhone(patientUserVo.getPatientPhone());
         patientService.addPatient(patient);
         return ServerResponseVO.success();
     }
@@ -89,7 +98,7 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         User user = (User) doHashedCredentials(doctorUserVo.getUserName(), doctorUserVo.getUserPassword());
-        Integer userId = userService.addUser(user);
+        Long userId = userService.addUser(user);
         Doctor doctor = new Doctor();
         doctor.setDepartmentCode(doctorUserVo.getDepartmentCode());
         doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
@@ -108,7 +117,7 @@ public class UserController {
         }
         user = (User) doHashedCredentials(user.getUserName(), user.getUserPassword());
         if (user != null) {
-            Integer i = userService.addUser(user);
+            Long i = userService.addUser(user);
             if (i < 1) {
                 logger.error("注册时，数据插入异常");
                 return ServerResponseVO.error(ServerResponseEnum.REGISTERED_FAIL);

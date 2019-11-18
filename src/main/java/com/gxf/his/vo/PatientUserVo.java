@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class PatientUserVo {
-    private Integer patientId;
+    private Long patientId;
 
     private String patientName;
 
@@ -20,7 +20,13 @@ public class PatientUserVo {
 
     private String patientMedicareCard;
 
-    private Integer userId;
+    private Integer patientAge;
+
+    private Byte patientIsMarriage;
+
+    private String patientPhone;
+
+    private Long userId;
 
     private String userName;
 

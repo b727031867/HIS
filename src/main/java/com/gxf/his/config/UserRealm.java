@@ -131,7 +131,7 @@ public class UserRealm extends AuthorizingRealm {
             List<Role> roles = roleService.findRolesByUserId(user.getUserId());
             // 添加用户拥有的角色
             SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-            ArrayList<Integer> ids = new ArrayList<>();
+            ArrayList<Long> ids = new ArrayList<>();
             for (Role role : roles) {
                 simpleAuthorizationInfo.addRole(role.getRoleName());
                 ids.add(role.getRoleId());

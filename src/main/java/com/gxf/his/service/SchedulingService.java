@@ -17,11 +17,18 @@ public interface SchedulingService {
      * 删除一条排班信息
      * @param schedulingId 排班信息的ID
      */
-    void deleteScheduling(Integer schedulingId);
+    void deleteScheduling(Long schedulingId);
 
     /**
      * 更新排班信息
      * @param scheduling
      */
     void updateScheduling(Scheduling scheduling);
+
+    /**
+     * 查找一条排班信息
+     * @param id 排班信息的ID
+     * @return 排班信息实体
+     */
+    Scheduling selectSchedulingById(Long id);
 }

@@ -17,7 +17,7 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMapper roleMapper;
     @Override
-    public List<Role> findRolesByUserId(int userId) {
+    public List<Role> findRolesByUserId(Long userId) {
         return roleMapper.selectRolesByUserId(userId);
     }
 }

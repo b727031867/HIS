@@ -9,7 +9,7 @@ import java.io.Serializable;
  **/
 @Data
 public class Drugstore implements Serializable {
-    private Integer drugStoreId;
+    private Long drugStoreId;
 
     private String drugStoreName;
 

@@ -50,7 +50,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void deleteDepartment(Integer departmentId) {
+    public void deleteDepartment(Long departmentId) {
         try {
             departmentMapper.deleteByPrimaryKey(departmentId);
         }catch (Exception e){

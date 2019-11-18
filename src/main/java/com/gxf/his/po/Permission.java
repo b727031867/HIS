@@ -9,7 +9,7 @@ import java.io.Serializable;
  **/
 @Data
 public class Permission implements Serializable {
-    private Integer permissionId;
+    private Long permissionId;
 
     private String permissionName;
 

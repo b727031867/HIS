@@ -9,7 +9,7 @@ import java.io.Serializable;
  **/
 @Data
 public class Department implements Serializable {
-    private Integer departmentId;
+    private Long departmentId;
 
     private Integer departmentCode;
 
@@ -17,7 +17,7 @@ public class Department implements Serializable {
 
     private String departmentIntroduction;
 
-    private Integer departmentParentId;
+    private Long departmentParentId;
 
     private static final long serialVersionUID = 1L;
 

@@ -32,7 +32,7 @@ public class SchedulingServiceImpl implements SchedulingService {
     }
 
     @Override
-    public void deleteScheduling(Integer schedulingId) {
+    public void deleteScheduling( Long schedulingId) {
         try {
             schedulingMapper.deleteByPrimaryKey(schedulingId);
         }catch (Exception e){
@@ -42,12 +42,24 @@ public class SchedulingServiceImpl implements SchedulingService {
     }
 
     @Override
-    public void updateScheduling(Scheduling scheduling) {
+    public void updateScheduling( Scheduling scheduling) {
         try {
             schedulingMapper.updateByPrimaryKey(scheduling);
         }catch (Exception e){
             logger.error("更新排班信息失败！信息为："+e.getMessage());
             throw new SchedulingException(ServerResponseEnum.SCHEDULING_UPDATE_FAIL);
         }
+    }
+
+    @Override
+    public Scheduling selectSchedulingById(Long id) {
+        Scheduling scheduling ;
+        try {
+            scheduling = schedulingMapper.selectByPrimaryKey(id);
+        }catch (Exception e){
+            logger.error("查找排班信息失败！信息为："+e.getMessage());
+            throw new SchedulingException(ServerResponseEnum.SCHEDULING_SELECT_FAIL);
+        }
+        return scheduling;
     }
 }

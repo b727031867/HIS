@@ -10,19 +10,19 @@ import java.util.Date;
  **/
 @Data
 public class Role implements Serializable {
-    private Integer roleId;
+    private Long roleId;
 
     private String roleName;
 
     private String createByName;
 
-    private Integer createById;
+    private Long createById;
 
     private Date createTime;
 
     private String updateByName;
 
-    private Integer updateById;
+    private Long updateById;
 
     private Date updateTime;
 

@@ -15,17 +15,17 @@ public interface UserMapper {
             "select",
             "user_id, user_name, user_salt, user_password, user_status, user_create_date",
             "from entity_user",
-            "where user_id = #{userId,jdbcType=INTEGER}"
+            "where user_id = #{userId,jdbcType=BIGINT}"
     })
     @Results({
-            @Result(column="user_id", property="userId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT, id=true),
             @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_salt", property="userSalt", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_password", property="userPassword", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_status", property="userStatus", jdbcType=JdbcType.TINYINT),
             @Result(column="user_create_date", property="userCreateDate", jdbcType=JdbcType.TIMESTAMP)
     })
-    User selectByPrimaryKey(Integer userId);
+    User selectByPrimaryKey(Long userId);
 
     @Select({
             "select",
@@ -34,7 +34,7 @@ public interface UserMapper {
             "where user_name = #{userName,jdbcType=VARCHAR}"
     })
     @Results({
-            @Result(column="user_id", property="userId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT, id=true),
             @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_salt", property="userSalt", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_password", property="userPassword", jdbcType=JdbcType.VARCHAR),
@@ -49,7 +49,7 @@ public interface UserMapper {
             "from entity_user"
     })
     @Results({
-            @Result(column="user_id", property="userId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT, id=true),
             @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_salt", property="userSalt", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_password", property="userPassword", jdbcType=JdbcType.VARCHAR),
@@ -66,7 +66,7 @@ public interface UserMapper {
             "user_password = #{userPassword,jdbcType=VARCHAR},",
             "user_status = #{userStatus,jdbcType=TINYINT}",
             "user_create_date = #{userStatus,jdbcType=TIMESTAMP}",
-            "where user_id = #{userId,jdbcType=INTEGER}"
+            "where user_id = #{userId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(User record);
 
@@ -75,7 +75,7 @@ public interface UserMapper {
             "insert into entity_user (user_id, user_name, ",
             "user_salt, user_password, ",
             "user_status, user_create_date)",
-            "values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, ",
+            "values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, ",
             "#{userSalt,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, ",
             "#{userStatus,jdbcType=TINYINT},#{userCreateDate,jdbcType=TIMESTAMP})"
     })
@@ -84,8 +84,8 @@ public interface UserMapper {
     //  ********************************删除方法********************************
     @Delete({
         "delete from entity_user",
-        "where user_id = #{userId,jdbcType=INTEGER}"
+        "where user_id = #{userId,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Integer userId);
+    int deleteByPrimaryKey(Long userId);
 
 }

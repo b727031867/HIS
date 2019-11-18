@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer addUser(User user) throws UserException {
+    public Long addUser(User user) throws UserException {
         try{
             userMapper.insert(user);
         }catch (Exception e){

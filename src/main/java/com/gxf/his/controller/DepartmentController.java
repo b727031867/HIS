@@ -37,7 +37,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/delete")
-    public ServerResponseVO deleteDepartment(Integer departmentId){
+    public ServerResponseVO deleteDepartment(Long departmentId){
         if(null == departmentId){
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }

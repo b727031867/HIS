@@ -21,7 +21,7 @@ public interface UserService {
      * @param user 用户对象
      * @return 成功插入的行数
      */
-    Integer addUser(User user);
+    Long addUser(User user);
 
 
 }

@@ -34,7 +34,9 @@ public enum ServerResponseEnum {
     DEPARTMENT_DELETE_FAIL(72,"科室删除失败"),
     SCHEDULING_SAVE_FAIL(80,"排班信息保存失败"),
     SCHEDULING_DELETE_FAIL(81,"排班信息删除失败"),
-    SCHEDULING_UPDATE_FAIL(82,"排班信息更新失败");
+    SCHEDULING_UPDATE_FAIL(82,"排班信息更新失败"),
+    SCHEDULING_SELECT_NONE(83,"排班信息查找结果为空"),
+    SCHEDULING_SELECT_FAIL(83,"排班信息查找失败");
     Integer code;
     String message;
 }

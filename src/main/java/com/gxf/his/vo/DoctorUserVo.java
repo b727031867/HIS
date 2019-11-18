@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class DoctorUserVo {
-    private Integer doctorId;
+    private Long doctorId;
 
     private String employeeId;
 
@@ -20,9 +20,9 @@ public class DoctorUserVo {
 
     private String departmentCode;
 
-    private Integer schedulingId;
+    private Long schedulingId;
 
-    private Integer userId;
+    private Long userId;
 
     private Integer ticketDayNum;
 

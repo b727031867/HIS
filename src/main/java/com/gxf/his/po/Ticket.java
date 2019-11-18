@@ -10,7 +10,7 @@ import java.util.Date;
  **/
 @Data
 public class Ticket implements Serializable {
-    private Integer ticketId;
+    private Long ticketId;
 
     private Integer ticketNumber;
 
@@ -24,9 +24,9 @@ public class Ticket implements Serializable {
 
     private Date ticketValidityEnd;
 
-    private Integer doctorId;
+    private Long doctorId;
 
-    private Integer patientId;
+    private Long patientId;
 
     private static final long serialVersionUID = 1L;
 

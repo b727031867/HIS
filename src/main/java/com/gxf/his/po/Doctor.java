@@ -9,7 +9,7 @@ import java.io.Serializable;
  **/
 @Data
 public class Doctor implements Serializable {
-    private Integer doctorId;
+    private Long doctorId;
 
     private String employeeId;
 
@@ -21,9 +21,9 @@ public class Doctor implements Serializable {
 
     private String departmentCode;
 
-    private Integer schedulingId;
+    private Long schedulingId;
 
-    private Integer userId;
+    private Long userId;
 
     private Integer ticketDayNum;
 

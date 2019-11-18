@@ -11,7 +11,7 @@ import java.util.Date;
  **/
 @Data
 public class User implements Serializable {
-    private Integer userId;
+    private Long userId;
 
     private String userName;
 

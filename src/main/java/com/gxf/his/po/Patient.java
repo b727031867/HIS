@@ -9,7 +9,7 @@ import java.io.Serializable;
  **/
 @Data
 public class Patient implements Serializable {
-    private Integer patientId;
+    private Long patientId;
 
     private String patientName;
 
@@ -19,7 +19,13 @@ public class Patient implements Serializable {
 
     private String patientMedicareCard;
 
-    private Integer userId;
+    private Integer patientAge;
+
+    private Byte patientIsMarriage;
+
+    private String patientPhone;
+
+    private Long userId;
 
     private static final long serialVersionUID = 1L;
 

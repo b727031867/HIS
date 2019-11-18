@@ -16,17 +16,17 @@ import org.springframework.stereotype.Repository;
 public interface DepartmentMapper {
     @Delete({
         "delete from entity_department",
-        "where department_id = #{departmentId,jdbcType=INTEGER}"
+        "where department_id = #{departmentId,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Integer departmentId);
+    int deleteByPrimaryKey(Long departmentId);
 
     @Insert({
         "insert into entity_department (department_id, department_code, ",
         "department_name, department_introduction, ",
         "department_parent_id)",
-        "values (#{departmentId,jdbcType=INTEGER}, #{departmentCode,jdbcType=INTEGER}, ",
+        "values (#{departmentId,jdbcType=BIGINT}, #{departmentCode,jdbcType=INTEGER}, ",
         "#{departmentName,jdbcType=VARCHAR}, #{departmentIntroduction,jdbcType=VARCHAR}, ",
-        "#{departmentParentId,jdbcType=INTEGER})"
+        "#{departmentParentId,jdbcType=BIGINT})"
     })
     int insert(Department record);
 
@@ -34,16 +34,16 @@ public interface DepartmentMapper {
         "select",
         "department_id, department_code, department_name, department_introduction, department_parent_id",
         "from entity_department",
-        "where department_id = #{departmentId,jdbcType=INTEGER}"
+        "where department_id = #{departmentId,jdbcType=BIGINT}"
     })
     @Results({
-        @Result(column="department_id", property="departmentId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.INTEGER),
         @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
-        @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.INTEGER)
+        @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
     })
-    Department selectByPrimaryKey(Integer departmentId);
+    Department selectByPrimaryKey(Long departmentId);
 
     @Select({
         "select",
@@ -51,11 +51,11 @@ public interface DepartmentMapper {
         "from entity_department"
     })
     @Results({
-        @Result(column="department_id", property="departmentId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.INTEGER),
         @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
-        @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.INTEGER)
+        @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
     })
     List<Department> selectAll();
 
@@ -65,11 +65,11 @@ public interface DepartmentMapper {
             "from entity_department where department_parent_id = -1"
     })
     @Results({
-            @Result(column="department_id", property="departmentId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
             @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.INTEGER),
             @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
             @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
-            @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.INTEGER)
+            @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
     })
     List<Department> selectAllFatherDepartment();
 
@@ -78,8 +78,8 @@ public interface DepartmentMapper {
         "set department_code = #{departmentCode,jdbcType=INTEGER},",
           "department_name = #{departmentName,jdbcType=VARCHAR},",
           "department_introduction = #{departmentIntroduction,jdbcType=VARCHAR},",
-          "department_parent_id = #{departmentParentId,jdbcType=INTEGER}",
-        "where department_id = #{departmentId,jdbcType=INTEGER}"
+          "department_parent_id = #{departmentParentId,jdbcType=BIGINT}",
+        "where department_id = #{departmentId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Department record);
 }

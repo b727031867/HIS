@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 public interface TicketMapper {
     @Delete({
         "delete from entity_ticket",
-        "where ticket_id = #{ticketId,jdbcType=INTEGER}"
+        "where ticket_id = #{ticketId,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Integer ticketId);
+    int deleteByPrimaryKey(Long ticketId);
 
     @Insert({
         "insert into entity_ticket (ticket_id, ticket_number, ",
@@ -22,11 +22,11 @@ public interface TicketMapper {
         "ticket_create_time, ticket_validity_start, ",
         "ticket_validity_end, doctor_id, ",
         "patient_id)",
-        "values (#{ticketId,jdbcType=INTEGER}, #{ticketNumber,jdbcType=INTEGER}, ",
+        "values (#{ticketId,jdbcType=BIGINT}, #{ticketNumber,jdbcType=INTEGER}, ",
         "#{ticketType,jdbcType=VARCHAR}, #{ticketTimeType,jdbcType=VARCHAR}, ",
         "#{ticketCreateTime,jdbcType=TIMESTAMP}, #{ticketValidityStart,jdbcType=TIMESTAMP}, ",
-        "#{ticketValidityEnd,jdbcType=TIMESTAMP}, #{doctorId,jdbcType=INTEGER}, ",
-        "#{patientId,jdbcType=INTEGER})"
+        "#{ticketValidityEnd,jdbcType=TIMESTAMP}, #{doctorId,jdbcType=BIGINT}, ",
+        "#{patientId,jdbcType=BIGINT})"
     })
     int insert(Ticket record);
 
@@ -35,20 +35,20 @@ public interface TicketMapper {
         "ticket_id, ticket_number, ticket_type, ticket_time_type, ticket_create_time, ",
         "ticket_validity_start, ticket_validity_end, doctor_id, patient_id",
         "from entity_ticket",
-        "where ticket_id = #{ticketId,jdbcType=INTEGER}"
+        "where ticket_id = #{ticketId,jdbcType=BIGINT}"
     })
     @Results({
-        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="ticket_number", property="ticketNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="ticket_type", property="ticketType", jdbcType=JdbcType.VARCHAR),
         @Result(column="ticket_time_type", property="ticketTimeType", jdbcType=JdbcType.VARCHAR),
         @Result(column="ticket_create_time", property="ticketCreateTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="ticket_validity_start", property="ticketValidityStart", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="ticket_validity_end", property="ticketValidityEnd", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.INTEGER),
-        @Result(column="patient_id", property="patientId", jdbcType=JdbcType.INTEGER)
+        @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT),
+        @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT)
     })
-    Ticket selectByPrimaryKey(Integer ticketId);
+    Ticket selectByPrimaryKey(Long ticketId);
 
     @Select({
         "select",
@@ -57,15 +57,15 @@ public interface TicketMapper {
         "from entity_ticket"
     })
     @Results({
-        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="ticket_number", property="ticketNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="ticket_type", property="ticketType", jdbcType=JdbcType.VARCHAR),
         @Result(column="ticket_time_type", property="ticketTimeType", jdbcType=JdbcType.VARCHAR),
         @Result(column="ticket_create_time", property="ticketCreateTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="ticket_validity_start", property="ticketValidityStart", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="ticket_validity_end", property="ticketValidityEnd", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.INTEGER),
-        @Result(column="patient_id", property="patientId", jdbcType=JdbcType.INTEGER)
+        @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT),
+        @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT)
     })
     List<Ticket> selectAll();
 
@@ -77,9 +77,9 @@ public interface TicketMapper {
           "ticket_create_time = #{ticketCreateTime,jdbcType=TIMESTAMP},",
           "ticket_validity_start = #{ticketValidityStart,jdbcType=TIMESTAMP},",
           "ticket_validity_end = #{ticketValidityEnd,jdbcType=TIMESTAMP},",
-          "doctor_id = #{doctorId,jdbcType=INTEGER},",
-          "patient_id = #{patientId,jdbcType=INTEGER}",
-        "where ticket_id = #{ticketId,jdbcType=INTEGER}"
+          "doctor_id = #{doctorId,jdbcType=BIGINT},",
+          "patient_id = #{patientId,jdbcType=BIGINT}",
+        "where ticket_id = #{ticketId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Ticket record);
 }

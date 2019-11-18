@@ -13,14 +13,14 @@ import org.springframework.stereotype.Repository;
 public interface PermissionMapper {
     @Delete({
         "delete from entity_permission",
-        "where permission_id = #{permissionId,jdbcType=INTEGER}"
+        "where permission_id = #{permissionId,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Integer permissionId);
+    int deleteByPrimaryKey(Long permissionId);
 
     @Insert({
         "insert into entity_permission (permission_id, permission_name, ",
         "permission)",
-        "values (#{permissionId,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR}, ",
+        "values (#{permissionId,jdbcType=BIGINT}, #{permissionName,jdbcType=VARCHAR}, ",
         "#{permission,jdbcType=VARCHAR})"
     })
     int insert(Permission record);
@@ -29,14 +29,14 @@ public interface PermissionMapper {
         "select",
         "permission_id, permission_name, permission",
         "from entity_permission",
-        "where permission_id = #{permissionId,jdbcType=INTEGER}"
+        "where permission_id = #{permissionId,jdbcType=BIGINT}"
     })
     @Results({
-        @Result(column="permission_id", property="permissionId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="permission_id", property="permissionId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="permission_name", property="permissionName", jdbcType=JdbcType.VARCHAR),
         @Result(column="permission", property="permission", jdbcType=JdbcType.VARCHAR)
     })
-    Permission selectByPrimaryKey(Integer permissionId);
+    Permission selectByPrimaryKey(Long permissionId);
 
     /**
      * 获取某位用户的所有权限
@@ -46,7 +46,7 @@ public interface PermissionMapper {
     @Select("SELECT * FROM entity_permission AS ep WHERE rrp.role_id IN #{ids} " +
             "AND ep.permission_id  = ref_role_permission.permission_id")
     @Results({
-            @Result(column="permission_id", property="permissionId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="permission_id", property="permissionId", jdbcType=JdbcType.BIGINT, id=true),
             @Result(column="permission_name", property="permissionName", jdbcType=JdbcType.VARCHAR),
             @Result(column="permission", property="permission", jdbcType=JdbcType.VARCHAR)
     })
@@ -58,7 +58,7 @@ public interface PermissionMapper {
         "from entity_permission"
     })
     @Results({
-        @Result(column="permission_id", property="permissionId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="permission_id", property="permissionId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="permission_name", property="permissionName", jdbcType=JdbcType.VARCHAR),
         @Result(column="permission", property="permission", jdbcType=JdbcType.VARCHAR)
     })
@@ -68,7 +68,7 @@ public interface PermissionMapper {
         "update entity_permission",
         "set permission_name = #{permissionName,jdbcType=VARCHAR},",
           "permission = #{permission,jdbcType=VARCHAR}",
-        "where permission_id = #{permissionId,jdbcType=INTEGER}"
+        "where permission_id = #{permissionId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Permission record);
 }

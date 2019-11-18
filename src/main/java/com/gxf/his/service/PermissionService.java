@@ -12,5 +12,5 @@ public interface PermissionService {
      * @param roleIds
      * @return 权限字符串，用，分隔
      */
-    List<String> findPermissionsByRoleId(List<Integer> roleIds);
+    List<String> findPermissionsByRoleId(List<Long> roleIds);
 }

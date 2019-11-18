@@ -13,6 +13,6 @@ public interface DepartmentService {
 
     void addDepartment(Department department);
 
-    void deleteDepartment(Integer departmentId);
+    void deleteDepartment(Long departmentId);
 
 }

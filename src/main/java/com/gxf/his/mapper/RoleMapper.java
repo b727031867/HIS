@@ -12,19 +12,19 @@ import org.springframework.stereotype.Repository;
 public interface RoleMapper {
     @Delete({
         "delete from entity_role",
-        "where role_id = #{roleId,jdbcType=INTEGER}"
+        "where role_id = #{roleId,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Integer roleId);
+    int deleteByPrimaryKey(Long roleId);
 
     @Insert({
         "insert into entity_role (role_id, role_name, ",
         "create_by_name, create_by_id, ",
         "create_time, update_by_name, ",
         "update_by_id, update_time)",
-        "values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, ",
-        "#{createByName,jdbcType=VARCHAR}, #{createById,jdbcType=INTEGER}, ",
+        "values (#{roleId,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, ",
+        "#{createByName,jdbcType=VARCHAR}, #{createById,jdbcType=BIGINT}, ",
         "#{createTime,jdbcType=TIMESTAMP}, #{updateByName,jdbcType=VARCHAR}, ",
-        "#{updateById,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})"
+        "#{updateById,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP})"
     })
     int insert(Role record);
 
@@ -33,19 +33,19 @@ public interface RoleMapper {
         "role_id, role_name, create_by_name, create_by_id, create_time, update_by_name, ",
         "update_by_id, update_time",
         "from entity_role",
-        "where role_id = #{roleId,jdbcType=INTEGER}"
+        "where role_id = #{roleId,jdbcType=BIGINT}"
     })
     @Results({
-        @Result(column="role_id", property="roleId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="role_id", property="roleId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="role_name", property="roleName", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_by_name", property="createByName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="create_by_id", property="createById", jdbcType=JdbcType.INTEGER),
+        @Result(column="create_by_id", property="createById", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_by_name", property="updateByName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="update_by_id", property="updateById", jdbcType=JdbcType.INTEGER),
+        @Result(column="update_by_id", property="updateById", jdbcType=JdbcType.BIGINT),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    Role selectByPrimaryKey(Integer roleId);
+    Role selectByPrimaryKey(Long roleId);
 
     @Select({
         "select",
@@ -54,13 +54,13 @@ public interface RoleMapper {
         "from entity_role"
     })
     @Results({
-        @Result(column="role_id", property="roleId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="role_id", property="roleId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="role_name", property="roleName", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_by_name", property="createByName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="create_by_id", property="createById", jdbcType=JdbcType.INTEGER),
+        @Result(column="create_by_id", property="createById", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_by_name", property="updateByName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="update_by_id", property="updateById", jdbcType=JdbcType.INTEGER),
+        @Result(column="update_by_id", property="updateById", jdbcType=JdbcType.BIGINT),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
     List<Role> selectAll();
@@ -69,12 +69,12 @@ public interface RoleMapper {
         "update entity_role",
         "set role_name = #{roleName,jdbcType=VARCHAR},",
           "create_by_name = #{createByName,jdbcType=VARCHAR},",
-          "create_by_id = #{createById,jdbcType=INTEGER},",
+          "create_by_id = #{createById,jdbcType=BIGINT},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "update_by_name = #{updateByName,jdbcType=VARCHAR},",
-          "update_by_id = #{updateById,jdbcType=INTEGER},",
+          "update_by_id = #{updateById,jdbcType=BIGINT},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP}",
-        "where role_id = #{roleId,jdbcType=INTEGER}"
+        "where role_id = #{roleId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Role record);
 
@@ -84,16 +84,16 @@ public interface RoleMapper {
      * @return 角色列表
      */
     @Select("SELECT * FROM entity_role WHERE role_id IN ( SELECT role_id FROM ref_user_role WHERE user_id = #{uid," +
-            "jdbcType=INTEGER} ) ")
+            "jdbcType=BIGINT} ) ")
     @Results({
-            @Result(column="role_id", property="roleId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="role_id", property="roleId", jdbcType=JdbcType.BIGINT, id=true),
             @Result(column="role_name", property="roleName", jdbcType=JdbcType.VARCHAR),
             @Result(column="create_by_name", property="createByName", jdbcType=JdbcType.VARCHAR),
-            @Result(column="create_by_id", property="createById", jdbcType=JdbcType.INTEGER),
+            @Result(column="create_by_id", property="createById", jdbcType=JdbcType.BIGINT),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
             @Result(column="update_by_name", property="updateByName", jdbcType=JdbcType.VARCHAR),
-            @Result(column="update_by_id", property="updateById", jdbcType=JdbcType.INTEGER),
+            @Result(column="update_by_id", property="updateById", jdbcType=JdbcType.BIGINT),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    List<Role> selectRolesByUserId(@Param("uid") Integer uid);
+    List<Role> selectRolesByUserId(@Param("uid") Long uid);
 }
