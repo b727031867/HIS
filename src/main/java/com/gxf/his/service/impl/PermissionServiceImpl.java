@@ -21,7 +21,7 @@ public class PermissionServiceImpl implements PermissionService {
 
 
     @Override
-    public List<String> findPermissionsByRoleId(List<Integer> roleIds) {
+    public List<String> findPermissionsByRoleId(List<Long> roleIds) {
         List<Permission> permissions = permissionMapper.selectPermissionsByRoleIds(roleIds);
         ArrayList<String> userPermissions =new ArrayList<>();
         for (Permission permission : permissions) {

@@ -59,9 +59,9 @@
         </javaClientGenerator>
 
         <!--table是指定每个表的生成策略，%表示全部生成,flat表示不单独为主键生成类-->
-        <table tableName="entity_%" modelType="flat">
-            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
-        </table>
+        <!--<table tableName="entity_%" modelType="flat">-->
+            <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+        <!--</table>-->
         <!--<table tableName="entity_department"-->
         <!--domainObjectName="Department" modelType="flat"/>-->
         <!--<table tableName="entity_doctor" domainObjectName="Doctor"-->
@@ -78,7 +78,17 @@
         <!--modelType="flat"/>-->
         <!--<table tableName="entity_ticket" domainObjectName="Ticket"-->
         <!--modelType="flat"/>-->
-        <!--<table tableName="entity_user" domainObjectName="User"-->
-        <!--modelType="flat"/>-->
+        <table tableName="entity_medical_record" domainObjectName="MedicalRecord"
+               modelType="flat">
+            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
+        </table>
+        <table tableName="entity_resource" domainObjectName="Resource"
+               modelType="flat">
+            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
+        </table>
+        <table tableName="entity_prescription_list" domainObjectName="PrescriptionList"
+               modelType="flat">
+            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
+        </table>
     </context>
 </generatorConfiguration>

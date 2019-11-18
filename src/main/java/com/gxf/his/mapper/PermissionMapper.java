@@ -50,7 +50,7 @@ public interface PermissionMapper {
             @Result(column="permission_name", property="permissionName", jdbcType=JdbcType.VARCHAR),
             @Result(column="permission", property="permission", jdbcType=JdbcType.VARCHAR)
     })
-    List<Permission> selectPermissionsByRoleIds(@Param("ids") List<Integer> ids);
+    List<Permission> selectPermissionsByRoleIds(@Param("ids") List<Long> ids);
 
     @Select({
         "select",
