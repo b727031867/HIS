@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ import java.util.List;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
     private Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class);
-    @Autowired
+    @Resource
     private DepartmentMapper departmentMapper;
 
     @Override

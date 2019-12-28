@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * @author 龚秀峰
  * @date 2019-10-13
@@ -20,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
     @Override
@@ -46,5 +48,16 @@ public class UserServiceImpl implements UserService {
         }
         return user.getUserId();
 
+    }
+
+    @Override
+    public Long updateUser(User user) {
+        try {
+            userMapper.updateByPrimaryKey(user);
+        }catch (Exception e){
+            logger.error("User更新失败!",e);
+            throw new UserException(ServerResponseEnum.USER_UPDATE_FAIL);
+        }
+        return user.getUserId();
     }
 }

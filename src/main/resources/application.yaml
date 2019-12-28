@@ -25,6 +25,10 @@ mybatis:
 server:
   port: 8081
 spring:
+#  配置返回Json的日期格式化
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   ## 数据库配置 - start
   datasource:
     url: jdbc:mysql://localhost:3307/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
@@ -43,6 +47,8 @@ spring:
       time-between-eviction-runs-millis: 60000
       # 配置一个连接在池中最小生存的时间，单位是毫秒
       min-evictable-idle-time-millis: 300000
+      # 空闲时间超过minEvictableIdleTimeMillis，则进行保活操作
+      keepAlive: true
       validation-query: SELECT 1 FROM DUAL
       test-while-idle: true
       test-on-borrow: false
@@ -108,3 +114,8 @@ config:
   # Shiro缓存过期时间(秒)(一般设置与AccessToken过期时间一致) 此处CustomCache读取失败，待解决
   shiro-cache-expireTime: 7200
 ## 其它配置 - end  
+# pageHelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true

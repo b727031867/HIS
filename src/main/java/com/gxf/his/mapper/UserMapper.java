@@ -3,12 +3,10 @@ package com.gxf.his.mapper;
 import com.gxf.his.po.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-@Mapper
+
 public interface UserMapper {
     //  ********************************查询方法********************************
     @Select({
@@ -60,12 +58,12 @@ public interface UserMapper {
 
     //  ********************************更新方法********************************
     @Update({
-            "update entity_user",
+            "update entity_user ",
             "set user_name = #{userName,jdbcType=VARCHAR},",
             "user_salt = #{userSalt,jdbcType=VARCHAR},",
             "user_password = #{userPassword,jdbcType=VARCHAR},",
-            "user_status = #{userStatus,jdbcType=TINYINT}",
-            "user_create_date = #{userStatus,jdbcType=TIMESTAMP}",
+            "user_status = #{userStatus,jdbcType=TINYINT},",
+            "user_create_date = #{userCreateDate,jdbcType=TIMESTAMP}",
             "where user_id = #{userId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(User record);

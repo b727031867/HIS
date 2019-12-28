@@ -1,14 +1,12 @@
 package com.gxf.his.mapper;
 
 import com.gxf.his.po.Role;
-import java.util.List;
-
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
-import org.springframework.stereotype.Repository;
 
-@Repository
-@Mapper
+import java.util.List;
+
+
 public interface RoleMapper {
     @Delete({
         "delete from entity_role",
@@ -36,7 +34,7 @@ public interface RoleMapper {
         "where role_id = #{roleId,jdbcType=BIGINT}"
     })
     @Results({
-        @Result(column="role_id", property="roleId", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="role_id", property="roleId", jdbcType= JdbcType.BIGINT, id=true),
         @Result(column="role_name", property="roleName", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_by_name", property="createByName", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_by_id", property="createById", jdbcType=JdbcType.BIGINT),

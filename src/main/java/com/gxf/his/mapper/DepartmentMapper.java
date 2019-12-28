@@ -1,18 +1,15 @@
 package com.gxf.his.mapper;
 
 import com.gxf.his.po.Department;
-import java.util.List;
-
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
-import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author GXF
  * @date 2019-10-13 19:06:21
  **/
-@Repository
-@Mapper
 public interface DepartmentMapper {
     @Delete({
         "delete from entity_department",

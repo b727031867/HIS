@@ -63,7 +63,7 @@ public class UserController {
 
 
     @PostMapping("/savePatient")
-    public ServerResponseVO savePatient(PatientUserVo patientUserVo) {
+    public ServerResponseVO savePatient(@RequestBody PatientUserVo patientUserVo) {
         if (StringUtils.isEmpty(patientUserVo.getUserName().trim()) ||
             StringUtils.isEmpty(patientUserVo.getUserPassword().trim()) ||
             StringUtils.isEmpty(patientUserVo.getPatientPhone().trim()) ||
@@ -89,15 +89,15 @@ public class UserController {
     }
 
     @PostMapping("/saveDoctor")
-    public ServerResponseVO saveDoctor(DoctorUserVo doctorUserVo) {
-        if (StringUtils.isEmpty(doctorUserVo.getUserName().trim()) || StringUtils.isEmpty(doctorUserVo.getUserPassword().trim())
+    public ServerResponseVO saveDoctor(@RequestBody  DoctorUserVo doctorUserVo) {
+        if (StringUtils.isEmpty(doctorUserVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorUserVo.getUser().getUserPassword().trim())
                 || StringUtils.isEmpty(doctorUserVo.getDepartmentCode().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorIntroduction().trim())
                 || StringUtils.isEmpty(doctorUserVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorProfessionalTitle().trim())
                 || StringUtils.isEmpty(doctorUserVo.getEmployeeId().trim())
         ) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        User user = (User) doHashedCredentials(doctorUserVo.getUserName(), doctorUserVo.getUserPassword());
+        User user = (User) doHashedCredentials(doctorUserVo.getUser().getUserName(), doctorUserVo.getUser().getUserPassword());
         Long userId = userService.addUser(user);
         Doctor doctor = new Doctor();
         doctor.setDepartmentCode(doctorUserVo.getDepartmentCode());
@@ -240,7 +240,7 @@ public class UserController {
     }
 
 
-    private Object doHashedCredentials(String userName, String password) {
+    public static User doHashedCredentials(String userName, String password) {
         User user = new User();
         user.setUserName(userName);
         //默认注册的用户状态是正常状态

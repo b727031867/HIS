@@ -1,14 +1,12 @@
 package com.gxf.his.mapper;
 
 import com.gxf.his.po.Patient;
-import java.util.List;
-
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
-import org.springframework.stereotype.Repository;
 
-@Repository
-@Mapper
+import java.util.List;
+
+
 public interface PatientMapper {
     @Delete({
         "delete from entity_patient",

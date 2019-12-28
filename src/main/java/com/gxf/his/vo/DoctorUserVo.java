@@ -1,5 +1,7 @@
 package com.gxf.his.vo;
 
+import com.gxf.his.po.Scheduling;
+import com.gxf.his.po.User;
 import lombok.Data;
 
 /**
@@ -22,15 +24,7 @@ public class DoctorUserVo {
 
     private Long schedulingId;
 
-    private Long userId;
-
     private Integer ticketDayNum;
 
-    private String userName;
-
-    private String userSalt;
-
-    private String userPassword;
-
-    private Byte userStatus;
+    private User user;
 }

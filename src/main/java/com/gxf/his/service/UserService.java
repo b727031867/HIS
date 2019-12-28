@@ -19,9 +19,16 @@ public interface UserService {
     /**
      * 添加一位用户
      * @param user 用户对象
-     * @return 成功插入的行数
+     * @return 成功插入的用户ID
      */
     Long addUser(User user);
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return 更新影响的用户ID
+     */
+    Long updateUser(User user);
 
 
 }

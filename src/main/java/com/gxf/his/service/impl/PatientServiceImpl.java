@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * @author 龚秀峰
  * @date 2019-10-20
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class PatientServiceImpl implements PatientService {
     private Logger logger = LoggerFactory.getLogger(PatientServiceImpl.class);
 
-    @Autowired
+    @Resource
     private PatientMapper patientMapper;
 
     @Override

@@ -14,6 +14,7 @@ public enum ServerResponseEnum {
      * 请求处理各种情况的枚举
      */
     SUCCESS(0, "成功"),
+    EXPIRED(7,"此Token已失效"),
     BUSINESS_EXCEPTION(8,"业务异常"),
     PARAMETER_ERROR(9,"参数为空"),
     ERROR(10, "失败"),
@@ -26,8 +27,11 @@ public enum ServerResponseEnum {
     REGISTERED_FAIL(17, "注册失败"),
     USER_SAVE_FAIL(18,"用户保存失败"),
     USER_SELECT_FAIL(19,"用户查询失败"),
+    USER_UPDATE_FAIL(20,"用户更新失败"),
     PATIENT_SAVE_FAIL(40,"病人保存失败"),
     DOCTOR_SAVE_FAIL(50,"医生保存失败"),
+    DOCTOR_LIST_FAIL(51,"医生查询失败"),
+    DOCTOR_UPDATE_FAIL(52,"医生信息更新失败"),
     PERMISSION_SELECT_FAIL(60,"权限查询失败"),
     DEPARTMENTS_NOT_EXIST(70,"暂无此类型的科室"),
     DEPARTMENT_SAVE_FAIL(71,"科室保存失败"),

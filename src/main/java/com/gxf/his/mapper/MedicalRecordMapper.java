@@ -1,14 +1,12 @@
 package com.gxf.his.mapper;
 
 import com.gxf.his.po.MedicalRecord;
-import java.util.List;
-
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
-import org.springframework.stereotype.Repository;
 
-@Repository
-@Mapper
+import java.util.List;
+
+
 public interface MedicalRecordMapper {
     @Delete({
         "delete from entity_medical_record",

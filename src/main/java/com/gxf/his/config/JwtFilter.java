@@ -78,6 +78,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     return true;
                 } else {
                     msg = "refreshToken已过期或accessToken过期后已经颁发了最新的accessToken，此accessToken作废！";
+                    this.response403(response, msg);
+                    return false;
                 }
             } catch (UnsupportedTokenException e) {
                 msg = e.getMessage();
@@ -144,6 +146,21 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         httpServletResponse.setContentType("application/json; charset=utf-8");
         try (PrintWriter out = httpServletResponse.getWriter()) {
             out.append(ServerResponseVO.error(ServerResponseEnum.UNAUTHORIZED).toString());
+        } catch (IOException e) {
+            logger.error("返回响应信息出现IOException异常" + e.getMessage());
+        }
+    }
+
+    /**
+     * 无需重定向，直接返回响应信息，token过期或者封锁此ip的时候调用
+     */
+    private void response403(ServletResponse resp, String msg) {
+        HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
+        httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setContentType("application/json; charset=utf-8");
+        try (PrintWriter out = httpServletResponse.getWriter()) {
+            out.append(ServerResponseVO.error(ServerResponseEnum.EXPIRED).toString());
         } catch (IOException e) {
             logger.error("返回响应信息出现IOException异常" + e.getMessage());
         }
