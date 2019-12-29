@@ -1,5 +1,6 @@
 package com.gxf.his.mapper;
 
+import com.gxf.his.po.Doctor;
 import com.gxf.his.po.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
@@ -86,4 +87,11 @@ public interface UserMapper {
     })
     int deleteByPrimaryKey(Long userId);
 
+    /**
+     * 批量删除用户
+     * @param users 医生列表
+     * @return 影响的行数
+     */
+    @DeleteProvider(type = Batch.class, method = "batchUserDelete")
+    Integer batchUserDelete(List<User> users);
 }

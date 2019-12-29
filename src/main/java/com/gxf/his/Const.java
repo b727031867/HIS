@@ -39,4 +39,5 @@ public class Const {
     * description: 用于刷新的Token的前缀
     */
    public static final String REDIS_CONSTANT_REFRESH_TOKEN_PREFIX = "shiro:refresh_token:";
+
 }

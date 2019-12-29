@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.po.Doctor;
+import com.gxf.his.po.User;
 import com.gxf.his.vo.DoctorUserVo;
 
 import java.util.List;
@@ -15,6 +16,22 @@ public interface DoctorService {
      * @param doctor 需要添加的医生
      */
     Long addDoctor(Doctor doctor);
+
+    /**
+     * 删除一位医生
+     * @param doctorId 医生的Id
+     * @param userId 医生对应的用户Id
+     * @return 影响的行数
+     */
+    void deleteDoctorAndUser (Long doctorId,Long userId) throws Exception;
+
+    /**
+     * 批量删除医生和其对应的用户
+     * @param doctors 要删除的医生列表
+     * @param users 要删除的用户列表
+     * @return 影响的行数
+     */
+    Integer deleteDoctorAndUserBatch(List<Doctor> doctors, List<User> users);
 
     /**
      * 查询所有的医生

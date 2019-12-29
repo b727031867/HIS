@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author 龚秀峰
@@ -36,6 +37,25 @@ public class UserServiceImpl implements UserService {
         }
         return user;
 
+    }
+
+    @Override
+    public int deleteUser(Long id) {
+        try {
+            return userMapper.deleteByPrimaryKey(id);
+        }catch (Exception e){
+            logger.error("根据ID删除用户失败！",e);
+            throw new UserException(ServerResponseEnum.USER_DELETE_FAIL);
+        }
+    }
+
+    @Override
+    public Integer deleteUserBatch(List<User> users) {
+        try {
+            return userMapper.batchUserDelete(users);
+        }catch (Exception e){
+            throw new UserException(ServerResponseEnum.USER_DELETE_FAIL);
+        }
     }
 
     @Override

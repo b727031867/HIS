@@ -2,20 +2,20 @@ package com.gxf.his.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gxf.his.Const;
 import com.gxf.his.config.RedisClient;
+import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.Doctor;
 import com.gxf.his.po.User;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.vo.DoctorUserVo;
 import com.gxf.his.vo.ServerResponseVO;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,7 +29,7 @@ public class DoctorController {
     private Logger logger = LoggerFactory.getLogger(DoctorController.class);
 
     @Autowired
-    public DoctorController(DoctorService dservice,UserService uService ,RedisClient redis) {
+    public DoctorController(DoctorService dservice, UserService uService, RedisClient redis) {
         this.redis = redis;
         doctorService = dservice;
         userService = uService;
@@ -62,7 +62,6 @@ public class DoctorController {
     public ServerResponseVO saveDoctorAndUser(@RequestBody DoctorUserVo doctorUserVo) {
         logger.info("当前更新的医生信息为：" + doctorUserVo.toString());
         Doctor doctor = new Doctor();
-        User user = new User();
         //更新医生信息
         doctor.setDoctorId(doctorUserVo.getDoctorId());
         doctor.setEmployeeId(doctorUserVo.getEmployeeId());
@@ -75,15 +74,45 @@ public class DoctorController {
         doctor.setTicketDayNum(doctorUserVo.getTicketDayNum());
         doctorService.updateDoctor(doctor);
         //更新用户信息
-        user = doctorUserVo.getUser();
+        User user = doctorUserVo.getUser();
         //重新加密密码,生成新密码盐和密钥
         String password = user.getUserPassword();
-        User tempUser = UserController.doHashedCredentials(user.getUserName(),password);
+        User tempUser = UserController.doHashedCredentials(user.getUserName(), password);
         user.setUserPassword(tempUser.getUserPassword());
         user.setUserSalt(tempUser.getUserSalt());
         logger.info(user.toString());
         userService.updateUser(user);
         return ServerResponseVO.success();
+    }
+
+    @DeleteMapping
+    public ServerResponseVO deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,
+                                                          @RequestParam(name = "userId") Long userId) {
+        try {
+            doctorService.deleteDoctorAndUser(doctorId, userId);
+            return ServerResponseVO.success();
+        } catch (Exception e) {
+            return ServerResponseVO.error(ServerResponseEnum.USER_DELETE_FAIL);
+        }
+    }
+
+    @DeleteMapping("/batch")
+    public ServerResponseVO deleteDoctorsAndUsersByIds(@RequestBody List<DoctorUserVo> doctorUserVos){
+        List<Doctor> doctors = new ArrayList<>(16);
+        List<User> users = new ArrayList<>(16);
+        for(DoctorUserVo doctorUserVo :doctorUserVos){
+            Doctor doctor = new Doctor();
+            doctor.setDoctorId(doctorUserVo.getDoctorId());
+            doctors.add(doctor);
+            users.add(doctorUserVo.getUser());
+        }
+        Integer a = doctorService.deleteDoctorAndUserBatch(doctors,users);
+        //正常情况应该删除n个医生就有n个对应的用户也删除
+        int b = 2;
+        if(doctorUserVos.size()*b == a){
+            return ServerResponseVO.success();
+        }
+        return  ServerResponseVO.error(ServerResponseEnum.DOCTOR_DELETE_FAIL);
     }
 
 

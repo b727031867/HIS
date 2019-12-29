@@ -12,6 +12,14 @@ public interface DoctorMapper {
     @Delete({"delete from entity_doctor", "where doctor_id = #{doctorId,jdbcType=BIGINT}"})
     int deleteByPrimaryKey(Long doctorId);
 
+    /**
+     * 批量删除医生
+     * @param doctors 医生列表
+     * @return 影响的行数
+     */
+    @DeleteProvider(type = Batch.class, method = "batchDoctorDelete")
+    Integer batchDoctorDelete(List<Doctor> doctors);
+
     @Insert({
             "insert into entity_doctor (doctor_id, employee_id, ", "doctor_name, doctor_professional_title, ",
             "doctor_introduction, department_code, ", "scheduling_id, user_id, ", "ticket_day_num)", "values " +
