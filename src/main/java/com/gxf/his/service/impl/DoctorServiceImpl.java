@@ -92,6 +92,18 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public List<DoctorUserVo> selectDoctorByAttribute(DoctorUserVo doctorUserVo) {
+        List<DoctorUserVo> doctors;
+        try {
+            doctors = doctorMapper.selectDoctorByAtribute(doctorUserVo);
+        } catch (Exception e) {
+            logger.error("按属性查询医生失败", e);
+            throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);
+        }
+        return doctors;
+    }
+
+    @Override
     public Long updateDoctor(Doctor doctor) {
         try {
             doctorMapper.updateByPrimaryKey(doctor);

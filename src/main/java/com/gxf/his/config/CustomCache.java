@@ -25,22 +25,23 @@ public class CustomCache<K, V> implements Cache<K, V> {
     /**
      *设置600秒后Shiro缓存过期 @Value("${config.shiro-cache-expireTime}")
      */
-    private String shiroCacheExpireTime = "600";
 
     private RedisTemplate<String, Object> redisTemplate;
 
+    /**
+     * 使用StringRedisSerializer做序列化
+     * redisTemplate.setValueSerializer(new StringRedisSerializer());
+     */
+    @SuppressWarnings("unchecked")
     public CustomCache(RedisTemplate redisTemplate) {
-        // 使用StringRedisSerializer做序列化
-        // redisTemplate.setValueSerializer(new StringRedisSerializer());
         this.redisTemplate = redisTemplate;
     }
 
     /**
      * 缓存的key名称获取为shiro:cache:account
      *
-     * @param key
+     * @param key key
      * @return java.lang.String
-     * @author Wang926454
      * @date 2018/9/4 18:33
      */
     private String getKey(Object key) {
@@ -51,6 +52,7 @@ public class CustomCache<K, V> implements Cache<K, V> {
      * 获取缓存
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Object get(Object key) throws CacheException {
         return redisTemplate.opsForValue().get(this.getKey(key));
     }
@@ -59,14 +61,11 @@ public class CustomCache<K, V> implements Cache<K, V> {
      * 保存缓存
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Object put(Object key, Object value) throws CacheException {
-        // 读取配置文件，获取Redis的Shiro缓存过期时间
-        // PropertiesUtil.readProperties("config.properties");
-        // String shiroCacheExpireTime =
-        // PropertiesUtil.getProperty("shiroCacheExpireTime");
         // 设置Redis的Shiro缓存
         try {
-            redisTemplate.opsForValue().set(this.getKey(key), value, Integer.parseInt(shiroCacheExpireTime), TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(this.getKey(key), value, Integer.parseInt(Const.SHIROCACHEEXPIRETIME), TimeUnit.SECONDS);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,6 +77,7 @@ public class CustomCache<K, V> implements Cache<K, V> {
      * 移除缓存
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Object remove(Object key) throws CacheException {
         redisTemplate.delete(this.getKey(key));
         return null;

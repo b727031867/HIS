@@ -47,6 +47,13 @@ public interface DoctorService {
     List<DoctorUserVo> getDoctorsByDepartmentCode(String departmentCode);
 
     /**
+     * 根据属性查询医生
+     * @param doctorUserVo 医生的业务逻辑对象
+     * @return 医生列表
+     */
+    List<DoctorUserVo> selectDoctorByAttribute(DoctorUserVo doctorUserVo);
+
+    /**
      * 更新此医生的信息
      * @param doctor
      * @return 被更新医生的ID

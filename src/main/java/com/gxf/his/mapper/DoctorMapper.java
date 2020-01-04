@@ -54,7 +54,7 @@ public interface DoctorMapper {
             @Result(column = "doctor_name", property = "doctorName", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_professional_title", property = "doctorProfessionalTitle", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_introduction", property = "doctorIntroduction", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "department_code", property = "departmentCode", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR,one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
             @Result(column = "scheduling_id", property = "schedulingId", jdbcType = JdbcType.BIGINT),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
             @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
@@ -68,12 +68,45 @@ public interface DoctorMapper {
             @Result(column = "doctor_name", property = "doctorName", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_professional_title", property = "doctorProfessionalTitle", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_introduction", property = "doctorIntroduction", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "department_code", property = "departmentCode", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR,one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
             @Result(column = "scheduling_id", property = "schedulingId", jdbcType = JdbcType.BIGINT),
-            @Result(column = "user_id", property = "userId", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
+            @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
             @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
     })
     List<DoctorUserVo> selectDoctorByCondition(String departmentCode);
+
+
+    @Select("<script>"
+            + "SELECT "
+            + " * "
+            + "FROM entity_doctor "
+            + "<where> "
+            + "<if test='doctorName != null'>"
+            + " doctor_name like '%${doctorName}%' "
+            + "</if> "
+            + "<if test='departments != null'> "
+            + " AND department_code in "
+            + " <foreach item='department' index='index' collection='departments' open='(' separator=',' close=')'>"
+            + " #{department.departmentCode}"
+            + "</foreach>"
+            + "</if>"
+            + "<if test='doctorProfessionalTitle != null'> "
+            + " AND doctor_professional_title like '%${doctorProfessionalTitle}%' "
+            + "</if>"
+            + "</where> "
+            + "</script>")
+    @Results({
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "employee_id", property = "employeeId", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "doctor_name", property = "doctorName", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "doctor_professional_title", property = "doctorProfessionalTitle", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "doctor_introduction", property = "doctorIntroduction", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR,one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
+            @Result(column = "scheduling_id", property = "schedulingId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
+            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
+    })
+    List<DoctorUserVo> selectDoctorByAtribute(DoctorUserVo doctorUserVo);
 
 
     @Update({"update entity_doctor", "set employee_id = #{employeeId,jdbcType=VARCHAR},", "doctor_name = " +

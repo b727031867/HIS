@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Department implements Serializable {
     private Long departmentId;
 
-    private Integer departmentCode;
+    private String departmentCode;
 
     private String departmentName;
 

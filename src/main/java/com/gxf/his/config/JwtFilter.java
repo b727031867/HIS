@@ -92,7 +92,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         }
         logger.debug("Authorization字段为空！禁止访问");
         msg = "未认证不许访问！";
-        this.response401(response, msg);
+        this.response401(response,msg);
         return false;
     }
 
@@ -114,7 +114,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     /**
      * 重定向，返回HTTP 401错误
      */
-    private boolean abort401(ServletResponse response) {
+    private boolean abort(ServletResponse response) {
         try {
             HttpServletResponse resp = (HttpServletResponse) response;
             resp.sendRedirect("/401");
@@ -145,7 +145,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json; charset=utf-8");
         try (PrintWriter out = httpServletResponse.getWriter()) {
-            out.append(ServerResponseVO.error(ServerResponseEnum.UNAUTHORIZED).toString());
+            ServerResponseVO serverResponseVO = new ServerResponseVO();
+            serverResponseVO.setMessage(msg);
+            serverResponseVO.setCode(401);
+            out.append(serverResponseVO.toString());
         } catch (IOException e) {
             logger.error("返回响应信息出现IOException异常" + e.getMessage());
         }

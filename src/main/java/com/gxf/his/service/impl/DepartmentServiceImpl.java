@@ -59,4 +59,16 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new DepartmentException(ServerResponseEnum.DEPARTMENT_DELETE_FAIL);
         }
     }
+
+    @Override
+    public List<Department> getDepartmentsByVaguelyDepartmentName(String name) {
+        try {
+            String vaguelyName = "%"+name+"%";
+            List<Department> departments = departmentMapper.getDepartmentsByVaguelyDepartmentName(vaguelyName);
+            return departments;
+        }catch (Exception e){
+            logger.error("科室查询失败！",e);
+            throw new DepartmentException(ServerResponseEnum.DEPARTMENT_LIST_FAIL);
+        }
+    }
 }

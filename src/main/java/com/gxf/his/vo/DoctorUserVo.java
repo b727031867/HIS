@@ -1,8 +1,10 @@
 package com.gxf.his.vo;
 
-import com.gxf.his.po.Scheduling;
+import com.gxf.his.po.Department;
 import com.gxf.his.po.User;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author 龚秀峰
@@ -20,11 +22,13 @@ public class DoctorUserVo {
 
     private String doctorIntroduction;
 
-    private String departmentCode;
+    private Department department;
 
     private Long schedulingId;
 
     private Integer ticketDayNum;
 
     private User user;
+
+    private List<Department> departments;
 }

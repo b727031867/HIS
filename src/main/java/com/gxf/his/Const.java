@@ -1,6 +1,5 @@
 package com.gxf.his;
 
-import sun.security.provider.SHA;
 
 /**
  * @author 龚秀峰
@@ -39,5 +38,10 @@ public class Const {
     * description: 用于刷新的Token的前缀
     */
    public static final String REDIS_CONSTANT_REFRESH_TOKEN_PREFIX = "shiro:refresh_token:";
+
+   /**
+    * 设置600秒后Shiro缓存过期
+    */
+   public static final String SHIROCACHEEXPIRETIME = "600";
 
 }

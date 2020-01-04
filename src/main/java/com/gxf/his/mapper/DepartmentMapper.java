@@ -21,7 +21,7 @@ public interface DepartmentMapper {
         "insert into entity_department (department_id, department_code, ",
         "department_name, department_introduction, ",
         "department_parent_id)",
-        "values (#{departmentId,jdbcType=BIGINT}, #{departmentCode,jdbcType=INTEGER}, ",
+        "values (#{departmentId,jdbcType=BIGINT}, #{departmentCode,jdbcType=VARCHAR}, ",
         "#{departmentName,jdbcType=VARCHAR}, #{departmentIntroduction,jdbcType=VARCHAR}, ",
         "#{departmentParentId,jdbcType=BIGINT})"
     })
@@ -35,12 +35,44 @@ public interface DepartmentMapper {
     })
     @Results({
         @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
-        @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.INTEGER),
+        @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
     })
     Department selectByPrimaryKey(Long departmentId);
+
+
+    @Select({
+            "select",
+            "department_id, department_code, department_name, department_introduction, department_parent_id",
+            "from entity_department",
+            "where department_code = #{departmentCode,jdbcType=VARCHAR}"
+    })
+    @Results({
+            @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
+    })
+    Department selectByDepartmentCode(String departmentCode);
+
+    @Select({
+            "select",
+            "department_id, department_code, department_name, department_introduction, department_parent_id",
+            "from entity_department",
+            "where department_name like #{name,jdbcType=VARCHAR}"
+    })
+    @Results({
+            @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
+    })
+    List<Department> getDepartmentsByVaguelyDepartmentName(String name);
+
 
     @Select({
         "select",
@@ -49,7 +81,7 @@ public interface DepartmentMapper {
     })
     @Results({
         @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
-        @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.INTEGER),
+        @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
         @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
@@ -63,7 +95,7 @@ public interface DepartmentMapper {
     })
     @Results({
             @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
-            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.INTEGER),
+            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
             @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
             @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
             @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
@@ -72,7 +104,7 @@ public interface DepartmentMapper {
 
     @Update({
         "update entity_department",
-        "set department_code = #{departmentCode,jdbcType=INTEGER},",
+        "set department_code = #{departmentCode,jdbcType=VARCHAR},",
           "department_name = #{departmentName,jdbcType=VARCHAR},",
           "department_introduction = #{departmentIntroduction,jdbcType=VARCHAR},",
           "department_parent_id = #{departmentParentId,jdbcType=BIGINT}",

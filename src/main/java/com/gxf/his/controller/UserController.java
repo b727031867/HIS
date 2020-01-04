@@ -91,7 +91,7 @@ public class UserController {
     @PostMapping("/saveDoctor")
     public ServerResponseVO saveDoctor(@RequestBody  DoctorUserVo doctorUserVo) {
         if (StringUtils.isEmpty(doctorUserVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorUserVo.getUser().getUserPassword().trim())
-                || StringUtils.isEmpty(doctorUserVo.getDepartmentCode().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorIntroduction().trim())
+                || StringUtils.isEmpty(doctorUserVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorIntroduction().trim())
                 || StringUtils.isEmpty(doctorUserVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorProfessionalTitle().trim())
                 || StringUtils.isEmpty(doctorUserVo.getEmployeeId().trim())
         ) {
@@ -100,7 +100,7 @@ public class UserController {
         User user = (User) doHashedCredentials(doctorUserVo.getUser().getUserName(), doctorUserVo.getUser().getUserPassword());
         Long userId = userService.addUser(user);
         Doctor doctor = new Doctor();
-        doctor.setDepartmentCode(doctorUserVo.getDepartmentCode());
+        doctor.setDepartmentCode(doctorUserVo.getDepartment().getDepartmentCode());
         doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
         doctor.setDoctorName(doctorUserVo.getDoctorName());
         doctor.setDoctorProfessionalTitle(doctorUserVo.getDoctorProfessionalTitle());
