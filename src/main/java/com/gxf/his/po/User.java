@@ -23,6 +23,8 @@ public class User implements Serializable {
 
     private Date userCreateDate;
 
+    private Long appId;
+
     private static final long serialVersionUID = 1L;
 
 }

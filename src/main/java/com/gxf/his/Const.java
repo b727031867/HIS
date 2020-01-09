@@ -44,4 +44,9 @@ public class Const {
     */
    public static final String SHIROCACHEEXPIRETIME = "600";
 
+   /**
+    * 本项目的应用ID
+    */
+   public static final Long APP_ID = 1L;
+
 }

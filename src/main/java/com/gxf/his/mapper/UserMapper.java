@@ -12,7 +12,7 @@ public interface UserMapper {
     //  ********************************查询方法********************************
     @Select({
             "select",
-            "user_id, user_name, user_salt, user_password, user_status, user_create_date",
+            "user_id, user_name, user_salt, user_password, user_status, user_create_date,app_id ",
             "from entity_user",
             "where user_id = #{userId,jdbcType=BIGINT}"
     })
@@ -22,13 +22,14 @@ public interface UserMapper {
             @Result(column="user_salt", property="userSalt", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_password", property="userPassword", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_status", property="userStatus", jdbcType=JdbcType.TINYINT),
-            @Result(column="user_create_date", property="userCreateDate", jdbcType=JdbcType.TIMESTAMP)
+            @Result(column="user_create_date", property="userCreateDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="app_id", property="appId", jdbcType=JdbcType.BIGINT)
     })
     User selectByPrimaryKey(Long userId);
 
     @Select({
             "select",
-            "user_id, user_name, user_salt, user_password, user_status, user_create_date",
+            "user_id, user_name, user_salt, user_password, user_status, user_create_date,app_id ",
             "from entity_user",
             "where user_name = #{userName,jdbcType=VARCHAR}"
     })
@@ -38,13 +39,14 @@ public interface UserMapper {
             @Result(column="user_salt", property="userSalt", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_password", property="userPassword", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_status", property="userStatus", jdbcType=JdbcType.TINYINT),
-            @Result(column="user_create_date", property="userCreateDate", jdbcType=JdbcType.TIMESTAMP)
+            @Result(column="user_create_date", property="userCreateDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="app_id", property="appId", jdbcType=JdbcType.BIGINT)
     })
     User selectByUserName(String userName);
 
     @Select({
             "select",
-            "user_id, user_name, user_salt, user_password, user_status, user_create_date",
+            "user_id, user_name, user_salt, user_password, user_status, user_create_date, app_id ",
             "from entity_user"
     })
     @Results({
@@ -53,7 +55,8 @@ public interface UserMapper {
             @Result(column="user_salt", property="userSalt", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_password", property="userPassword", jdbcType=JdbcType.VARCHAR),
             @Result(column="user_status", property="userStatus", jdbcType=JdbcType.TINYINT),
-            @Result(column="user_create_date", property="userCreateDate", jdbcType=JdbcType.TIMESTAMP)
+            @Result(column="user_create_date", property="userCreateDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="app_id", property="appId", jdbcType=JdbcType.BIGINT)
     })
     List<User> selectAll();
 
@@ -65,6 +68,7 @@ public interface UserMapper {
             "user_password = #{userPassword,jdbcType=VARCHAR},",
             "user_status = #{userStatus,jdbcType=TINYINT},",
             "user_create_date = #{userCreateDate,jdbcType=TIMESTAMP}",
+            "app_id = #{appId,jdbcType=BIGINT}",
             "where user_id = #{userId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(User record);
@@ -73,10 +77,10 @@ public interface UserMapper {
     @Insert({
             "insert into entity_user (user_id, user_name, ",
             "user_salt, user_password, ",
-            "user_status, user_create_date)",
+            "user_status, user_create_date,app_id)",
             "values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, ",
             "#{userSalt,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, ",
-            "#{userStatus,jdbcType=TINYINT},#{userCreateDate,jdbcType=TIMESTAMP})"
+            "#{userStatus,jdbcType=TINYINT},#{userCreateDate,jdbcType=TIMESTAMP},#{appId,jdbcType=BIGINT})"
     })
     @Options(useGeneratedKeys = true, keyProperty = "userId", keyColumn = "user_id")
     int insert(User record);

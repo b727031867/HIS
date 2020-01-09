@@ -269,6 +269,7 @@ public class UserController {
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         ft.format(now);
         user.setUserCreateDate(now);
+        user.setAppId(Const.APP_ID);
         return user;
     }
 }
