@@ -30,6 +30,7 @@ public enum ServerResponseEnum {
     USER_UPDATE_FAIL(20,"用户更新失败"),
     USER_DELETE_FAIL(21,"用户删除失败"),
     PATIENT_SAVE_FAIL(40,"病人保存失败"),
+    PATIENT_DELETE_FAIL(41,"病人删除失败"),
     DOCTOR_SAVE_FAIL(50,"医生保存失败"),
     DOCTOR_LIST_FAIL(51,"医生查询失败"),
     DOCTOR_UPDATE_FAIL(52,"医生信息更新失败"),

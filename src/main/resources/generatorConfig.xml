@@ -78,15 +78,19 @@
         <!--modelType="flat"/>-->
         <!--<table tableName="entity_ticket" domainObjectName="Ticket"-->
         <!--modelType="flat"/>-->
-        <table tableName="entity_medical_record" domainObjectName="MedicalRecord"
-               modelType="flat">
-            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
-        </table>
-        <table tableName="entity_resource" domainObjectName="Resource"
-               modelType="flat">
-            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
-        </table>
-        <table tableName="entity_prescription_list" domainObjectName="PrescriptionList"
+        <!--<table tableName="entity_medical_record" domainObjectName="MedicalRecord"-->
+               <!--modelType="flat">-->
+            <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+        <!--</table>-->
+        <!--<table tableName="entity_resource" domainObjectName="Resource"-->
+               <!--modelType="flat">-->
+            <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+        <!--</table>-->
+        <!--<table tableName="entity_prescription_list" domainObjectName="PrescriptionList"-->
+               <!--modelType="flat">-->
+            <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+        <!--</table>-->
+        <table tableName="entity_cashier" domainObjectName="Cashier"
                modelType="flat">
             <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
         </table>

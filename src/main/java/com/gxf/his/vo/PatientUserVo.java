@@ -1,5 +1,6 @@
 package com.gxf.his.vo;
 
+import com.gxf.his.po.User;
 import lombok.Data;
 
 /**
@@ -26,7 +27,7 @@ public class PatientUserVo {
 
     private String patientPhone;
 
-    private Long userId;
+    private User user;
 
     private String userName;
 
@@ -36,5 +37,18 @@ public class PatientUserVo {
 
     private Byte userStatus;
 
+    /**
+     * 查询对象的属性名称
+     */
+    private String searchAttribute;
 
+    /**
+     * 是否精确查询
+     */
+    private Boolean isAccurate;
+
+    /**
+     * 查询的值
+     */
+    private String value;
 }
