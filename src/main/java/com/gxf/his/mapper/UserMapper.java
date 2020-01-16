@@ -67,7 +67,7 @@ public interface UserMapper {
             "user_salt = #{userSalt,jdbcType=VARCHAR},",
             "user_password = #{userPassword,jdbcType=VARCHAR},",
             "user_status = #{userStatus,jdbcType=TINYINT},",
-            "user_create_date = #{userCreateDate,jdbcType=TIMESTAMP}",
+            "user_create_date = #{userCreateDate,jdbcType=TIMESTAMP},",
             "app_id = #{appId,jdbcType=BIGINT}",
             "where user_id = #{userId,jdbcType=BIGINT}"
     })

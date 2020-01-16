@@ -3,11 +3,11 @@ logging:
   file: HisLogs/myLog.log
   level:
     gxf:
-      '*': TRACE
+      '*': INFO
     org:
       springframework:
         boot:
-          autoconfigure: DEBUG
+          autoconfigure: INFO
   pattern:
     console: '%d{MM-dd HH:mm:ss}[%thread] %-5level %logger{50} - %msg%n'
 ## 日志配置 - end
@@ -19,6 +19,8 @@ mybatis:
   configuration:
     # 开启自动驼峰命名规则
     map-underscore-to-camel-case: true
+    # MyBatis Log Plugin 开启日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 ## mybatis配置 - end
 
 
@@ -37,6 +39,8 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     # 连接池配置
     druid:
+      # JDBC的name
+      name: com.mysql.cj.jdbc.Driver
       # 初始化大小，最小，最大
       initial-size: 5
       min-idle: 5

@@ -42,7 +42,7 @@ public interface PatientService {
      * 删除某个病人，包括病人对象与对应的病人用户
      * @param patientId 病人对象的ID
      * @param userId 病人用户的ID
-     * @return 本次删除影响的行数
+     * @return 本次删除的病人数
      */
     int deletePatientAndUser(Long patientId,Long userId);
 

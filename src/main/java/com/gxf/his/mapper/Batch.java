@@ -1,6 +1,7 @@
 package com.gxf.his.mapper;
 
 import com.gxf.his.po.Doctor;
+import com.gxf.his.po.Patient;
 import com.gxf.his.po.User;
 import com.gxf.his.vo.DoctorUserVo;
 
@@ -26,6 +27,25 @@ public class Batch {
         for (int i = 0; i < doctors.size(); i++) {
             sb.append("'").append(doctors.get(i).getDoctorId()).append("'");
             if (i < doctors.size() - 1) {
+                sb.append(",");
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+    /**
+     * 批量删除患者
+     * @param map 传入的对象
+     * @return 批量删除的sql语句
+     */
+    public String batchPatientDelete(Map map) {
+        List<Patient> patients = (List<Patient>) map.get("list");
+        StringBuffer sb = new StringBuffer();
+        sb.append("delete from entity_patient where patient_id in (");
+        for (int i = 0; i < patients.size(); i++) {
+            sb.append("'").append(patients.get(i).getPatientId()).append("'");
+            if (i < patients.size() - 1) {
                 sb.append(",");
             }
         }

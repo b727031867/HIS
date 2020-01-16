@@ -12,6 +12,7 @@ import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.vo.DoctorUserVo;
 import com.gxf.his.vo.ServerResponseVO;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,31 @@ public class DoctorController {
             logger.info(user.toString());
             userService.updateUser(user);
         }
+        return ServerResponseVO.success();
+    }
+
+    @PostMapping
+    public ServerResponseVO saveDoctor(@RequestBody  DoctorUserVo doctorUserVo) {
+        if (StringUtils.isEmpty(doctorUserVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorUserVo.getUser().getUserPassword().trim())
+                || StringUtils.isEmpty(doctorUserVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorIntroduction().trim())
+                || StringUtils.isEmpty(doctorUserVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorProfessionalTitle().trim())
+                || StringUtils.isEmpty(doctorUserVo.getEmployeeId().trim())
+        ) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        if(userService.findByUserName(doctorUserVo.getUser().getUserName()) != null){
+            return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
+        }
+        User user =  UserController.doHashedCredentials(doctorUserVo.getUser().getUserName(), doctorUserVo.getUser().getUserPassword());
+        Long userId = userService.addUser(user);
+        Doctor doctor = new Doctor();
+        doctor.setDepartmentCode(doctorUserVo.getDepartment().getDepartmentCode());
+        doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
+        doctor.setDoctorName(doctorUserVo.getDoctorName());
+        doctor.setDoctorProfessionalTitle(doctorUserVo.getDoctorProfessionalTitle());
+        doctor.setEmployeeId(doctorUserVo.getEmployeeId());
+        doctor.setUserId(userId);
+        doctorService.addDoctor(doctor);
         return ServerResponseVO.success();
     }
 

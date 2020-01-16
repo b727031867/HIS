@@ -29,14 +29,6 @@ public class PatientUserVo {
 
     private User user;
 
-    private String userName;
-
-    private String userSalt;
-
-    private String userPassword;
-
-    private Byte userStatus;
-
     /**
      * 查询对象的属性名称
      */

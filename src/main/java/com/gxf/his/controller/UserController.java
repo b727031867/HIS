@@ -56,66 +56,15 @@ public class UserController {
     @Value("${config.refreshToken-expireTime}")
     private String refreshTokenExpireTime;
 
-    @Autowired
-    private PatientService patientService;
-    @Autowired
-    private DoctorService doctorService;
-
-
-    @PostMapping("/savePatient")
-    public ServerResponseVO savePatient(@RequestBody PatientUserVo patientUserVo) {
-        if (StringUtils.isEmpty(patientUserVo.getUserName().trim()) ||
-            StringUtils.isEmpty(patientUserVo.getUserPassword().trim()) ||
-            StringUtils.isEmpty(patientUserVo.getPatientPhone().trim()) ||
-            StringUtils.isEmpty(patientUserVo.getPatientName().trim()) ||
-            patientUserVo.getPatientAge() <= 0 ||
-            patientUserVo.getPatientAge() >= 150
-        ) {
-            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
-        }
-        User user = (User) doHashedCredentials(patientUserVo.getUserName(), patientUserVo.getUserPassword());
-        Long userId = userService.addUser(user);
-        Patient patient = new Patient();
-        patient.setPatientCard(patientUserVo.getPatientCard());
-        patient.setPatientMedicareCard(patientUserVo.getPatientMedicareCard());
-        patient.setPatientName(patientUserVo.getPatientName());
-        patient.setPatientSex(patientUserVo.getPatientSex());
-        patient.setUserId(userId);
-        patient.setPatientAge(patientUserVo.getPatientAge());
-        patient.setPatientIsMarriage(patientUserVo.getPatientIsMarriage());
-        patient.setPatientPhone(patientUserVo.getPatientPhone());
-        patientService.addPatient(patient);
-        return ServerResponseVO.success();
-    }
-
-    @PostMapping("/saveDoctor")
-    public ServerResponseVO saveDoctor(@RequestBody  DoctorUserVo doctorUserVo) {
-        if (StringUtils.isEmpty(doctorUserVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorUserVo.getUser().getUserPassword().trim())
-                || StringUtils.isEmpty(doctorUserVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorIntroduction().trim())
-                || StringUtils.isEmpty(doctorUserVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorProfessionalTitle().trim())
-                || StringUtils.isEmpty(doctorUserVo.getEmployeeId().trim())
-        ) {
-            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
-        }
-        User user = (User) doHashedCredentials(doctorUserVo.getUser().getUserName(), doctorUserVo.getUser().getUserPassword());
-        Long userId = userService.addUser(user);
-        Doctor doctor = new Doctor();
-        doctor.setDepartmentCode(doctorUserVo.getDepartment().getDepartmentCode());
-        doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
-        doctor.setDoctorName(doctorUserVo.getDoctorName());
-        doctor.setDoctorProfessionalTitle(doctorUserVo.getDoctorProfessionalTitle());
-        doctor.setEmployeeId(doctorUserVo.getEmployeeId());
-        doctor.setUserId(userId);
-        doctorService.addDoctor(doctor);
-        return ServerResponseVO.success();
-    }
-
     @PostMapping("/save")
     public ServerResponseVO save(User user) {
         if (StringUtils.isEmpty(user.getUserName().trim()) || StringUtils.isEmpty(user.getUserPassword().trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        user = (User) doHashedCredentials(user.getUserName(), user.getUserPassword());
+        if(userService.findByUserName(user.getUserName()) != null){
+            return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
+        }
+        user = doHashedCredentials(user.getUserName(), user.getUserPassword());
         if (user != null) {
             Long i = userService.addUser(user);
             if (i < 1) {

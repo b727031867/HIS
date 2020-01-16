@@ -11,6 +11,7 @@ import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.vo.PatientUserVo;
 import com.gxf.his.vo.ServerResponseVO;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.List;
  * @date 2019-10-24
  */
 @RestController
+@RequestMapping("/patient")
 public class PatientController {
     private Logger logger = LoggerFactory.getLogger(PatientController.class);
 
@@ -60,10 +62,9 @@ public class PatientController {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         PatientUserVo patientUserVo =new PatientUserVo();
-        patientUserVo.setSearchAttribute(attribute);
-        patientUserVo.setValue(value);
-//        List<Department> departments = departmentService.getDepartmentsByVaguelyDepartmentName(value);
-//            doctorUserVo.setDepartments(departments);
+        patientUserVo.setSearchAttribute(attribute.trim());
+        patientUserVo.setValue(value.trim());
+        patientUserVo.setIsAccurate(isAccurate);
         PageHelper.startPage(page, size);
         List<PatientUserVo> patients = patientService.selectPatientByAttribute(patientUserVo);
         PageInfo<PatientUserVo> pageInfo = PageInfo.of(patients);
@@ -71,20 +72,20 @@ public class PatientController {
     }
 
     @PutMapping
-    public ServerResponseVO saveDoctorAndUser(@RequestBody PatientUserVo patientUserVo) {
+    public ServerResponseVO<ServerResponseEnum> saveDoctorAndUser(@RequestBody PatientUserVo patientUserVo) {
         logger.info("当前更新的病人信息为：" + patientUserVo.toString());
-        Patient doctor = new Patient();
+        Patient patient = new Patient();
+        patient.setPatientId(patientUserVo.getPatientId());
+        patient.setPatientAge(patientUserVo.getPatientAge());
+        patient.setPatientName(patientUserVo.getPatientName());
+        patient.setPatientIsMarriage(patientUserVo.getPatientIsMarriage());
+        patient.setPatientCard(patientUserVo.getPatientCard());
+        patient.setPatientPhone(patientUserVo.getPatientPhone());
+        patient.setPatientSex(patientUserVo.getPatientSex());
+        patient.setPatientMedicareCard(patientUserVo.getPatientMedicareCard());
+        patient.setUserId(patientUserVo.getUser().getUserId());
         //更新病人信息
-//        doctor.setDoctorId(doctorUserVo.getDoctorId());
-//        doctor.setEmployeeId(doctorUserVo.getEmployeeId());
-//        doctor.setDoctorName(doctorUserVo.getDoctorName());
-//        doctor.setDoctorProfessionalTitle(doctorUserVo.getDoctorProfessionalTitle());
-//        doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
-//        doctor.setDepartmentCode(doctorUserVo.getDepartment().getDepartmentCode());
-//        doctor.setSchedulingId(doctorUserVo.getSchedulingId());
-//        doctor.setUserId(doctorUserVo.getUser().getUserId());
-//        doctor.setTicketDayNum(doctorUserVo.getTicketDayNum());
-        patientService.updatePatient(doctor);
+        patientService.updatePatient(patient);
         //更新用户信息
         User user = patientUserVo.getUser();
         //重新加密密码,生成新密码盐和密钥
@@ -99,6 +100,35 @@ public class PatientController {
         return ServerResponseVO.success();
     }
 
+    @PostMapping
+    public ServerResponseVO savePatient(@RequestBody PatientUserVo patientUserVo) {
+        if (StringUtils.isEmpty(patientUserVo.getUser().getUserName().trim()) ||
+                StringUtils.isEmpty(patientUserVo.getUser().getUserPassword().trim()) ||
+                StringUtils.isEmpty(patientUserVo.getPatientPhone().trim()) ||
+                StringUtils.isEmpty(patientUserVo.getPatientName().trim()) ||
+                patientUserVo.getPatientAge() <= 0 ||
+                patientUserVo.getPatientAge() >= 150
+        ) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        if(userService.findByUserName(patientUserVo.getUser().getUserName()) != null){
+            return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
+        }
+        User user = UserController.doHashedCredentials(patientUserVo.getUser().getUserName(), patientUserVo.getUser().getUserPassword());
+        Long userId = userService.addUser(user);
+        Patient patient = new Patient();
+        patient.setPatientCard(patientUserVo.getPatientCard());
+        patient.setPatientMedicareCard(patientUserVo.getPatientMedicareCard());
+        patient.setPatientName(patientUserVo.getPatientName());
+        patient.setPatientSex(patientUserVo.getPatientSex());
+        patient.setUserId(userId);
+        patient.setPatientAge(patientUserVo.getPatientAge());
+        patient.setPatientIsMarriage(patientUserVo.getPatientIsMarriage());
+        patient.setPatientPhone(patientUserVo.getPatientPhone());
+        patientService.addPatient(patient);
+        return ServerResponseVO.success();
+    }
+
     @DeleteMapping
     public ServerResponseVO deleteDoctorAndUserByDoctorId(@RequestParam(name = "patientId") Long patientId,
                                                           @RequestParam(name = "userId") Long userId) {
@@ -106,7 +136,7 @@ public class PatientController {
             patientService.deletePatientAndUser(patientId, userId);
             return ServerResponseVO.success();
         } catch (Exception e) {
-            return ServerResponseVO.error(ServerResponseEnum.USER_DELETE_FAIL);
+            return ServerResponseVO.error(ServerResponseEnum.PATIENT_DELETE_FAIL);
         }
     }
 
