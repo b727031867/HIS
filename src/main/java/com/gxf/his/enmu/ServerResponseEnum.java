@@ -47,7 +47,11 @@ public enum ServerResponseEnum {
     SCHEDULING_DELETE_FAIL(81,"排班信息删除失败"),
     SCHEDULING_UPDATE_FAIL(82,"排班信息更新失败"),
     SCHEDULING_SELECT_NONE(83,"排班信息查找结果为空"),
-    SCHEDULING_SELECT_FAIL(83,"排班信息查找失败");
+    SCHEDULING_SELECT_FAIL(83,"排班信息查找失败"),
+    CASHIER_SAVE_FAIL(100,"收银员保存失败"),
+    CASHIER_DELETE_FAIL(101,"收银员删除失败"),
+    CASHIER_LIST_FAIL(102,"收银员查询失败"),
+    CASHIER_UPDATE_FAIL(103,"收银员信息更新失败");
     Integer code;
     String message;
 }

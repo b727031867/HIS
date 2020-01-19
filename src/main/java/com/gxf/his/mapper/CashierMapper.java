@@ -1,14 +1,11 @@
 package com.gxf.his.mapper;
 
 import com.gxf.his.po.Cashier;
-import java.util.List;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.gxf.his.vo.CashierUserVo;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+
+import java.util.List;
 
 public interface CashierMapper {
     @Delete({
@@ -16,6 +13,15 @@ public interface CashierMapper {
         "where cashier_id = #{cashierId,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(Long cashierId);
+
+    /**
+     * 批量删除收银员
+     * @param cashiers 收银员列表
+     * @return 影响的行数
+     */
+    @DeleteProvider(type = Batch.class, method = "batchCashierDelete")
+    Integer batchCashierDelete(List<Cashier> cashiers);
+
 
     @Insert({
         "insert into entity_cashier (cashier_id, `name`, ",
@@ -49,14 +55,60 @@ public interface CashierMapper {
         "from entity_cashier"
     })
     @Results({
-        @Result(column="cashier_id", property="cashierId", jdbcType=JdbcType.BIGINT, id=true),
-        @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
-        @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
-        @Result(column="entry_date", property="entryDate", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
-        @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT)
+            @Result(column="cashier_id", property="cashierId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
+            @Result(column="entry_date", property="entryDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="department", property="departmentCode", jdbcType=JdbcType.VARCHAR, one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
+            @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey"))
     })
-    List<Cashier> selectAll();
+    List<CashierUserVo> selectAll();
+
+    @Select("<script>"
+            + "SELECT "
+            + " * "
+            + "FROM entity_cashier "
+            + "<where> "
+            + "<if test='searchAttribute == \"name\" '>"
+            + " name like CONCAT('%',#{value},'%')  "
+            + "</if> "
+            + "<if test='searchAttribute == \"phone\" '> "
+            + " AND phone like  CONCAT('%',#{value},'%') "
+            + "</if>"
+            + "</where> "
+            + "</script>")
+    @Results({
+            @Result(column="cashier_id", property="cashierId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
+            @Result(column="entry_date", property="entryDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="department_code", property="department", jdbcType=JdbcType.VARCHAR, one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
+            @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey"))
+    })
+    List<CashierUserVo> selectCashierByAttribute(CashierUserVo cashierUserVo);
+
+    @Select("<script>"
+            + "SELECT "
+            + " * "
+            + "FROM entity_cashier "
+            + "<where> "
+            + "<if test='searchAttribute == \"name\" '>"
+            + " name = #{value} "
+            + "</if> "
+            + "<if test='searchAttribute == \"phone\" '> "
+            + " AND phone = #{value} "
+            + "</if>"
+            + "</where> "
+            + "</script>")
+    @Results({
+            @Result(column="cashier_id", property="cashierId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
+            @Result(column="entry_date", property="entryDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="department_code", property="department", jdbcType=JdbcType.VARCHAR, one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
+            @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey"))
+    })
+    List<CashierUserVo> selectCashierByAccurateAttribute(CashierUserVo cashierUserVo);
 
     @Update({
         "update entity_cashier",

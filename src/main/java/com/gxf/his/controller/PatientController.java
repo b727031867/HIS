@@ -30,11 +30,10 @@ public class PatientController {
     private Logger logger = LoggerFactory.getLogger(PatientController.class);
 
     @Autowired
-    public PatientController(PatientService dservice, UserService uService, DepartmentService depService, RedisClient redis) {
+    public PatientController(PatientService dservice, UserService uService, RedisClient redis) {
         this.redis = redis;
         patientService = dservice;
         userService = uService;
-        departmentService = depService;
     }
 
     private RedisClient redis;
@@ -43,7 +42,6 @@ public class PatientController {
 
     private UserService userService;
 
-    private DepartmentService departmentService;
 
     @GetMapping
     public ServerResponseVO getPatients(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
@@ -55,7 +53,7 @@ public class PatientController {
     }
 
     @GetMapping("/attribute")
-    public ServerResponseVO getDoctorsByAttribute(@RequestParam(value = "attribute",defaultValue = "patientName") String attribute
+    public ServerResponseVO getPatientsByAttribute(@RequestParam(value = "attribute",defaultValue = "patientName") String attribute
             , @RequestParam(value = "isAccurate") Boolean isAccurate , @RequestParam(value = "value") String value , @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
         if(value == null || value.trim().length() == 0 || isAccurate == null){
@@ -72,7 +70,7 @@ public class PatientController {
     }
 
     @PutMapping
-    public ServerResponseVO<ServerResponseEnum> saveDoctorAndUser(@RequestBody PatientUserVo patientUserVo) {
+    public ServerResponseVO savePatientAndUser(@RequestBody PatientUserVo patientUserVo) {
         logger.info("当前更新的病人信息为：" + patientUserVo.toString());
         Patient patient = new Patient();
         patient.setPatientId(patientUserVo.getPatientId());
@@ -122,7 +120,7 @@ public class PatientController {
     }
 
     @DeleteMapping
-    public ServerResponseVO deleteDoctorAndUserByDoctorId(@RequestParam(name = "patientId") Long patientId,
+    public ServerResponseVO deletePatientAndUserByPatientId(@RequestParam(name = "patientId") Long patientId,
                                                           @RequestParam(name = "userId") Long userId) {
         try {
             patientService.deletePatientAndUser(patientId, userId);
@@ -133,7 +131,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/batch")
-    public ServerResponseVO deleteDoctorsAndUsersByIds(@RequestBody List<PatientUserVo> patientUserVos){
+    public ServerResponseVO deletePatientsAndUsersByIds(@RequestBody List<PatientUserVo> patientUserVos){
         List<Patient> patients = new ArrayList<>(16);
         List<User> users = new ArrayList<>(16);
         for(PatientUserVo patientUserVo : patientUserVos){

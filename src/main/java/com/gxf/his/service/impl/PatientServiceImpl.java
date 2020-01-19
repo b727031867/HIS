@@ -87,7 +87,7 @@ public class PatientServiceImpl implements PatientService {
         a = patientMapper.deleteByPrimaryKey(patientId) + a;
         a = userService.deleteUser(userId) + a;
         if(a != b){
-            logger.warn("删除时，没有找到ID为"+patientId+"的用户或ID为"+userId+"的病人！");
+            logger.warn("删除时，没有找到ID为"+patientId+"的用户并且ID为"+userId+"的病人！");
             throw new PatientException(ServerResponseEnum.PATIENT_DELETE_FAIL);
         }
         return 1;
