@@ -1,5 +1,6 @@
 package com.gxf.his.service.impl;
 
+import com.gxf.his.controller.UserController;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.GlobalExceptionHandler;
 import com.gxf.his.exception.UserException;
@@ -72,12 +73,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long updateUser(User user) {
-        try {
-            userMapper.updateByPrimaryKey(user);
-        }catch (Exception e){
-            logger.error("User更新失败!",e);
-            throw new UserException(ServerResponseEnum.USER_UPDATE_FAIL);
+        //重新加密密码,生成新密码盐和密钥
+        String password = user.getUserPassword();
+        //密码不为空才进行加密更新用户信息
+        if(!"".equals(password.trim())) {
+            User tempUser = UserController.doHashedCredentials(user.getUserName(), password);
+            user.setUserPassword(tempUser.getUserPassword());
+            user.setUserSalt(tempUser.getUserSalt());
+            logger.info("当前更新的用户信息为：" + user.toString());
+            try {
+                userMapper.updateByPrimaryKey(user);
+            }catch (Exception e){
+                logger.error("User更新失败!",e);
+                throw new UserException(ServerResponseEnum.USER_UPDATE_FAIL);
+            }
+        }else {
+            logger.info("当前用户密码为空！");
         }
         return user.getUserId();
     }
+
 }

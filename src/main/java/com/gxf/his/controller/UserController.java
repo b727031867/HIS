@@ -221,4 +221,5 @@ public class UserController {
         user.setAppId(Const.APP_ID);
         return user;
     }
+
 }

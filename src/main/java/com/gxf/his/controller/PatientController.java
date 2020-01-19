@@ -88,15 +88,7 @@ public class PatientController {
         patientService.updatePatient(patient);
         //更新用户信息
         User user = patientUserVo.getUser();
-        //重新加密密码,生成新密码盐和密钥
-        String password = user.getUserPassword();
-        if(!"".equals(password.trim())){
-            User tempUser = UserController.doHashedCredentials(user.getUserName(), password);
-            user.setUserPassword(tempUser.getUserPassword());
-            user.setUserSalt(tempUser.getUserSalt());
-            logger.info(user.toString());
-            userService.updateUser(user);
-        }
+        userService.updateUser(user);
         return ServerResponseVO.success();
     }
 
