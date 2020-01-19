@@ -70,7 +70,7 @@ public class CashierController {
 
     @PutMapping
     public ServerResponseVO saveCashierAndUser(@RequestBody CashierUserVo cashierUserVo) {
-        logger.info("当前更新的病人信息为：" + cashierUserVo.toString());
+        logger.info("当前更新的收银员信息为：" + cashierUserVo.toString());
         Cashier cashier = new Cashier();
         cashier.setCashierId(cashierUserVo.getCashierId());
         cashier.setDepartmentCode(cashierUserVo.getDepartment().getDepartmentCode());
@@ -78,7 +78,7 @@ public class CashierController {
         cashier.setName(cashierUserVo.getName());
         cashier.setPhone(cashierUserVo.getPhone());
         cashier.setUserId(cashierUserVo.getUser().getUserId());
-        //更新病人信息
+        //更新收银员信息
         cashierService.updateCashier(cashier);
         //更新用户信息
         User user = cashierUserVo.getUser();
@@ -95,9 +95,8 @@ public class CashierController {
         ) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        if(userService.findByUserName(cashierUserVo.getUser().getUserName()) != null){
-            return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
-        }
+        //如果此用户名对应多个用户，则会抛出异常
+        userService.findByUserName(cashierUserVo.getUser().getUserName());
         User user = UserController.doHashedCredentials(cashierUserVo.getUser().getUserName(), cashierUserVo.getUser().getUserPassword());
         Long userId = userService.addUser(user);
         Cashier cashier = new Cashier();
@@ -131,12 +130,7 @@ public class CashierController {
             cashiers.add(cashier);
             users.add(cashierUserVo.getUser());
         }
-        int a = cashierService.deleteCashierAndUserBatch(cashiers,users);
-        //正常情况应该删除n个医生就有n个对应的用户也删除
-        int b = 2;
-        if(cashierUserVos.size()*b == a){
-            return ServerResponseVO.success();
-        }
-        return  ServerResponseVO.error(ServerResponseEnum.CASHIER_DELETE_FAIL);
+        cashierService.deleteCashierAndUserBatch(cashiers,users);
+        return ServerResponseVO.success();
     }
 }

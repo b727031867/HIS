@@ -59,7 +59,7 @@ public interface CashierMapper {
             @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
             @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
             @Result(column="entry_date", property="entryDate", jdbcType=JdbcType.TIMESTAMP),
-            @Result(column="department", property="departmentCode", jdbcType=JdbcType.VARCHAR, one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
+            @Result(column="department_code", property="department", jdbcType=JdbcType.VARCHAR, one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey"))
     })
     List<CashierUserVo> selectAll();

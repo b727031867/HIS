@@ -7,8 +7,10 @@ import com.gxf.his.exception.UserException;
 import com.gxf.his.po.User;
 import com.gxf.his.mapper.UserMapper;
 import com.gxf.his.service.UserService;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,9 @@ public class UserServiceImpl implements UserService {
         User user;
         try {
             user = userMapper.selectByUserName(userName);
+        }catch (MyBatisSystemException e){
+            logger.error("当前用户名查出多位用户："+e.getMessage());
+            throw new UserException(ServerResponseEnum.USER_REPEAT_ERROR);
         }catch (Exception e){
             logger.error("根据用户名查询用户失败！",e);
             throw new UserException(ServerResponseEnum.USER_SELECT_FAIL);

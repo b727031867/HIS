@@ -57,7 +57,7 @@ public class PatientServiceTest {
     }
 
 
-    private static String getPhoneNumber() {
+    public static String getPhoneNumber() {
         int index=getNum(0,telFirst.length-1);
         String first=telFirst[index];
         String second=String.valueOf(getNum(1,888)+10000).substring(1);
@@ -66,7 +66,7 @@ public class PatientServiceTest {
     }
 
 
-    private String getRandomString(String[] randomValue){
+    public static String getRandomString(String[] randomValue){
         Random random = new Random();
         int index = random.nextInt(randomValue.length);
         return randomValue[index];
@@ -77,12 +77,12 @@ public class PatientServiceTest {
      * @param maxInt 最大值
      * @return 小于
      */
-    private int getRandomInteger(int maxInt){
+    public static int getRandomInteger(int maxInt){
         Random random = new Random();
         return random.nextInt(maxInt);
     }
 
-    private String getName() {
+    public static String getName() {
         Random random = new Random();
         String[] Surname = {"赵", "钱", "孙", "李", "周", "吴", "郑", "王", "冯", "陈", "褚", "卫", "蒋", "沈", "韩", "杨", "朱", "秦", "尤", "许",
                 "何", "吕", "施", "张", "孔", "曹", "严", "华", "金", "魏", "陶", "姜", "戚", "谢", "邹", "喻", "柏", "水", "窦", "章", "云", "苏", "潘", "葛", "奚", "范", "彭", "郎",
