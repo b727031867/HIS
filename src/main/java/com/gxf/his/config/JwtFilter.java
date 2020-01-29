@@ -55,6 +55,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 构造注入工具类
+     *
      * @param redisClient Redis客户端
      */
     public JwtFilter(RedisClient redisClient) {
@@ -92,7 +93,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         }
         logger.debug("Authorization字段为空！禁止访问");
         msg = "未认证不许访问！";
-        this.response401(response,msg);
+        this.response401(response, msg);
         return false;
     }
 
@@ -111,19 +112,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         return true;
     }
 
-    /**
-     * 重定向，返回HTTP 401错误
-     */
-    private boolean abort(ServletResponse response) {
-        try {
-            HttpServletResponse resp = (HttpServletResponse) response;
-            resp.sendRedirect("/401");
-            resp.setStatus(HttpStatus.UNAUTHORIZED.value());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return false;
-    }
 
     /**
      * 将executeLogin方法调用去除

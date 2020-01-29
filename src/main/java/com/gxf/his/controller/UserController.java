@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.ServerResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -40,21 +41,35 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    public UserController(UserService service,
+    public UserController(UserService service,PatientService pService,
                           RedisClient redis) {
         this.redis = redis;
         userService = service;
+        patientService = pService;
     }
 
     private RedisClient redis;
 
     private UserService userService;
 
+    private PatientService patientService;
+
     /**
      * 用户每隔多少时间需要重新登陆一次，单位：秒
      **/
     @Value("${config.refreshToken-expireTime}")
     private String refreshTokenExpireTime;
+
+    @GetMapping("/checkUsername")
+    public ServerResponseVO checkUsernameIsExists(@RequestParam(value = "userName") String userName){
+        if (StringUtils.isEmpty(userName.trim())) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        if(userService.findByUserName(userName) != null){
+            return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
+        }
+        return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
+    }
 
     @PostMapping("/save")
     public ServerResponseVO save(User user) {
@@ -73,6 +88,24 @@ public class UserController {
             }
         }
 
+        return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
+    }
+
+    @PostMapping("/registerPatient")
+    public ServerResponseVO registerPatient(@RequestParam(value = "userName") String userName,
+                                        @RequestParam(value = "userPassword") String password) {
+        if (StringUtils.isEmpty(userName.trim()) || StringUtils.isEmpty(password.trim())) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        if(userService.findByUserName(password) != null){
+            return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
+        }
+        User user = doHashedCredentials(userName, password);
+        Long id = userService.addUser(user);
+        //病人关联用户
+        Patient patient = new Patient();
+        patient.setUserId(id);
+        patientService.addPatient(patient);
         return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
     }
 

@@ -136,13 +136,13 @@ public class ShiroConfig {
         // 设置认证失败的路径
         shiroFilterFactoryBean.setUnauthorizedUrl("/401");
         //排除401路径，ShiroFilter将不做过滤的操作
+        // 允许通过的接口
         filterRuleMap.put("/user/login", "anon");
+        filterRuleMap.put("/user/checkUsername", "anon");
+        filterRuleMap.put("/user/save", "anon");
+        filterRuleMap.put("/user/registerPatient", "anon");
         filterRuleMap.put("/druid/*", "anon");
         filterRuleMap.put("/401", "anon");
-        // 允许通过的测试接口
-        filterRuleMap.put("/user/save", "anon");
-        filterRuleMap.put("/user/savePatient", "anon");
-        filterRuleMap.put("/user/saveDoctor", "anon");
         // 所有的请求通过ShiroFilter执行处理
         filterRuleMap.put("/**", "jwt");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterRuleMap);
