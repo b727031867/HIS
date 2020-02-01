@@ -2,13 +2,17 @@ package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
 import com.gxf.his.po.Doctor;
+import com.gxf.his.po.Scheduling;
 import com.gxf.his.po.User;
+import com.gxf.his.uitls.CombinationUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -22,31 +26,174 @@ public class DoctorServiceTest {
     DoctorService doctorService;
     @Autowired
     UserService userService;
+    @Autowired
+    SchedulingService schedulingService;
+
+    String[] professionalTitles = {"主治医师", "副主任医师", "主任医师", "医师"};
+    String[] departmentCodes = {"0001", "0002", "0003", "0004", "0005", "0006", "0007", "0008", "0009", "0010", "0011", "0012", "0013", "0014"};
+    String[] employeeIdPrefix = {"ZY-00", "JZ-00", "ZC-00", "MZ-00"};
+    // 出诊时间段 0：上午8~12 1：下午14:30~18:30 2: 晚上19:00~2 3:白天全天 4:急诊24小时
+    static String[] workTimes = {"0", "1", "2", "3", "4"};
+    static String[] workDates = {"1", "2", "3", "4", "5", "6", "7"};
+
+    /**
+     * 希望生成多少位医生
+     */
+    static int generateDoctorNumber = 100;
+
+    /**
+     * 每个医生一天默认的挂号数
+     */
+    static int ticketNumber = 60;
+
+    /**
+     * 每层有多少房间
+     */
+    static int roomNumber = 15;
+    static String[] floors = {"1", "2", "3", "4", "5", "6"};
+    static String[] buildings = {"A", "B", "C"};
+    /**
+     * 排班可选列表
+     */
+    static ArrayList<Scheduling> schedulingList = new ArrayList<>(generateDoctorNumber);
+
+    /**
+     * 可能出现的工作日列表
+     */
+    static ArrayList<ArrayList<String>> dates = new ArrayList<>(8);
+
+    /**
+     * 出诊房间
+     */
+    static ArrayList<String> rooms = new ArrayList<>(160);
+
+    // 初始化工作日情况列表
+    private static void init() {
+        //上班周一到周日为1~7
+        ArrayList<String> is = new ArrayList<String>(Arrays.asList(workDates));
+        //一周上班两天的所有可能情况
+        ArrayList<String> twoWorkDates = CombinationUtil.combine(is, "", 2);
+        ArrayList<String> threeWorkDates = CombinationUtil.combine(is, "", 3);
+        ArrayList<String> fourWorkDates = CombinationUtil.combine(is, "", 4);
+        ArrayList<String> fiveWorkDates = CombinationUtil.combine(is, "", 5);
+        ArrayList<String> sixWorkDates = CombinationUtil.combine(is, "", 6);
+        //随机获取一种排班，加入排班列表中，如果排班列表
+        dates.add(twoWorkDates);
+        dates.add(threeWorkDates);
+        dates.add(fourWorkDates);
+        dates.add(fiveWorkDates);
+        dates.add(sixWorkDates);
+        //设置所有房间，分楼层设置
+        for (String building : buildings) {
+            for (String floor : floors) {
+                for (int i = 1; i <= roomNumber; i++) {
+                    //小于10则补0,比如 09 08
+                    String room;
+                    if (i % 10 == i) {
+                        room = building + "-" + floor + "0" + String.valueOf(i);
+                    } else {
+                        room = building + "-" + floor + String.valueOf(i);
+                    }
+                    rooms.add(room);
+                }
+            }
+        }
+        //初始化排班列表
+        setSchedulingList();
+    }
+
+
     @Test
-    public void testAddDoctor(){
-        String[] professionalTitles = {"主治医师","副主任医师","主任医师","医师"};
-        String[] departmentCodes = {"0001","0002","0003","0004","0005","0006","0007","0008","0009","0010","0011","0012","0013","0014"};
-        String[] employeeIdPrefix = {"ZY-00","JZ-00","ZC-00","MZ-00"};
-        for(int i=0;i<300;i++){
-            Doctor doctor =new Doctor();
-            String userName = "test"+i;
+    public void testAddDoctor() {
+        init();
+        for (int i = 0; i < generateDoctorNumber; i++) {
+            Doctor doctor = new Doctor();
+            String userName = "test" + i;
             String password = "test";
             String introduce = "这是一些测试医生介绍内容！这是一些测试医生介绍内容！这是一些测试医生介绍内容！";
-            User user = UserController.doHashedCredentials(userName,password);
+            User user = UserController.doHashedCredentials(userName, password);
             Long userId = userService.addUser(user);
             doctor.setDepartmentCode(getRandomString(departmentCodes));
             doctor.setDoctorIntroduction(introduce);
             doctor.setDoctorName(getName());
             doctor.setDoctorProfessionalTitle(getRandomString(professionalTitles));
-            doctor.setEmployeeId(getRandomString(employeeIdPrefix)+i);
+            doctor.setEmployeeId(getRandomString(employeeIdPrefix) + i);
+            doctor.setTicketDayNum(ticketNumber);
             doctor.setUserId(userId);
+            Scheduling scheduling = getScheduling();
+            Long id = schedulingService.addScheduling(scheduling);
+            doctor.setSchedulingId(id);
             doctorService.addDoctor(doctor);
         }
 
     }
 
+    /**
+     * 从排班列表中获取不冲突排班列表
+     *
+     * @return 返回一个排班
+     */
+    private static Scheduling getScheduling() {
+        Random random = new Random();
+        if(schedulingList.size() - 1 == 0){
+            return schedulingList.get(0);
+        }
+        int index = random.nextInt(schedulingList.size() - 1);
+        Scheduling scheduling = schedulingList.get(index);
+        //每个医生都有不同的排班，不可能出现同时在相同地方上班
+        schedulingList.remove(index);
+        return scheduling;
+    }
 
-    private String getRandomString(String[] randomValue){
+    /**
+     * 初始化不重复的排班
+     */
+    private static void setSchedulingList() {
+        for (; schedulingList.size() < generateDoctorNumber; ) {
+            Scheduling scheduling = new Scheduling();
+            String workDates = getWorkDays();
+            String workRoom = getWorkRoom();
+            //是否重复
+            boolean flag = false;
+            //检查已经保存的Scheduling，防止出现相同的排班情况，即上班周期重叠并且房间号完全相同
+            for (Scheduling schedulingItem : schedulingList) {
+                if (schedulingItem.getSchedulingRoom().equals(workRoom) && schedulingItem.getSchedulingTime().contains(workDates)) {
+                    flag = true;
+                }
+            }
+            scheduling.setSchedulingType(getRandomString(workTimes));
+            scheduling.setSchedulingTime(workDates);
+            scheduling.setSchedulingRoom(workRoom);
+            if (!flag) {
+                schedulingList.add(scheduling);
+            }
+        }
+    }
+
+    /**
+     * 随机获取一个房间
+     *
+     * @return room 房间号 A-101 A栋一楼一号房间 A-211 A栋二楼十一号房间
+     */
+    private static String getWorkRoom() {
+        Random random = new Random();
+        return rooms.get(random.nextInt(rooms.size() - 1));
+    }
+
+    /**
+     * 获取一周随机上几天班的某一种情况，比如 1，3，5 说明总共上三天班，并且周一、周三、周五上班。
+     *
+     * @return 上班情况 比如1，3，5
+     */
+    private static String getWorkDays() {
+        Random random = new Random();
+        //获取一周随机上几天班
+        ArrayList<String> strings = dates.get(random.nextInt(dates.size() - 1));
+        //返回上几天班的某种情况
+        return strings.get(random.nextInt(strings.size() - 1));
+    }
+
+    private static String getRandomString(String[] randomValue) {
         Random random = new Random();
         int index = random.nextInt(randomValue.length);
         return randomValue[index];
@@ -65,25 +212,24 @@ public class DoctorServiceTest {
         int index = random.nextInt(Surname.length - 1);
         String name = Surname[index]; //获得一个随机的姓氏
         int i = random.nextInt(3);//可以根据这个数设置产生的男女比例
-        if(i==2){
-            int j = random.nextInt(girl.length()-2);
+        if (i == 2) {
+            int j = random.nextInt(girl.length() - 2);
             if (j % 2 == 0) {
 //                name = "女-" + name + girl.substring(j, j + 2);
-                name =  name + girl.substring(j, j + 2);
+                name = name + girl.substring(j, j + 2);
             } else {
 //                name = "女-" + name + girl.substring(j, j + 1);
                 name = name + girl.substring(j, j + 1);
             }
 
-        }
-        else{
-            int j = random.nextInt(girl.length()-2);
+        } else {
+            int j = random.nextInt(girl.length() - 2);
             if (j % 2 == 0) {
 //                name = "男-" + name + boy.substring(j, j + 2);
-                name =  name + boy.substring(j, j + 2);
+                name = name + boy.substring(j, j + 2);
             } else {
 //                name = "男-" + name + boy.substring(j, j + 1);
-                name =  name + boy.substring(j, j + 1);
+                name = name + boy.substring(j, j + 1);
             }
 
         }

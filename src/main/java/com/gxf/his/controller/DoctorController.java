@@ -10,6 +10,7 @@ import com.gxf.his.po.User;
 import com.gxf.his.service.DepartmentService;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.UserService;
+import com.gxf.his.vo.DepartmentVo;
 import com.gxf.his.vo.DoctorUserVo;
 import com.gxf.his.vo.ServerResponseVO;
 import org.apache.commons.lang.StringUtils;
@@ -62,6 +63,14 @@ public class DoctorController {
         PageInfo<DoctorUserVo> pageInfo = PageInfo.of(doctors);
         return ServerResponseVO.success(pageInfo);
     }
+    @GetMapping("departmentCode")
+    public ServerResponseVO getDoctorsByDepartmentCode(String departmentCode){
+        if(departmentCode == null || departmentCode.trim().isEmpty()){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        List<DoctorUserVo> departmentVos = doctorService.getDoctorsByDepartmentCode(departmentCode);
+        return ServerResponseVO.success(departmentVos);
+    }
 
     @GetMapping("/attribute")
     public ServerResponseVO getDoctorsByAttribute(@RequestParam(value = "attribute",defaultValue = "doctorName") String attribute
@@ -102,7 +111,7 @@ public class DoctorController {
         doctor.setDoctorProfessionalTitle(doctorUserVo.getDoctorProfessionalTitle());
         doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
         doctor.setDepartmentCode(doctorUserVo.getDepartment().getDepartmentCode());
-        doctor.setSchedulingId(doctorUserVo.getSchedulingId());
+        doctor.setSchedulingId(doctorUserVo.getScheduling().getSchedulingId());
         doctor.setUserId(doctorUserVo.getUser().getUserId());
         doctor.setTicketDayNum(doctorUserVo.getTicketDayNum());
         doctorService.updateDoctor(doctor);

@@ -1,6 +1,7 @@
 package com.gxf.his.vo;
 
 import com.gxf.his.po.Department;
+import com.gxf.his.po.Scheduling;
 import com.gxf.his.po.User;
 import lombok.Data;
 
@@ -24,7 +25,7 @@ public class DoctorUserVo {
 
     private Department department;
 
-    private Long schedulingId;
+    private Scheduling scheduling;
 
     private Integer ticketDayNum;
 

@@ -11,7 +11,7 @@ public interface SchedulingService {
      * 插入一条排班信息
      * @param scheduling 排班信息类
      */
-    Integer addScheduling(Scheduling scheduling);
+    Long addScheduling(Scheduling scheduling);
 
     /**
      * 删除一条排班信息

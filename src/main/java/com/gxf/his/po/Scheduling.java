@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Scheduling implements Serializable {
     private Long schedulingId;
 
-    private Boolean schedulingType;
+    private String schedulingType;
 
     private String schedulingTime;
 

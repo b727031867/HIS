@@ -83,7 +83,7 @@ public class DoctorServiceImpl implements DoctorService {
     public List<DoctorUserVo> getDoctorsByDepartmentCode(String departmentCode) {
         List<DoctorUserVo> doctors;
         try {
-            doctors = doctorMapper.selectDoctorByCondition(departmentCode);
+            doctors = doctorMapper.selectDoctorByDepartmentCode(departmentCode);
         } catch (Exception e) {
             logger.error("按部门查询医生失败", e);
             throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);

@@ -69,11 +69,11 @@ public interface DoctorMapper {
             @Result(column = "doctor_professional_title", property = "doctorProfessionalTitle", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_introduction", property = "doctorIntroduction", jdbcType = JdbcType.VARCHAR),
             @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR,one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
-            @Result(column = "scheduling_id", property = "schedulingId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "scheduling_id", property = "scheduling", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.SchedulingMapper.selectByPrimaryKey")),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
             @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
     })
-    List<DoctorUserVo> selectDoctorByCondition(String departmentCode);
+    List<DoctorUserVo> selectDoctorByDepartmentCode(String departmentCode);
 
 
     @Select("<script>"

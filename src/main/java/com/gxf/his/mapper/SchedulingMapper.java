@@ -17,7 +17,7 @@ public interface SchedulingMapper {
     @Insert({
         "insert into entity_scheduling (scheduling_id, scheduling_type, ",
         "scheduling_time, scheduling_room)",
-        "values (#{schedulingId,jdbcType=BIGINT}, #{schedulingType,jdbcType=BIT}, ",
+        "values (#{schedulingId,jdbcType=BIGINT}, #{schedulingType,jdbcType=VARCHAR}, ",
         "#{schedulingTime,jdbcType=VARCHAR}, #{schedulingRoom,jdbcType=VARCHAR})"
     })
     int insert(Scheduling record);
@@ -30,7 +30,7 @@ public interface SchedulingMapper {
     })
     @Results({
         @Result(column="scheduling_id", property="schedulingId", jdbcType=JdbcType.BIGINT, id=true),
-        @Result(column="scheduling_type", property="schedulingType", jdbcType=JdbcType.BIT),
+        @Result(column="scheduling_type", property="schedulingType", jdbcType=JdbcType.VARCHAR),
         @Result(column="scheduling_time", property="schedulingTime", jdbcType=JdbcType.VARCHAR),
         @Result(column="scheduling_room", property="schedulingRoom", jdbcType=JdbcType.VARCHAR)
     })
@@ -43,7 +43,7 @@ public interface SchedulingMapper {
     })
     @Results({
         @Result(column="scheduling_id", property="schedulingId", jdbcType=JdbcType.BIGINT, id=true),
-        @Result(column="scheduling_type", property="schedulingType", jdbcType=JdbcType.BIT),
+        @Result(column="scheduling_type", property="schedulingType", jdbcType=JdbcType.VARCHAR),
         @Result(column="scheduling_time", property="schedulingTime", jdbcType=JdbcType.VARCHAR),
         @Result(column="scheduling_room", property="schedulingRoom", jdbcType=JdbcType.VARCHAR)
     })
@@ -51,7 +51,7 @@ public interface SchedulingMapper {
 
     @Update({
         "update entity_scheduling",
-        "set scheduling_type = #{schedulingType,jdbcType=BIT},",
+        "set scheduling_type = #{schedulingType,jdbcType=VARCHAR},",
           "scheduling_time = #{schedulingTime,jdbcType=VARCHAR},",
           "scheduling_room = #{schedulingRoom,jdbcType=VARCHAR}",
         "where scheduling_id = #{schedulingId,jdbcType=BIGINT}"

@@ -91,7 +91,7 @@ public interface DepartmentMapper {
     @Select({
             "select",
             "department_id, department_code, department_name, department_introduction, department_parent_id",
-            "from entity_department where department_parent_id = -1"
+            "from entity_department where department_parent_id != -2"
     })
     @Results({
             @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),

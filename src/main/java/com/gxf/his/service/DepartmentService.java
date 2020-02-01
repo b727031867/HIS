@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface DepartmentService {
     /**
-     * 获取所有顶级科室
+     * 获取所有医疗科室，不包括财务部门等
      * @return
      */
     List<Department> getAllFatherDepartments();
