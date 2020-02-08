@@ -8,8 +8,7 @@ import com.gxf.his.po.User;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.vo.PatientUserVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +21,8 @@ import java.util.List;
  * @date 2019-10-20
  */
 @Service
+@Slf4j
 public class PatientServiceImpl implements PatientService {
-    private Logger logger = LoggerFactory.getLogger(PatientServiceImpl.class);
 
     @Resource
     private PatientMapper patientMapper;
@@ -36,7 +35,7 @@ public class PatientServiceImpl implements PatientService {
         try {
             patientMapper.insert(patient);
         }catch (Exception e){
-            logger.error("病人保存失败",e);
+            log.error("病人保存失败",e);
             throw new PatientException(ServerResponseEnum.PATIENT_SAVE_FAIL);
         }
     }
@@ -47,7 +46,7 @@ public class PatientServiceImpl implements PatientService {
         try {
             patients = patientMapper.selectAll();
         } catch (Exception e) {
-            logger.error("查询所有病人失败", e);
+            log.error("查询所有病人失败", e);
             throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
         }
         return patients;
@@ -63,7 +62,7 @@ public class PatientServiceImpl implements PatientService {
                 patients = patientMapper.selectPatientByAttribute(patientUserVo);
             }
         } catch (Exception e) {
-            logger.error("按属性查询病人失败", e);
+            log.error("按属性查询病人失败", e);
             throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
         }
         return patients;
@@ -74,7 +73,7 @@ public class PatientServiceImpl implements PatientService {
         try {
             return patientMapper.updateByPrimaryKey(patient);
         } catch (Exception e) {
-            logger.error("病人信息更新失败", e);
+            log.error("病人信息更新失败", e);
             throw new PatientException(ServerResponseEnum.PATIENT_UPDATE_FAIL);
         }
     }
@@ -87,7 +86,7 @@ public class PatientServiceImpl implements PatientService {
         a = patientMapper.deleteByPrimaryKey(patientId) + a;
         a = userService.deleteUser(userId) + a;
         if(a != b){
-            logger.warn("删除时，没有找到ID为"+patientId+"的用户并且ID为"+userId+"的病人！");
+            log.warn("删除时，没有找到ID为"+patientId+"的用户并且ID为"+userId+"的病人！");
             throw new PatientException(ServerResponseEnum.PATIENT_DELETE_FAIL);
         }
         return 1;

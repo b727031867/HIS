@@ -2,13 +2,10 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.DepartmentException;
-import com.gxf.his.exception.PatientException;
 import com.gxf.his.mapper.DepartmentMapper;
 import com.gxf.his.po.Department;
 import com.gxf.his.service.DepartmentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,8 +16,8 @@ import java.util.List;
  * @date 2019-10-24
  */
 @Service
+@Slf4j
 public class DepartmentServiceImpl implements DepartmentService {
-    private Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class);
     @Resource
     private DepartmentMapper departmentMapper;
 
@@ -33,9 +30,9 @@ public class DepartmentServiceImpl implements DepartmentService {
             }
             return departments;
         } catch (DepartmentException e) {
-            logger.warn("当前暂无子科室！");
+            log.warn("当前暂无子科室！");
         } catch (Exception e) {
-            logger.warn("查询所有子科室出现异常！信息为：" + e.getMessage());
+            log.warn("查询所有子科室出现异常！信息为：" + e.getMessage());
         }
         return null;
     }
@@ -49,9 +46,9 @@ public class DepartmentServiceImpl implements DepartmentService {
             }
             return departments;
         } catch (DepartmentException e) {
-            logger.warn("当前暂无科室！");
+            log.warn("当前暂无科室！");
         } catch (Exception e) {
-            logger.warn("查询所有科室出现异常！信息为：" + e.getMessage());
+            log.warn("查询所有科室出现异常！信息为：" + e.getMessage());
         }
         return null;
     }
@@ -61,7 +58,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             departmentMapper.insert(department);
         }catch (Exception e){
-            logger.error("科室保存失败！",e);
+            log.error("科室保存失败！",e);
             throw new DepartmentException(ServerResponseEnum.PATIENT_SAVE_FAIL);
         }
     }
@@ -71,7 +68,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             departmentMapper.deleteByPrimaryKey(departmentId);
         }catch (Exception e){
-            logger.error("科室删除失败！",e);
+            log.error("科室删除失败！",e);
             throw new DepartmentException(ServerResponseEnum.DEPARTMENT_DELETE_FAIL);
         }
     }
@@ -83,7 +80,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             List<Department> departments = departmentMapper.getDepartmentsByVaguelyDepartmentName(vaguelyName);
             return departments;
         }catch (Exception e){
-            logger.error("科室查询失败！",e);
+            log.error("科室查询失败！",e);
             throw new DepartmentException(ServerResponseEnum.DEPARTMENT_LIST_FAIL);
         }
     }

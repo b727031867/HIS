@@ -29,4 +29,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/HisLogs/
+/classes/
+/Logs/

@@ -49,4 +49,28 @@ public class Const {
     */
    public static final Long APP_ID = 1L;
 
+   // ****************HIS系统相关参数的开始****************
+
+   /**
+    * 订单未付款的过期时间 单位：分钟
+    */
+   public static final long ORDER_EXPIRED_TIME = 10;
+
+   /**
+    * 订单类型：挂号单
+    */
+   public static final Integer GH = 0;
+
+   /**
+    * 订单类型：处方单
+    */
+   public static final Integer CF = 1;
+
+   /**
+    * 订单类型：检查单
+    */
+   public static final Integer JC = 2;
+
+   // ****************HIS系统相关参数的结束****************
+
 }

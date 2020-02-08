@@ -2,16 +2,12 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.controller.UserController;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.exception.GlobalExceptionHandler;
 import com.gxf.his.exception.UserException;
-import com.gxf.his.po.User;
 import com.gxf.his.mapper.UserMapper;
+import com.gxf.his.po.User;
 import com.gxf.his.service.UserService;
-import org.apache.ibatis.exceptions.TooManyResultsException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.MyBatisSystemException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,9 +18,8 @@ import java.util.List;
  * @date 2019-10-13
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
-
-    private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     @Resource
     private UserMapper userMapper;
@@ -35,10 +30,10 @@ public class UserServiceImpl implements UserService {
         try {
             user = userMapper.selectByUserName(userName);
         }catch (MyBatisSystemException e){
-            logger.error("当前用户名查出多位用户："+e.getMessage());
+            log.error("当前用户名查出多位用户："+e.getMessage());
             throw new UserException(ServerResponseEnum.USER_REPEAT_ERROR);
         }catch (Exception e){
-            logger.error("根据用户名查询用户失败！",e);
+            log.error("根据用户名查询用户失败！",e);
             throw new UserException(ServerResponseEnum.USER_SELECT_FAIL);
         }
         return user;
@@ -50,7 +45,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userMapper.deleteByPrimaryKey(id);
         }catch (Exception e){
-            logger.error("根据ID删除用户失败！",e);
+            log.error("根据ID删除用户失败！",e);
             throw new UserException(ServerResponseEnum.USER_DELETE_FAIL);
         }
     }
@@ -69,7 +64,7 @@ public class UserServiceImpl implements UserService {
         try{
             userMapper.insert(user);
         }catch (Exception e){
-            logger.error("User插入失败!",e);
+            log.error("User插入失败!",e);
             throw new UserException(ServerResponseEnum.USER_SAVE_FAIL);
         }
         return user.getUserId();
@@ -85,15 +80,15 @@ public class UserServiceImpl implements UserService {
             User tempUser = UserController.doHashedCredentials(user.getUserName(), password);
             user.setUserPassword(tempUser.getUserPassword());
             user.setUserSalt(tempUser.getUserSalt());
-            logger.info("当前更新的用户信息为：" + user.toString());
+            log.info("当前更新的用户信息为：" + user.toString());
             try {
                 userMapper.updateByPrimaryKey(user);
             }catch (Exception e){
-                logger.error("User更新失败!",e);
+                log.error("User更新失败!",e);
                 throw new UserException(ServerResponseEnum.USER_UPDATE_FAIL);
             }
         }else {
-            logger.info("当前用户密码为空！");
+            log.info("当前用户密码为空！");
         }
         return user.getUserId();
     }

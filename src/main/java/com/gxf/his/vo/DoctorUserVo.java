@@ -6,6 +6,7 @@ import com.gxf.his.po.TicketResource;
 import com.gxf.his.po.User;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @date 2019-10-13
  */
 @Data
-public class DoctorUserVo {
+public class DoctorUserVo implements Serializable {
     private Long doctorId;
 
     private String employeeId;

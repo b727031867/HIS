@@ -1,5 +1,6 @@
 package com.gxf.his.service.impl;
 
+import com.gxf.his.Const;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.OrderException;
 import com.gxf.his.mapper.OrderItemMapper;
@@ -9,12 +10,13 @@ import com.gxf.his.po.OrderItem;
 import com.gxf.his.po.TicketResource;
 import com.gxf.his.service.OrderService;
 import com.gxf.his.service.TicketResourceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.gxf.his.uitls.MyUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -22,9 +24,9 @@ import java.util.List;
  * 订单接口的实现类
  */
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
-    private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Resource
     private OrderMapper orderMapper;
@@ -48,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
                 orderItemMapper.deleteByOrderId(order.getOrderId());
             }
         } catch (Exception e) {
-            logger.error("查询并且删除过期订单失败", e);
+            log.error("查询并且删除过期订单失败", e);
             throw new OrderException(ServerResponseEnum.ORDER_LIST_FAIL);
         }
     }
@@ -57,17 +59,21 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = Exception.class)
     public void addOrder(Order order) {
         try {
-            orderMapper.insert(order);
             List<OrderItem> orderItemList = order.getOrderItemList();
             Long orderId = order.getOrderId();
+            BigDecimal totalPrice = BigDecimal.ZERO;
             for (OrderItem orderItem : orderItemList) {
                 orderItem.setOrderId(orderId);
+                //计算总价
+                totalPrice = totalPrice.add(orderItem.getOrderItemTotal().multiply(new BigDecimal(orderItem.getDrugQuantities())));
                 orderItemMapper.insert(orderItem);
                 //根据不同的订单项，锁定不同的资源
                 lockResources(orderItem);
             }
+            order.setOrderTotal(totalPrice);
+            orderMapper.insert(order);
         } catch (Exception e) {
-            logger.error("订单添加失败", e);
+            log.error("订单添加失败", e);
             throw new OrderException(ServerResponseEnum.ORDER_SAVE_FAIL);
         }
     }
@@ -79,9 +85,27 @@ public class OrderServiceImpl implements OrderService {
             orderMapper.deleteByPrimaryKey(orderId);
             orderItemMapper.deleteByOrderId(orderId);
         } catch (Exception e) {
-            logger.error("订单删除失败", e);
+            log.error("订单删除失败", e);
             throw new OrderException(ServerResponseEnum.ORDER_DELETE_FAIL);
         }
+    }
+
+    @Override
+    public <T> T getResourceByOrderTypeAndId(Integer orderType,Long resourceId) {
+        //挂号单
+        if(Const.GH.equals(orderType)){
+            return MyUtil.cast(ticketResourceService.getTicketResourceById(resourceId));
+        }
+        //检查单
+        if(Const.CF.equals(orderType)){
+            //TODO
+        }
+        //处方单
+        if(Const.JC.equals(orderType)){
+            //TODO
+        }
+        log.warn("未知的订单类型:"+orderType);
+        return null;
     }
 
     private void releaseResources(OrderItem orderItem){

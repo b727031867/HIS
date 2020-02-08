@@ -3,6 +3,7 @@ package com.gxf.his.vo;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @Author GXF
  */
 @Data
-public class DepartmentVo {
+public class DepartmentVo implements Serializable {
 
     /**
      * 导航名称

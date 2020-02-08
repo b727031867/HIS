@@ -5,6 +5,7 @@ import com.gxf.his.po.Department;
 import com.gxf.his.po.User;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * @date 2020-01-19
  */
 @Data
-public class CashierUserVo {
+public class CashierUserVo implements Serializable {
     private Long cashierId;
     private String name;
     private String phone;

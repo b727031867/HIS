@@ -1,13 +1,11 @@
 package com.gxf.his.task;
 
 import com.gxf.his.mapper.TicketResourceMapper;
-import com.gxf.his.po.Order;
 import com.gxf.his.po.TicketResource;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.OrderService;
 import com.gxf.his.vo.DoctorUserVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,8 +24,8 @@ import java.util.List;
  * 用于补充票务资源 与
  */
 @Component
+@Slf4j
 public class Task {
-    private static final Logger log = LoggerFactory.getLogger(Task.class);
 
     @Resource
     private TicketResourceMapper ticketResourceMapper;

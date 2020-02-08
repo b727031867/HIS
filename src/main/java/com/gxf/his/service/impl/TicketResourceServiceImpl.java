@@ -5,8 +5,7 @@ import com.gxf.his.exception.TicketResourceException;
 import com.gxf.his.mapper.TicketResourceMapper;
 import com.gxf.his.po.TicketResource;
 import com.gxf.his.service.TicketResourceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,9 +20,8 @@ import java.util.List;
  * @author GXF
  */
 @Service
+@Slf4j
 public class TicketResourceServiceImpl implements TicketResourceService {
-
-    private Logger logger = LoggerFactory.getLogger(TicketResourceServiceImpl.class);
 
     @Resource
     private TicketResourceMapper ticketResourceMapper;
@@ -33,7 +31,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
         try {
             ticketResourceMapper.insert(ticketResource);
         } catch (Exception e) {
-            logger.error("票务资源保存失败", e);
+            log.error("票务资源保存失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_SAVE_FAIL);
         }
     }
@@ -43,7 +41,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
         try {
             return ticketResourceMapper.selectByDoctorIdAndAvailableDate(doctorId, availableDateStart,availableDateEnd);
         } catch (Exception e) {
-            logger.error("票务资源查询失败", e);
+            log.error("票务资源查询失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_LIST_FAIL);
         }
     }
@@ -53,7 +51,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
         try {
             return ticketResourceMapper.selectByPrimaryKey(ticketResourceId);
         } catch (Exception e) {
-            logger.error("票务资源查询失败", e);
+            log.error("票务资源查询失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_LIST_FAIL);
         }
     }
@@ -68,7 +66,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
             expirationDate = calendar.getTime();
             return expirationDate;
         } catch (Exception e) {
-            logger.error("票务资源过期日期查询失败", e);
+            log.error("票务资源过期日期查询失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_EXPIRATION_DATE_FAIL);
         }
     }
@@ -84,7 +82,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
             startDate = calendar.getTime();
             return startDate;
         } catch (Exception e) {
-            logger.error("票务资源过期日期查询失败", e);
+            log.error("票务资源过期日期查询失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_EXPIRATION_DATE_FAIL);
         }
     }
@@ -94,7 +92,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
         try {
             return ticketResourceMapper.updateByPrimaryKey(ticketResource);
         } catch (Exception e) {
-            logger.error("票务资源更新失败", e);
+            log.error("票务资源更新失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_UPDATE_FAIL);
         }
     }
@@ -104,7 +102,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
         try {
             return ticketResourceMapper.deleteByDoctorIdAndAvailableDate(doctorId, availableDate);
         } catch (Exception e) {
-            logger.error("票务资源更新失败", e);
+            log.error("票务资源更新失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_UPDATE_FAIL);
         }
     }

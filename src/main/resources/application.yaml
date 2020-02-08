@@ -1,17 +1,3 @@
-## 日志配置 - start
-logging:
-  file: HisLogs/myLog.log
-  level:
-    gxf:
-      '*': INFO
-    org:
-      springframework:
-        boot:
-          autoconfigure: INFO
-  pattern:
-    console: '%d{MM-dd HH:mm:ss}[%thread] %-5level %logger{50} - %msg%n'
-## 日志配置 - end
-
 
 ## mybatis配置 - start
 mybatis:

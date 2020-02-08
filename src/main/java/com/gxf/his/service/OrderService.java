@@ -2,8 +2,6 @@ package com.gxf.his.service;
 
 import com.gxf.his.po.Order;
 
-import java.util.List;
-
 /**
  * @author GXF
  * 订单服务类
@@ -26,4 +24,12 @@ public interface OrderService {
      * @param orderId 要删除的订单ID
      */
     void deleteOrder(Long orderId);
+
+    /**
+     * 根据订单类型和资源ID获取订单资源
+     * @param orderType 订单类型编号
+     * @param resourceId 资源ID
+     * @return 具体的资源对象
+     */
+    <T> T getResourceByOrderTypeAndId(Integer orderType,Long resourceId);
 }

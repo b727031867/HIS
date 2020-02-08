@@ -3,6 +3,8 @@ package com.gxf.his.vo;
 import com.gxf.his.po.User;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 患者注册业务的数据类
  *
@@ -10,7 +12,7 @@ import lombok.Data;
  * @date 2019-10-13
  */
 @Data
-public class PatientUserVo {
+public class PatientUserVo implements Serializable {
     private Long patientId;
 
     private String patientName;

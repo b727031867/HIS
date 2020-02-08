@@ -8,8 +8,7 @@ import com.gxf.his.po.User;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.vo.DoctorUserVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +21,8 @@ import java.util.List;
  * @date 2019-10-20
  */
 @Service
+@Slf4j
 public class DoctorServiceImpl implements DoctorService {
-    private Logger logger = LoggerFactory.getLogger(DoctorServiceImpl.class);
     @Resource
     private DoctorMapper doctorMapper;
     @Autowired
@@ -34,7 +33,7 @@ public class DoctorServiceImpl implements DoctorService {
         try {
             doctorMapper.insert(doctor);
         } catch (Exception e) {
-            logger.error("添加医生失败", e);
+            log.error("添加医生失败", e);
             throw new DoctorException(ServerResponseEnum.DOCTOR_SAVE_FAIL);
         }
         return doctor.getDoctorId();
@@ -48,7 +47,7 @@ public class DoctorServiceImpl implements DoctorService {
         a = doctorMapper.deleteByPrimaryKey(doctorId) + a;
         a = userService.deleteUser(userId) + a;
         if(a != b){
-            logger.warn("删除时，没有找到ID为"+doctorId+"的用户或ID为"+userId+"的医生！");
+            log.warn("删除时，没有找到ID为"+doctorId+"的用户或ID为"+userId+"的医生！");
             throw new Exception();
         }
     }
@@ -73,7 +72,7 @@ public class DoctorServiceImpl implements DoctorService {
         try {
             doctors = doctorMapper.selectAll();
         } catch (Exception e) {
-            logger.error("查询所有医生失败", e);
+            log.error("查询所有医生失败", e);
             throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);
         }
         return doctors;
@@ -85,7 +84,7 @@ public class DoctorServiceImpl implements DoctorService {
         try {
             doctors = doctorMapper.selectDoctorByDepartmentCode(departmentCode);
         } catch (Exception e) {
-            logger.error("按部门查询医生失败", e);
+            log.error("按部门查询医生失败", e);
             throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);
         }
         return doctors;
@@ -97,7 +96,7 @@ public class DoctorServiceImpl implements DoctorService {
         try {
             doctors = doctorMapper.selectDoctorByAtribute(doctorUserVo);
         } catch (Exception e) {
-            logger.error("按属性查询医生失败", e);
+            log.error("按属性查询医生失败", e);
             throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);
         }
         return doctors;
@@ -108,7 +107,7 @@ public class DoctorServiceImpl implements DoctorService {
         try {
             doctorMapper.updateByPrimaryKey(doctor);
         } catch (Exception e) {
-            logger.error("医生信息更新失败", e);
+            log.error("医生信息更新失败", e);
             throw new DoctorException(ServerResponseEnum.DOCTOR_UPDATE_FAIL);
         }
         return doctor.getDoctorId();
