@@ -25,17 +25,33 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentMapper departmentMapper;
 
     @Override
-    public List<Department> getAllFatherDepartments() {
+    public List<Department> getFatherAndChildrenDepartments() {
         try {
-            List<Department> departments = departmentMapper.selectAllFatherDepartment();
+            List<Department> departments = departmentMapper.selectFatherAndChildrenDepartments();
             if (departments.size() < 1) {
                 throw new DepartmentException(ServerResponseEnum.DEPARTMENTS_NOT_EXIST);
             }
             return departments;
         } catch (DepartmentException e) {
-            logger.warn("当前暂无顶级科室！");
+            logger.warn("当前暂无子科室！");
         } catch (Exception e) {
-            logger.warn("查询所有顶级科室出现异常！信息为：" + e.getMessage());
+            logger.warn("查询所有子科室出现异常！信息为：" + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public List<Department> getAllChildrenDepartments() {
+        try {
+            List<Department> departments = departmentMapper.selectAllChildrenDepartment();
+            if (departments.size() < 1) {
+                throw new DepartmentException(ServerResponseEnum.DEPARTMENTS_NOT_EXIST);
+            }
+            return departments;
+        } catch (DepartmentException e) {
+            logger.warn("当前暂无科室！");
+        } catch (Exception e) {
+            logger.warn("查询所有科室出现异常！信息为：" + e.getMessage());
         }
         return null;
     }

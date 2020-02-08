@@ -49,8 +49,8 @@ public class DepartmentController {
     }
 
     @GetMapping("/top")
-    public ServerResponseVO getFartherDepartment(){
-        List<Department> departments = departmentService.getAllFatherDepartments();
+    public ServerResponseVO getFartherAndChildrenDepartment(){
+        List<Department> departments = departmentService.getFatherAndChildrenDepartments();
         List<DepartmentVo> departmentVos = new ArrayList<>(16);
         List<Department> childrenDepts = new ArrayList<>(16);
         // 获取子科室，即Id不是-1或者-2的科室
@@ -72,7 +72,6 @@ public class DepartmentController {
                         DepartmentVo.ChildrenBean childrenBean = new DepartmentVo.ChildrenBean();
                         childrenBean.setId(childrenDept.getDepartmentCode());
                         childrenBean.setText(childrenDept.getDepartmentName());
-
                         childrenBeans.add(childrenBean);
                     }
 

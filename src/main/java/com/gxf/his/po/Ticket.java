@@ -28,6 +28,8 @@ public class Ticket implements Serializable {
 
     private Long patientId;
 
+    private Long orderId;
+
     private static final long serialVersionUID = 1L;
 
 }

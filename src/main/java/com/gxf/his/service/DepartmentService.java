@@ -10,10 +10,16 @@ import java.util.List;
  */
 public interface DepartmentService {
     /**
-     * 获取所有医疗科室，不包括财务部门等
+     * 获取所有医疗科室，包括顶级科室和子科室，不包括财务部门等
      * @return
      */
-    List<Department> getAllFatherDepartments();
+    List<Department> getFatherAndChildrenDepartments();
+
+    /**
+     * 获取所有子医疗科室，不包括财务部门等
+     * @return
+     */
+    List<Department> getAllChildrenDepartments();
 
     /**
      * 添加一种科室

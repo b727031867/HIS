@@ -90,9 +90,16 @@
                <!--modelType="flat">-->
             <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
         <!--</table>-->
-        <table tableName="entity_cashier" domainObjectName="Cashier"
+<!--        <table tableName="entity_order" domainObjectName="Order"-->
+<!--               modelType="flat">-->
+<!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+<!--        </table>-->
+<!--        <table tableName="entity_order_item" domainObjectName="OrderItem"-->
+<!--               modelType="flat">-->
+<!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+<!--        </table>-->
+        <table tableName="ticket_resource" domainObjectName="TicketResource"
                modelType="flat">
-            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>
         </table>
     </context>
 </generatorConfiguration>

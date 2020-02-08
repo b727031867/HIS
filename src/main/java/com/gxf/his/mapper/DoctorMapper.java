@@ -22,16 +22,16 @@ public interface DoctorMapper {
 
     @Insert({
             "insert into entity_doctor (doctor_id, employee_id, ", "doctor_name, doctor_professional_title, ",
-            "doctor_introduction, department_code, ", "scheduling_id, user_id, ", "ticket_day_num)", "values " +
+            "doctor_introduction, department_code, ", "scheduling_id, user_id, ", "ticket_day_num,ticket_price,ticket_current_num)", "values " +
             "(#{doctorId,jdbcType=BIGINT}, #{employeeId,jdbcType=VARCHAR}, ", "#{doctorName,jdbcType=VARCHAR}, " +
             "#{doctorProfessionalTitle,jdbcType=VARCHAR}, ", "#{doctorIntroduction,jdbcType=VARCHAR}, " +
             "#{departmentCode,jdbcType=VARCHAR}, ", "#{schedulingId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, ",
-            "#{ticketDayNum,jdbcType=INTEGER})"
+            "#{ticketDayNum,jdbcType=INTEGER},#{ticketPrice,jdbcType=DECIMAL},#{ticketCurrentNum,jdbcType=INTEGER})"
     })
     int insert(Doctor record);
 
     @Select({"select", "doctor_id, employee_id, doctor_name, doctor_professional_title, doctor_introduction, ",
-            "department_code, scheduling_id, user_id, ticket_day_num", "from entity_doctor", "where doctor_id = " +
+            "department_code, scheduling_id, user_id, ticket_day_num,ticket_price,ticket_current_num", "from entity_doctor", "where doctor_id = " +
             "#{doctorId,jdbcType=BIGINT}"})
     @Results({
             @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT, id = true),
@@ -42,12 +42,14 @@ public interface DoctorMapper {
             @Result(column = "department_code", property = "departmentCode", jdbcType = JdbcType.VARCHAR),
             @Result(column = "scheduling_id", property = "schedulingId", jdbcType = JdbcType.BIGINT),
             @Result(column = "user_id", property = "userId", jdbcType = JdbcType.BIGINT),
-            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
+            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER),
+            @Result(column = "ticket_price", property = "ticketPrice", jdbcType = JdbcType.DECIMAL),
+            @Result(column = "ticket_current_num", property = "ticketCurrentNum", jdbcType = JdbcType.INTEGER),
     })
     Doctor selectByPrimaryKey(Long doctorId);
 
     @Select({"select", "doctor_id, employee_id, doctor_name, doctor_professional_title, doctor_introduction, ",
-            "department_code, scheduling_id, user_id, ticket_day_num", "from entity_doctor"})
+            "department_code, scheduling_id, user_id, ticket_day_num,ticket_price,ticket_current_num", "from entity_doctor"})
     @Results({
             @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT, id = true),
             @Result(column = "employee_id", property = "employeeId", jdbcType = JdbcType.VARCHAR),
@@ -55,9 +57,11 @@ public interface DoctorMapper {
             @Result(column = "doctor_professional_title", property = "doctorProfessionalTitle", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_introduction", property = "doctorIntroduction", jdbcType = JdbcType.VARCHAR),
             @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR,one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
-            @Result(column = "scheduling_id", property = "schedulingId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "scheduling_id", property = "scheduling", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.SchedulingMapper.selectByPrimaryKey")),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
-            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
+            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER),
+            @Result(column = "ticket_price", property = "ticketPrice", jdbcType = JdbcType.DECIMAL),
+            @Result(column = "ticket_current_num", property = "ticketCurrentNum", jdbcType = JdbcType.INTEGER),
     })
     List<DoctorUserVo> selectAll();
 
@@ -71,7 +75,8 @@ public interface DoctorMapper {
             @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR,one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
             @Result(column = "scheduling_id", property = "scheduling", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.SchedulingMapper.selectByPrimaryKey")),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
-            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
+            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER),
+            @Result(column = "ticket_price", property = "ticketPrice", jdbcType = JdbcType.DECIMAL)
     })
     List<DoctorUserVo> selectDoctorByDepartmentCode(String departmentCode);
 
@@ -104,7 +109,8 @@ public interface DoctorMapper {
             @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR,one = @One(select = "com.gxf.his.mapper.DepartmentMapper.selectByDepartmentCode")),
             @Result(column = "scheduling_id", property = "schedulingId", jdbcType = JdbcType.BIGINT),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT,one = @One(select = "com.gxf.his.mapper.UserMapper.selectByPrimaryKey")),
-            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER)
+            @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER),
+            @Result(column = "ticket_price", property = "ticketPrice", jdbcType = JdbcType.DECIMAL)
     })
     List<DoctorUserVo> selectDoctorByAtribute(DoctorUserVo doctorUserVo);
 
@@ -114,7 +120,7 @@ public interface DoctorMapper {
             "doctor_professional_title = #{doctorProfessionalTitle," + "jdbcType" + "=VARCHAR},",
             "doctor_introduction = #{doctorIntroduction,jdbcType=VARCHAR},", "department_code =" + " " +
             "#{departmentCode,jdbcType=VARCHAR},", "scheduling_id = #{schedulingId,jdbcType=BIGINT},",
-            "user_id = " + "#{userId,jdbcType=BIGINT},", "ticket_day_num = #{ticketDayNum,jdbcType=INTEGER}", "where "
+            "user_id = " + "#{userId,jdbcType=BIGINT},", "ticket_day_num = #{ticketDayNum,jdbcType=INTEGER},","ticket_price = #{ticketPrice,jdbcType=DECIMAL}", "where "
             + "doctor_id = " + "#{doctorId,jdbcType=BIGINT}"})
     int updateByPrimaryKey(Doctor record);
 }

@@ -51,7 +51,16 @@ public enum ServerResponseEnum {
     CASHIER_SAVE_FAIL(100,"收银员保存失败"),
     CASHIER_DELETE_FAIL(101,"收银员删除失败"),
     CASHIER_LIST_FAIL(102,"收银员查询失败"),
-    CASHIER_UPDATE_FAIL(103,"收银员信息更新失败");
+    CASHIER_UPDATE_FAIL(103,"收银员信息更新失败"),
+    TICKET_RESOURCE_SAVE_FAIL(110,"票务资源保存失败"),
+    TICKET_RESOURCE_DELETE_FAIL(111,"票务资源删除失败"),
+    TICKET_RESOURCE_LIST_FAIL(112,"票务资源查询失败"),
+    TICKET_RESOURCE_UPDATE_FAIL(113,"票务资源信息更新失败"),
+    TICKET_RESOURCE_EXPIRATION_DATE_FAIL(114,"票务资源过期日期查询失败"),
+    ORDER_SAVE_FAIL(120,"订单保存失败"),
+    ORDER_DELETE_FAIL(121,"订单删除失败"),
+    ORDER_LIST_FAIL(122,"订单查询失败"),
+    ORDER_UPDATE_FAIL(123,"订单信息更新失败");
     Integer code;
     String message;
 }

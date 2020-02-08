@@ -3,6 +3,8 @@ package com.gxf.his.po;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 /**
  * @author GXF
  * @date 2019-10-13 19:04:23
@@ -26,6 +28,10 @@ public class Doctor implements Serializable {
     private Long userId;
 
     private Integer ticketDayNum;
+
+    private BigDecimal ticketPrice;
+
+    private Integer ticketCurrentNum;
 
     private static final long serialVersionUID = 1L;
 

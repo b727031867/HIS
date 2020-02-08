@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
+import com.gxf.his.po.Department;
 import com.gxf.his.po.Doctor;
 import com.gxf.his.po.Scheduling;
 import com.gxf.his.po.User;
@@ -11,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -28,9 +31,10 @@ public class DoctorServiceTest {
     UserService userService;
     @Autowired
     SchedulingService schedulingService;
+    @Autowired
+    DepartmentService departmentService;
 
     String[] professionalTitles = {"主治医师", "副主任医师", "主任医师", "医师"};
-    String[] departmentCodes = {"0001", "0002", "0003", "0004", "0005", "0006", "0007", "0008", "0009", "0010", "0011", "0012", "0013", "0014"};
     String[] employeeIdPrefix = {"ZY-00", "JZ-00", "ZC-00", "MZ-00"};
     // 出诊时间段 0：上午8~12 1：下午14:30~18:30 2: 晚上19:00~2 3:白天全天 4:急诊24小时
     static String[] workTimes = {"0", "1", "2", "3", "4"};
@@ -39,7 +43,7 @@ public class DoctorServiceTest {
     /**
      * 希望生成多少位医生
      */
-    static int generateDoctorNumber = 100;
+    static int generateDoctorNumber = 200;
 
     /**
      * 每个医生一天默认的挂号数
@@ -52,6 +56,7 @@ public class DoctorServiceTest {
     static int roomNumber = 15;
     static String[] floors = {"1", "2", "3", "4", "5", "6"};
     static String[] buildings = {"A", "B", "C"};
+    static String[] ticketPrice = {"17","25","30","200"};
     /**
      * 排班可选列表
      */
@@ -90,9 +95,9 @@ public class DoctorServiceTest {
                     //小于10则补0,比如 09 08
                     String room;
                     if (i % 10 == i) {
-                        room = building + "-" + floor + "0" + String.valueOf(i);
+                        room = building + "-" + floor + "0" + i;
                     } else {
-                        room = building + "-" + floor + String.valueOf(i);
+                        room = building + "-" + floor + i;
                     }
                     rooms.add(room);
                 }
@@ -106,19 +111,23 @@ public class DoctorServiceTest {
     @Test
     public void testAddDoctor() {
         init();
+        Random random = new Random();
+        List<Department> departments = departmentService.getAllChildrenDepartments();
         for (int i = 0; i < generateDoctorNumber; i++) {
+            Department department = departments.get(random.nextInt(departments.size()-1));
             Doctor doctor = new Doctor();
             String userName = "test" + i;
             String password = "test";
-            String introduce = "这是一些测试医生介绍内容！这是一些测试医生介绍内容！这是一些测试医生介绍内容！";
             User user = UserController.doHashedCredentials(userName, password);
             Long userId = userService.addUser(user);
-            doctor.setDepartmentCode(getRandomString(departmentCodes));
-            doctor.setDoctorIntroduction(introduce);
+            doctor.setDepartmentCode(department.getDepartmentCode());
+            doctor.setDoctorIntroduction(department.getDepartmentIntroduction());
             doctor.setDoctorName(getName());
             doctor.setDoctorProfessionalTitle(getRandomString(professionalTitles));
             doctor.setEmployeeId(getRandomString(employeeIdPrefix) + i);
             doctor.setTicketDayNum(ticketNumber);
+            doctor.setTicketPrice(new BigDecimal(getRandomString(ticketPrice)));
+            doctor.setTicketCurrentNum(random.nextInt(61));
             doctor.setUserId(userId);
             Scheduling scheduling = getScheduling();
             Long id = schedulingService.addScheduling(scheduling);

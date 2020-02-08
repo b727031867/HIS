@@ -41,7 +41,7 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    public UserController(UserService service,PatientService pService,
+    public UserController(UserService service, PatientService pService,
                           RedisClient redis) {
         this.redis = redis;
         userService = service;
@@ -61,11 +61,11 @@ public class UserController {
     private String refreshTokenExpireTime;
 
     @GetMapping("/checkUsername")
-    public ServerResponseVO checkUsernameIsExists(@RequestParam(value = "userName") String userName){
+    public ServerResponseVO checkUsernameIsExists(@RequestParam(value = "userName") String userName) {
         if (StringUtils.isEmpty(userName.trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        if(userService.findByUserName(userName) != null){
+        if (userService.findByUserName(userName) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
@@ -76,7 +76,7 @@ public class UserController {
         if (StringUtils.isEmpty(user.getUserName().trim()) || StringUtils.isEmpty(user.getUserPassword().trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        if(userService.findByUserName(user.getUserName()) != null){
+        if (userService.findByUserName(user.getUserName()) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         user = doHashedCredentials(user.getUserName(), user.getUserPassword());
@@ -93,11 +93,12 @@ public class UserController {
 
     @PostMapping("/registerPatient")
     public ServerResponseVO registerPatient(@RequestParam(value = "userName") String userName,
-                                        @RequestParam(value = "userPassword") String password) {
+                                            @RequestParam(value = "userPassword") String password,
+                                            @RequestParam(value = "patientName") String patientName) {
         if (StringUtils.isEmpty(userName.trim()) || StringUtils.isEmpty(password.trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        if(userService.findByUserName(password) != null){
+        if (userService.findByUserName(password) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         User user = doHashedCredentials(userName, password);
@@ -105,6 +106,7 @@ public class UserController {
         //病人关联用户
         Patient patient = new Patient();
         patient.setUserId(id);
+        patient.setPatientName(patientName);
         patientService.addPatient(patient);
         return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
     }
@@ -137,7 +139,7 @@ public class UserController {
             logger.debug("查询到的用户的盐为：" + user.getUserSalt());
             //加密次数
             int hashIterations = Const.ENCRYPTION_NUM;
-            //使用盐加密登陆密码
+            //使用盐加密登陆密码 剩余
             SimpleHash sh = new SimpleHash(Const.ENCRYPTION, password,
                     user.getUserSalt(), hashIterations);
             //如果加密后和数据库中的密码一致，说明密码正确，签发token
@@ -152,6 +154,7 @@ public class UserController {
                 //签发accessToken，时间戳为当前时间戳
                 String token = JwtUtil.sign(userName, currentTimeMillis);
                 hashMap.put("token", token);
+                hashMap.put("id", user.getUserId().toString());
                 msg.setData(hashMap);
                 msg.setMessage("登录成功");
                 msg.setCode(200);

@@ -100,7 +100,21 @@ public interface DepartmentMapper {
             @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
             @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
     })
-    List<Department> selectAllFatherDepartment();
+    List<Department> selectFatherAndChildrenDepartments();
+
+    @Select({
+            "select",
+            "department_id, department_code, department_name, department_introduction, department_parent_id",
+            "from entity_department where department_parent_id != -2 AND department_parent_id != -1"
+    })
+    @Results({
+            @Result(column="department_id", property="departmentId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_name", property="departmentName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_introduction", property="departmentIntroduction", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_parent_id", property="departmentParentId", jdbcType=JdbcType.BIGINT)
+    })
+    List<Department> selectAllChildrenDepartment();
 
     @Update({
         "update entity_department",

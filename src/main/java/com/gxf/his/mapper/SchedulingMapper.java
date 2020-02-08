@@ -20,6 +20,7 @@ public interface SchedulingMapper {
         "values (#{schedulingId,jdbcType=BIGINT}, #{schedulingType,jdbcType=VARCHAR}, ",
         "#{schedulingTime,jdbcType=VARCHAR}, #{schedulingRoom,jdbcType=VARCHAR})"
     })
+    @Options(useGeneratedKeys = true, keyProperty = "schedulingId", keyColumn = "scheduling_id")
     int insert(Scheduling record);
 
     @Select({
