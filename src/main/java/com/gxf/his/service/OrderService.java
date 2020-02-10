@@ -21,6 +21,13 @@ public interface OrderService {
     void addOrder(OrderVo order);
 
     /**
+     * 添加一个挂号订单
+     *
+     * @param order 要添加的订单
+     */
+    void addRegisterOrder(OrderVo order);
+
+    /**
      * 删除一个订单及其订单项
      *
      * @param orderId 要删除的订单ID

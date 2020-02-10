@@ -13,6 +13,7 @@ import com.gxf.his.service.DepartmentService;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.TicketResourceService;
 import com.gxf.his.service.UserService;
+import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/doctor")
 @Slf4j
-public class DoctorController {
+public class DoctorController extends BaseController {
 
     @Resource
     private DoctorService doctorService;
@@ -42,23 +43,23 @@ public class DoctorController {
     private TicketResourceService ticketResourceService;
 
     @GetMapping
-    public ServerResponseVO getDoctors(@RequestParam(required = false, name = "departmentCode") String departmentCode
+    public <T> ServerResponseVO<T> getDoctors(@RequestParam(required = false, name = "departmentCode") String departmentCode
             , @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
         if (null == departmentCode) {
             PageHelper.startPage(page, size);
             List<DoctorVo> doctors = doctorService.getAllDoctors();
             PageInfo<DoctorVo> pageInfo = PageInfo.of(doctors);
-            return ServerResponseVO.success(pageInfo);
+            return MyUtil.cast(ServerResponseVO.success(pageInfo));
         }
         PageHelper.startPage(page, size);
         List<DoctorVo> doctors = doctorService.getDoctorsByDepartmentCode(departmentCode);
         PageInfo<DoctorVo> pageInfo = PageInfo.of(doctors);
-        return ServerResponseVO.success(pageInfo);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
     @GetMapping("departmentCode")
-    public ServerResponseVO getDoctorsByDepartmentCode(String departmentCode) {
+    public <T> ServerResponseVO<T> getDoctorsByDepartmentCode(String departmentCode) {
         if (departmentCode == null || departmentCode.trim().isEmpty()) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
@@ -70,16 +71,16 @@ public class DoctorController {
             List<TicketResource> ticketResources = ticketResourceService.getTicketResourceByDoctorIdAndAvailableDate(doctorVo.getDoctorId(), startDate, expirationDate);
             doctorVo.setTicketResources(ticketResources);
         }
-        return ServerResponseVO.success(departmentVos);
+        return MyUtil.cast(ServerResponseVO.success(departmentVos));
     }
 
     @GetMapping("/attribute")
-    public ServerResponseVO getDoctorsByAttribute(@RequestParam(value = "attribute", defaultValue = "doctorName") String attribute
+    public <T> ServerResponseVO<T>  getDoctorsByAttribute(@RequestParam(value = "attribute", defaultValue = "doctorName") String attribute
             , @RequestParam(value = "value") String value, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
-        if (value == null || value.trim().length() == 0) {
-            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
-        }
+//        if(searchParamCheck(attribute,isAccurate,value)){TODO
+//            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+//        }
         //可能使用的查询属性
         String doctorName = "doctorName";
         String doctorProfessionalTitle = "doctorProfessionalTitle";
@@ -98,11 +99,11 @@ public class DoctorController {
         PageHelper.startPage(page, size);
         List<DoctorVo> doctors = doctorService.selectDoctorByAttribute(doctorVo);
         PageInfo<DoctorVo> pageInfo = PageInfo.of(doctors);
-        return ServerResponseVO.success(pageInfo);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
     @PutMapping
-    public ServerResponseVO saveDoctorAndUser(@RequestBody DoctorVo doctorVo) {
+    public <T> ServerResponseVO<T>  saveDoctorAndUser(@RequestBody DoctorVo doctorVo) {
         log.info("当前更新的医生信息为：" + doctorVo.toString());
         Doctor doctor = new Doctor();
         //更新医生信息
@@ -123,7 +124,7 @@ public class DoctorController {
     }
 
     @PostMapping
-    public ServerResponseVO saveDoctor(@RequestBody DoctorVo doctorVo) {
+    public <T> ServerResponseVO<T>  saveDoctor(@RequestBody DoctorVo doctorVo) {
         if (StringUtils.isEmpty(doctorVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorVo.getUser().getUserPassword().trim())
                 || StringUtils.isEmpty(doctorVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorVo.getDoctorIntroduction().trim())
                 || StringUtils.isEmpty(doctorVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorVo.getDoctorProfessionalTitle().trim())
@@ -148,7 +149,7 @@ public class DoctorController {
     }
 
     @DeleteMapping
-    public ServerResponseVO deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,
+    public <T> ServerResponseVO<T>  deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,
                                                           @RequestParam(name = "userId") Long userId) {
         try {
             doctorService.deleteDoctorAndUser(doctorId, userId);
@@ -159,7 +160,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/batch")
-    public ServerResponseVO deleteDoctorsAndUsersByIds(@RequestBody List<DoctorVo> doctorVos) {
+    public <T> ServerResponseVO<T>  deleteDoctorsAndUsersByIds(@RequestBody List<DoctorVo> doctorVos) {
         List<Doctor> doctors = new ArrayList<>(16);
         List<User> users = new ArrayList<>(16);
         for (DoctorVo doctorVo : doctorVos) {

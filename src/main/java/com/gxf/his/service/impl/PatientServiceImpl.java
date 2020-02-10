@@ -40,6 +40,30 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public Patient getPatientByPrimaryKey(Long patientId) {
+        Patient patient;
+        try {
+            patient = iPatientMapper.selectByPrimaryKey(patientId);
+        } catch (Exception e) {
+            log.error("根据ID查询病人失败", e);
+            throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
+        }
+        return patient;
+    }
+
+    @Override
+    public Patient getPatientByUid(Long uid) {
+        Patient patient;
+        try {
+            patient = iPatientMapper.selectByUid(uid);
+        } catch (Exception e) {
+            log.error("根据UID查询病人失败", e);
+            throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
+        }
+        return patient;
+    }
+
+    @Override
     public List<PatientVo> getAllPatients() {
         List<PatientVo> patients;
         try {

@@ -41,11 +41,6 @@ public class ServerResponseVO<T> implements Serializable {
         this.data = data;
     }
 
-    private ServerResponseVO(Integer code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
     /**
      * 返回成功信息
      *
@@ -53,7 +48,7 @@ public class ServerResponseVO<T> implements Serializable {
      * @param <T>  要返回的数据
      * @return 统一的响应返回数据
      */
-    public static <T> ServerResponseVO success(T data) {
+    public static <T> ServerResponseVO<T> success(T data) {
         return new ServerResponseVO<>(ServerResponseEnum.SUCCESS, data);
     }
 
@@ -62,8 +57,8 @@ public class ServerResponseVO<T> implements Serializable {
      *
      * @return 统一的响应返回数据
      */
-    public static ServerResponseVO success() {
-        return new ServerResponseVO(ServerResponseEnum.SUCCESS);
+    public static <T> ServerResponseVO<T> success() {
+        return new ServerResponseVO<>(ServerResponseEnum.SUCCESS);
     }
 
     /**
@@ -72,13 +67,13 @@ public class ServerResponseVO<T> implements Serializable {
      * @param responseCode 响应码
      * @return 统一的响应返回数据
      */
-    public static ServerResponseVO error(ServerResponseEnum responseCode) {
-        return new ServerResponseVO(responseCode);
+    public static <T> ServerResponseVO<T> error(ServerResponseEnum responseCode) {
+        return new ServerResponseVO<>(responseCode);
     }
 
     @Override
     public String toString() {
-        return "{code:\"" + this.code + "\",message:\"" + this.message + "\",data:\""+this.getData()+"\"}";
+        return "{code:\"" + this.code + "\",message:\"" + this.message + "\",data:\"" + this.getData() + "\"}";
 
     }
 }

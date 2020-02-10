@@ -9,6 +9,7 @@ import com.gxf.his.po.generate.Cashier;
 import com.gxf.his.po.generate.User;
 import com.gxf.his.service.CashierService;
 import com.gxf.his.service.UserService;
+import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -24,26 +25,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/cashier")
 @Slf4j
-public class CashierController {
+public class CashierController extends BaseController {
     @Resource
     private CashierService cashierService;
     @Resource
     private UserService userService;
 
     @GetMapping
-    public ServerResponseVO getCashiers(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
+    public <T> ServerResponseVO<T> getCashiers(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
         PageHelper.startPage(page, size);
         List<CashierVo> cashierVos = cashierService.getAllCashiers();
         PageInfo<CashierVo> pageInfo = PageInfo.of(cashierVos);
-        return ServerResponseVO.success(pageInfo);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
     @GetMapping("/attribute")
-    public ServerResponseVO getCashiersByAttribute(@RequestParam(value = "attribute", defaultValue = "patientName") String attribute
+    public <T> ServerResponseVO<T> getCashiersByAttribute(@RequestParam(value = "attribute", defaultValue = "patientName") String attribute
             , @RequestParam(value = "isAccurate") Boolean isAccurate, @RequestParam(value = "value") String value, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
-        if (value == null || value.trim().length() == 0 || isAccurate == null) {
+        if(searchParamCheck(attribute,isAccurate,value)){
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         CashierVo cashierVo = new CashierVo();
@@ -53,11 +54,11 @@ public class CashierController {
         PageHelper.startPage(page, size);
         List<CashierVo> patients = cashierService.selectCashierByAttribute(cashierVo);
         PageInfo<CashierVo> pageInfo = PageInfo.of(patients);
-        return ServerResponseVO.success(pageInfo);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
     @PutMapping
-    public ServerResponseVO saveCashierAndUser(@RequestBody CashierVo cashierVo) {
+    public <T> ServerResponseVO<T> saveCashierAndUser(@RequestBody CashierVo cashierVo) {
         log.info("当前更新的收银员信息为：" + cashierVo.toString());
         Cashier cashier = new Cashier();
         cashier.setCashierId(cashierVo.getCashierId());
@@ -75,7 +76,7 @@ public class CashierController {
     }
 
     @PostMapping
-    public ServerResponseVO saveCashier(@RequestBody CashierVo cashierVo) {
+    public <T> ServerResponseVO<T> saveCashier(@RequestBody CashierVo cashierVo) {
         if (StringUtils.isEmpty(cashierVo.getUser().getUserName().trim()) ||
                 StringUtils.isEmpty(cashierVo.getUser().getUserPassword().trim()) ||
                 StringUtils.isEmpty(cashierVo.getPhone().trim()) ||
@@ -98,7 +99,7 @@ public class CashierController {
     }
 
     @DeleteMapping
-    public ServerResponseVO deleteCashierAndUserByCashierId(@RequestParam(name = "cashierId") Long cashierId,
+    public <T> ServerResponseVO<T> deleteCashierAndUserByCashierId(@RequestParam(name = "cashierId") Long cashierId,
                                                             @RequestParam(name = "userId") Long userId) {
         try {
             cashierService.deleteCashierAndUser(cashierId, userId);
@@ -109,7 +110,7 @@ public class CashierController {
     }
 
     @DeleteMapping("/batch")
-    public ServerResponseVO deleteCashiersAndUsersByIds(@RequestBody List<CashierVo> cashierVos) {
+    public <T> ServerResponseVO<T> deleteCashiersAndUsersByIds(@RequestBody List<CashierVo> cashierVos) {
         List<Cashier> cashiers = new ArrayList<>(16);
         List<User> users = new ArrayList<>(16);
         for (CashierVo cashierVo : cashierVos) {

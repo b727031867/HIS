@@ -60,7 +60,11 @@ public enum ServerResponseEnum {
     ORDER_SAVE_FAIL(120,"订单保存失败"),
     ORDER_DELETE_FAIL(121,"订单删除失败"),
     ORDER_LIST_FAIL(122,"订单查询失败"),
-    ORDER_UPDATE_FAIL(123,"订单信息更新失败");
+    ORDER_UPDATE_FAIL(123,"订单信息更新失败"),
+    TICKET_SAVE_FAIL(130,"挂号信息保存失败"),
+    TICKET_DELETE_FAIL(131,"挂号信息删除失败"),
+    TICKET_LIST_FAIL(132,"挂号信息查询失败"),
+    TICKET_UPDATE_FAIL(133,"挂号信息更新失败");
     Integer code;
     String message;
 }

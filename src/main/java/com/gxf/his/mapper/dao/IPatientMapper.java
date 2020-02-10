@@ -80,6 +80,26 @@ public interface IPatientMapper extends PatientMapper {
     })
     List<PatientVo> selectPatientByAttribute(PatientVo patientVo);
 
+    @Select({
+            "select",
+            "patient_id, patient_age, patient_name, patient_is_marriage, patient_card, patient_phone, ",
+            "patient_sex, patient_medicare_card, user_id",
+            "from entity_patient",
+            "where user_id = #{uid,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="patient_age", property="patientAge", jdbcType=JdbcType.INTEGER),
+            @Result(column="patient_name", property="patientName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="patient_is_marriage", property="patientIsMarriage", jdbcType=JdbcType.TINYINT),
+            @Result(column="patient_card", property="patientCard", jdbcType=JdbcType.VARCHAR),
+            @Result(column="patient_phone", property="patientPhone", jdbcType=JdbcType.VARCHAR),
+            @Result(column="patient_sex", property="patientSex", jdbcType=JdbcType.TINYINT),
+            @Result(column="patient_medicare_card", property="patientMedicareCard", jdbcType=JdbcType.VARCHAR),
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT)
+    })
+    Patient selectByUid(Long uid);
+
     /**
      * 根据不同的属性精确查找患者
      *

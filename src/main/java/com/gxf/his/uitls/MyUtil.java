@@ -1,7 +1,6 @@
 package com.gxf.his.uitls;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GXF
@@ -9,8 +8,8 @@ import org.slf4j.LoggerFactory;
  * 通用方法
  * @date 2020/2/9 01:18
  */
+@Slf4j
 public class MyUtil {
-    private static final Logger logger = LoggerFactory.getLogger(MyUtil.class);
 
     /**
      * 通用类型转换，不报警
@@ -24,7 +23,7 @@ public class MyUtil {
         try {
             return (T) obj;
         } catch (Exception e) {
-            logger.error("类型转换出现异常！",e);
+            log.error("类型转换出现异常！",e);
             throw new RuntimeException();
         }
     }

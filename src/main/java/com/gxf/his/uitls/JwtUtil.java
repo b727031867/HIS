@@ -7,8 +7,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,14 +24,13 @@ import java.util.Date;
  * @date 2019-8-25
  */
 @Component
+@Slf4j
 public class JwtUtil {
 
     /**
      * accessTokenExpireTime token过期时间
      */
     private static String accessTokenExpireTime;
-
-    private final static Logger log = LoggerFactory.getLogger("loginLog");
 
     /**
      * 静态变量使用Setter注入

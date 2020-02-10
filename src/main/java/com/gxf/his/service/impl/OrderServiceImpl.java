@@ -15,6 +15,7 @@ import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -77,13 +78,7 @@ public class OrderServiceImpl implements OrderService {
                     Drug drug = iDrugMapper.selectByPrimaryKey(orderItem.getDrugId());
                     //TODO
 //                    totalPrice = totalPrice.add(drug.get.multiply(new BigDecimal(orderItem.getDrugQuantities())));
-                } else if (null != orderItem.getTicketResourceId()) {
-                    //挂号单
-                    TicketResource ticketResource = ticketResourceService.getTicketResourceById(orderItem.getTicketResourceId());
-                    //从医生中获取挂号费用
-                    Doctor doctor = iDoctorMapper.selectByPrimaryKey(ticketResource.getDoctorId());
-                    totalPrice = doctor.getTicketPrice();
-                } else if (null != orderItem.getCheckItemId()) {
+                }  else if (null != orderItem.getCheckItemId()) {
                     //检查单 TODO
                 } else {
                     log.warn("未知的订单项");
@@ -101,6 +96,34 @@ public class OrderServiceImpl implements OrderService {
             log.error("订单添加失败", e);
             throw new OrderException(ServerResponseEnum.ORDER_SAVE_FAIL);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addRegisterOrder(OrderVo order) {
+        //插入订单并且获取订单ID
+        int insert = iOrderMapper.insert(order);
+        Long orderId = order.getOrderId();
+        if(insert<1){
+            //本次提交将回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        List<TicketResource> ticketResourceList = order.getTicketResourceList();
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (TicketResource ticketResource : ticketResourceList) {
+            //根据票务资源生成订单项
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(orderId);
+            //挂号价格从医生中获取
+            Doctor doctor = iDoctorMapper.selectByPrimaryKey(ticketResource.getDoctorId());
+            totalPrice = totalPrice.add(doctor.getTicketPrice());
+            orderItem.setOrderItemTotal(doctor.getTicketPrice());
+            orderItem.setTicketResourceId(ticketResource.getRegisteredResourceId());
+            iOrderItemMapper.insert(orderItem);
+        }
+        //更新总价
+        order.setOrderTotal(totalPrice);
+        iOrderMapper.updateByPrimaryKey(order);
     }
 
     @Override

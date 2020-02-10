@@ -20,6 +20,13 @@ public interface UserService {
     User findByUserName(String userName);
 
     /**
+     * 根据主键获取用户
+     * @param uid 用户ID
+     * @return 用户对象
+     */
+    User getUserByPrimaryKey(Long uid);
+
+    /**
      * 删除用户
      *
      * @param id 用户ID

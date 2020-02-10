@@ -41,6 +41,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByPrimaryKey(Long uid) {
+        User user;
+        try {
+            user = iUserMapper.selectByPrimaryKey(uid);
+        } catch (Exception e) {
+            log.error("根据用户ID查询用户失败！", e);
+            throw new UserException(ServerResponseEnum.USER_SELECT_FAIL);
+        }
+        return user;
+    }
+
+    @Override
     public int deleteUser(Long id) {
         try {
             return iUserMapper.deleteByPrimaryKey(id);

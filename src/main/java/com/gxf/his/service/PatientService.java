@@ -20,6 +20,20 @@ public interface PatientService {
     void addPatient(Patient patient);
 
     /**
+     * 根据患者ID获取患者
+     * @param patientId 患者ID
+     * @return 患者
+     */
+    Patient getPatientByPrimaryKey(Long patientId);
+
+    /**
+     * 根据用户UID获取患者
+     * @param uid 患者用户的UID
+     * @return 患者
+     */
+    Patient getPatientByUid(Long uid);
+
+    /**
      * 获取所有病人列表
      *
      * @return 病人列表
