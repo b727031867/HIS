@@ -1,8 +1,8 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
-import com.gxf.his.po.Patient;
-import com.gxf.his.po.User;
+import com.gxf.his.po.generate.Patient;
+import com.gxf.his.po.generate.User;
 import com.gxf.his.uitls.DataGeneratorUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,19 +26,19 @@ public class PatientServiceTest {
     /**
      * 手机号前缀列表
      */
-    private static String[] telFirst="134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153".split(",");
+    private static String[] telFirst = "134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153".split(",");
 
     private static Byte currentPatientSex = new Byte("0");
 
     @Test
-    public void testAddPatient(){
-        String[] patientIsMarriages = {"0","1","2"};
-        for(int i=0;i<300;i++){
-            Patient patient =new Patient();
-            String userName = "testPatient"+i;
+    public void testAddPatient() {
+        String[] patientIsMarriages = {"0", "1", "2"};
+        for (int i = 0; i < 300; i++) {
+            Patient patient = new Patient();
+            String userName = "testPatient" + i;
             String password = "test";
-            User user = UserController.doHashedCredentials(userName,password);
-            Long userId = userService.addUser(user);
+            User user = UserController.doHashedCredentials(userName, password);
+            userService.addUser(user);
             patient.setPatientAge(getRandomInteger(100));
             patient.setPatientName(getName());
             patient.setPatientIsMarriage(Byte.parseByte(getRandomString(patientIsMarriages)));
@@ -46,27 +46,27 @@ public class PatientServiceTest {
             patient.setPatientPhone(getPhoneNumber());
             patient.setPatientSex(currentPatientSex);
             patient.setPatientMedicareCard(DataGeneratorUtil.getBrankNumber("6"));
-            patient.setUserId(userId);
+            patient.setUserId(user.getUserId());
             patientService.addPatient(patient);
         }
 
     }
 
-    private static int getNum(int start,int end) {
-        return (int)(Math.random()*(end-start+1)+start);
+    private static int getNum(int start, int end) {
+        return (int) (Math.random() * (end - start + 1) + start);
     }
 
 
     public static String getPhoneNumber() {
-        int index=getNum(0,telFirst.length-1);
-        String first=telFirst[index];
-        String second=String.valueOf(getNum(1,888)+10000).substring(1);
-        String third=String.valueOf(getNum(1,9100)+10000).substring(1);
-        return first+second+third;
+        int index = getNum(0, telFirst.length - 1);
+        String first = telFirst[index];
+        String second = String.valueOf(getNum(1, 888) + 10000).substring(1);
+        String third = String.valueOf(getNum(1, 9100) + 10000).substring(1);
+        return first + second + third;
     }
 
 
-    public static String getRandomString(String[] randomValue){
+    public static String getRandomString(String[] randomValue) {
         Random random = new Random();
         int index = random.nextInt(randomValue.length);
         return randomValue[index];
@@ -74,10 +74,11 @@ public class PatientServiceTest {
 
     /**
      * 获取一个随机数
+     *
      * @param maxInt 最大值
      * @return 小于
      */
-    public static int getRandomInteger(int maxInt){
+    public static int getRandomInteger(int maxInt) {
         Random random = new Random();
         return random.nextInt(maxInt);
     }
@@ -95,21 +96,19 @@ public class PatientServiceTest {
         int index = random.nextInt(Surname.length - 1);
         String name = Surname[index]; //获得一个随机的姓氏
         int i = random.nextInt(3);//可以根据这个数设置产生的男女比例
-        if(i==2){
-            int j = random.nextInt(girl.length()-2);
+        int j = random.nextInt(girl.length() - 2);
+        if (i == 2) {
             if (j % 2 == 0) {
-                name =  name + girl.substring(j, j + 2);
+                name = name + girl.substring(j, j + 2);
             } else {
                 name = name + girl.substring(j, j + 1);
             }
             currentPatientSex = new Byte("2");
-        }
-        else{
-            int j = random.nextInt(girl.length()-2);
+        } else {
             if (j % 2 == 0) {
-                name =  name + boy.substring(j, j + 2);
+                name = name + boy.substring(j, j + 2);
             } else {
-                name =  name + boy.substring(j, j + 1);
+                name = name + boy.substring(j, j + 1);
             }
             currentPatientSex = new Byte("1");
         }

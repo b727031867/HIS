@@ -1,7 +1,7 @@
 
 ## mybatis配置 - start
 mybatis:
-  type-aliases-package: com.gxf.his.po
+  type-aliases-package: com.gxf.his.po.*
   configuration:
     # 开启自动驼峰命名规则
     map-underscore-to-camel-case: true
@@ -19,6 +19,7 @@ spring:
     time-zone: GMT+8
   ## 数据库配置 - start
   datasource:
+    ## useAffectedRows=true 表示返回数据库操作影响的行数
     url: jdbc:mysql://localhost:3307/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
     password: 123GONG123
     username: root

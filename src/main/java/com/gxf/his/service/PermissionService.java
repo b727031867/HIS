@@ -7,10 +7,13 @@ import java.util.List;
  * @date 2019-10-13
  */
 public interface PermissionService {
+
     /**
      * 获取一组角色的权限字符串
-     * @param roleIds
+     *
+     * @param roleIds 角色的ID字符串 用逗号拼接
      * @return 权限字符串，用，分隔
      */
     List<String> findPermissionsByRoleId(List<Long> roleIds);
+
 }

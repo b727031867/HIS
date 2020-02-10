@@ -1,12 +1,13 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
-import com.gxf.his.po.User;
+import com.gxf.his.po.generate.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.annotation.Resource;
 
 /**
  * @author 龚秀峰
@@ -15,10 +16,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserServiceTest {
-    @Autowired
+    @Resource
     private UserService userService;
+
     @Test
-    public void addUser(){
+    public void addUser() {
         String userName = "admin";
         String password = "admin";
         User user = UserController.doHashedCredentials(userName, password);

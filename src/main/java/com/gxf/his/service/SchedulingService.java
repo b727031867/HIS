@@ -1,32 +1,38 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.Scheduling;
+import com.gxf.his.po.generate.Scheduling;
 
 /**
  * @author 龚秀峰
  * @date 2019-10-29
  */
 public interface SchedulingService {
+
     /**
      * 插入一条排班信息
+     *
      * @param scheduling 排班信息类
+     * @return 返回本次操作影响的行数
      */
-    Long addScheduling(Scheduling scheduling);
+    int addScheduling(Scheduling scheduling);
 
     /**
      * 删除一条排班信息
+     *
      * @param schedulingId 排班信息的ID
      */
-    void deleteScheduling(Long schedulingId);
+    int deleteScheduling(Long schedulingId);
 
     /**
      * 更新排班信息
-     * @param scheduling
+     *
+     * @param scheduling 排班信息
      */
-    void updateScheduling(Scheduling scheduling);
+    int updateScheduling(Scheduling scheduling);
 
     /**
      * 查找一条排班信息
+     *
      * @param id 排班信息的ID
      * @return 排班信息实体
      */

@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * @author GXF
  * @date 2019-10-13 12:03:26
+ * MapperScan只需要扫描子类则会自动注入父类Mapper
+ * EnableAsync 启用异步任务 EnableTransactionManagement 启用事务
+ * EnableScheduling 启用计划任务
  **/
 @EnableTransactionManagement
 @EnableAsync

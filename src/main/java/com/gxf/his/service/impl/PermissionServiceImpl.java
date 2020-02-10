@@ -1,10 +1,9 @@
 package com.gxf.his.service.impl;
 
-import com.gxf.his.mapper.PermissionMapper;
-import com.gxf.his.po.Permission;
+import com.gxf.his.mapper.dao.IPermissionMapper;
+import com.gxf.his.po.generate.Permission;
 import com.gxf.his.service.PermissionService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,13 +19,13 @@ import java.util.List;
 public class PermissionServiceImpl implements PermissionService {
 
     @Resource
-    PermissionMapper permissionMapper;
+    IPermissionMapper iPermissionMapper;
 
 
     @Override
     public List<String> findPermissionsByRoleId(List<Long> roleIds) {
-        List<Permission> permissions = permissionMapper.selectPermissionsByRoleIds(roleIds);
-        ArrayList<String> userPermissions =new ArrayList<>();
+        List<Permission> permissions = iPermissionMapper.selectPermissionsByRoleIds(roleIds);
+        ArrayList<String> userPermissions = new ArrayList<>();
         for (Permission permission : permissions) {
             userPermissions.add(permission.getPermission());
         }

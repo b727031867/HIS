@@ -1,9 +1,8 @@
 package com.gxf.his.service;
 
-import com.gxf.his.mapper.TicketResourceMapper;
-import com.gxf.his.po.TicketResource;
-import com.gxf.his.service.impl.TicketResourceServiceImpl;
-import com.gxf.his.vo.DoctorUserVo;
+import com.gxf.his.mapper.dao.ITicketResourceMapper;
+import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.generate.TicketResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ public class TicketResourceServiceTest {
     private static Logger logger = LoggerFactory.getLogger(TicketResourceServiceTest.class);
 
     @Resource
-    private TicketResourceMapper ticketResourceMapper;
+    private ITicketResourceMapper ITicketResourceMapper;
 
     @Resource
     private DoctorService doctorService;
@@ -56,6 +55,7 @@ public class TicketResourceServiceTest {
 
     /**
      * 获取过去第几天的日期(- 操作) 或者 未来 第几天的日期( + 操作)
+     *
      * @param past 过去则输入负数 未来则输入正数 0表示当天
      * @return 过去或未来的日期
      */
@@ -76,13 +76,13 @@ public class TicketResourceServiceTest {
      * @return 星期几对应的日期
      */
     public static Date getDateByDay(String day) {
-        for(Date date : dateList){
+        for (Date date : dateList) {
             //比如医生是周三值班 则返回未来中周三最接近的日期
-            if(getWeekOfDate(date).equals(day)){
+            if (getWeekOfDate(date).equals(day)) {
                 return date;
             }
         }
-        logger.warn("没有任何日期匹配当前星期几！"+day);
+        logger.warn("没有任何日期匹配当前星期几！" + day);
         return null;
     }
 
@@ -92,20 +92,20 @@ public class TicketResourceServiceTest {
     @Test
     public void generateTicketResource() {
         //获取未来六天的日期，包括当天,加入到列表中
-        for(int i=0;i<7;i++){
+        for (int i = 0; i < 7; i++) {
             dateList.add(getPastDate(i));
         }
-        List<DoctorUserVo> doctorUserVos = doctorService.getAllDoctors();
-        for(DoctorUserVo doctorUserVo:doctorUserVos){
-            String[] workdays = doctorUserVo.getScheduling().getSchedulingTime().split(",");
+        List<DoctorVo> doctorVos = doctorService.getAllDoctors();
+        for (DoctorVo doctorVo : doctorVos) {
+            String[] workdays = doctorVo.getScheduling().getSchedulingTime().split(",");
             // 为某位医生每个出诊日都插入票务资源
-            for(String day : workdays){
+            for (String day : workdays) {
                 TicketResource ticketResource = new TicketResource();
-                ticketResource.setDoctorId(doctorUserVo.getDoctorId());
+                ticketResource.setDoctorId(doctorVo.getDoctorId());
                 ticketResource.setDay(day);
                 ticketResource.setAvailableDate(getDateByDay(day));
-                ticketResource.setTicketLastNumber(doctorUserVo.getTicketDayNum());
-                ticketResourceMapper.insert(ticketResource);
+                ticketResource.setTicketLastNumber(doctorVo.getTicketDayNum());
+                ITicketResourceMapper.insert(ticketResource);
             }
         }
     }

@@ -2,8 +2,8 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.DepartmentException;
-import com.gxf.his.mapper.DepartmentMapper;
-import com.gxf.his.po.Department;
+import com.gxf.his.mapper.dao.IDepartmentMapper;
+import com.gxf.his.po.generate.Department;
 import com.gxf.his.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,12 +19,12 @@ import java.util.List;
 @Slf4j
 public class DepartmentServiceImpl implements DepartmentService {
     @Resource
-    private DepartmentMapper departmentMapper;
+    private IDepartmentMapper iDepartmentMapper;
 
     @Override
     public List<Department> getFatherAndChildrenDepartments() {
         try {
-            List<Department> departments = departmentMapper.selectFatherAndChildrenDepartments();
+            List<Department> departments = iDepartmentMapper.selectFatherAndChildrenDepartments();
             if (departments.size() < 1) {
                 throw new DepartmentException(ServerResponseEnum.DEPARTMENTS_NOT_EXIST);
             }
@@ -40,7 +40,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<Department> getAllChildrenDepartments() {
         try {
-            List<Department> departments = departmentMapper.selectAllChildrenDepartment();
+            List<Department> departments = iDepartmentMapper.selectAllChildrenDepartment();
             if (departments.size() < 1) {
                 throw new DepartmentException(ServerResponseEnum.DEPARTMENTS_NOT_EXIST);
             }
@@ -56,9 +56,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void addDepartment(Department department) {
         try {
-            departmentMapper.insert(department);
-        }catch (Exception e){
-            log.error("科室保存失败！",e);
+            iDepartmentMapper.insert(department);
+        } catch (Exception e) {
+            log.error("科室保存失败！", e);
             throw new DepartmentException(ServerResponseEnum.PATIENT_SAVE_FAIL);
         }
     }
@@ -66,9 +66,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartment(Long departmentId) {
         try {
-            departmentMapper.deleteByPrimaryKey(departmentId);
-        }catch (Exception e){
-            log.error("科室删除失败！",e);
+            iDepartmentMapper.deleteByPrimaryKey(departmentId);
+        } catch (Exception e) {
+            log.error("科室删除失败！", e);
             throw new DepartmentException(ServerResponseEnum.DEPARTMENT_DELETE_FAIL);
         }
     }
@@ -76,11 +76,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<Department> getDepartmentsByVaguelyDepartmentName(String name) {
         try {
-            String vaguelyName = "%"+name+"%";
-            List<Department> departments = departmentMapper.getDepartmentsByVaguelyDepartmentName(vaguelyName);
-            return departments;
-        }catch (Exception e){
-            log.error("科室查询失败！",e);
+            String vaguelyName = "%" + name + "%";
+            return iDepartmentMapper.getDepartmentsByVaguelyDepartmentName(vaguelyName);
+        } catch (Exception e) {
+            log.error("科室查询失败！", e);
             throw new DepartmentException(ServerResponseEnum.DEPARTMENT_LIST_FAIL);
         }
     }

@@ -1,10 +1,10 @@
 package com.gxf.his.task;
 
-import com.gxf.his.mapper.TicketResourceMapper;
-import com.gxf.his.po.TicketResource;
+import com.gxf.his.mapper.dao.ITicketResourceMapper;
+import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.generate.TicketResource;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.OrderService;
-import com.gxf.his.vo.DoctorUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,7 +28,7 @@ import java.util.List;
 public class Task {
 
     @Resource
-    private TicketResourceMapper ticketResourceMapper;
+    private ITicketResourceMapper iTicketResourceMapper;
 
     @Resource
     private DoctorService doctorService;
@@ -57,6 +57,7 @@ public class Task {
 
     /**
      * 获取过去第几天的日期(- 操作) 或者 未来 第几天的日期( + 操作)
+     *
      * @param past 过去则输入负数 未来则输入正数 0表示当天
      * @return 过去或未来的日期
      */
@@ -77,13 +78,13 @@ public class Task {
      * @return 星期几对应的日期
      */
     public static Date getDateByDay(String day) {
-        for(Date date : dateList){
+        for (Date date : dateList) {
             //比如医生是周三值班 则返回未来中周三最接近的日期
-            if(getWeekOfDate(date).equals(day)){
+            if (getWeekOfDate(date).equals(day)) {
                 return date;
             }
         }
-        log.warn("没有任何日期匹配当前星期几！"+day);
+        log.warn("没有任何日期匹配当前星期几！" + day);
         return null;
     }
 
@@ -96,23 +97,23 @@ public class Task {
         //获取未来六天的日期，包括当天,加入到列表中
         // 投放未来nextDay天的票务资源
         int nextDay = 7;
-        for(int i = 0; i< nextDay; i++){
+        for (int i = 0; i < nextDay; i++) {
             dateList.add(getPastDate(i));
         }
-        List<DoctorUserVo> doctorUserVos = doctorService.getAllDoctors();
-        for(DoctorUserVo doctorUserVo:doctorUserVos){
-            String[] workdays = doctorUserVo.getScheduling().getSchedulingTime().split(",");
+        List<DoctorVo> doctorVos = doctorService.getAllDoctors();
+        for (DoctorVo doctorVo : doctorVos) {
+            String[] workdays = doctorVo.getScheduling().getSchedulingTime().split(",");
             // 为某位医生每个出诊日都插入票务资源
-            for(String day : workdays){
+            for (String day : workdays) {
                 TicketResource ticketResource = new TicketResource();
-                ticketResource.setDoctorId(doctorUserVo.getDoctorId());
+                ticketResource.setDoctorId(doctorVo.getDoctorId());
                 ticketResource.setDay(day);
                 ticketResource.setAvailableDate(getDateByDay(day));
-                ticketResource.setTicketLastNumber(doctorUserVo.getTicketDayNum());
-                ticketResourceMapper.insert(ticketResource);
+                ticketResource.setTicketLastNumber(doctorVo.getTicketDayNum());
+                iTicketResourceMapper.insert(ticketResource);
             }
         }
-        log.info("执行了放号也业务，当前时间为:"+ LocalDateTime.now());
+        log.info("执行了放号也业务，当前时间为:" + LocalDateTime.now());
     }
 
     /**
@@ -120,7 +121,7 @@ public class Task {
      */
     @Async
     @Scheduled(cron = "0 0/1 * * * ?")
-    public void checkExpireOrder(){
+    public void checkExpireOrder() {
         orderService.getAndRemoveExpireOrders();
     }
 }

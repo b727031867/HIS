@@ -1,19 +1,15 @@
 package com.gxf.his.config;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.gxf.his.Const;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.uitls.JwtUtil;
-import com.gxf.his.vo.ServerResponseVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.authc.pam.UnsupportedTokenException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.ServletRequest;
@@ -22,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * <p>Title: 实现自定义的Shiro的过滤器</p>
@@ -33,8 +27,8 @@ import java.util.List;
  * @author 龚秀峰
  * @date 2019-8-25
  */
+@Slf4j
 public class JwtFilter extends BasicHttpAuthenticationFilter {
-    private Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
     /**
      * 判断Token头是否为空
@@ -84,14 +78,14 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 }
             } catch (UnsupportedTokenException e) {
                 msg = e.getMessage();
-                logger.warn("JWT签名校验失败:" + e.getMessage());
+                log.warn("JWT签名校验失败:" + e.getMessage());
             } catch (Exception e) {
                 msg = e.getMessage();
             }
             this.response401(response, msg);
             return false;
         }
-        logger.debug("Authorization字段为空！禁止访问");
+        log.debug("Authorization字段为空！禁止访问");
         msg = "未认证不许访问！";
         this.response401(response, msg);
         return false;
@@ -138,7 +132,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             serverResponseVO.setCode(401);
             out.append(serverResponseVO.toString());
         } catch (IOException e) {
-            logger.error("返回响应信息出现IOException异常" + e.getMessage());
+            log.error("返回响应信息出现IOException异常" + e.getMessage());
         }
     }
 
@@ -153,7 +147,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         try (PrintWriter out = httpServletResponse.getWriter()) {
             out.append(ServerResponseVO.error(ServerResponseEnum.EXPIRED).toString());
         } catch (IOException e) {
-            logger.error("返回响应信息出现IOException异常" + e.getMessage());
+            log.error("返回响应信息出现IOException异常" + e.getMessage());
         }
     }
 
@@ -169,7 +163,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         String assessTokenMillis =
                 JwtUtil.getSignTime(token);
         if (assessTokenMillis == null || username == null || token == null) {
-            logger.debug("token或用户名或时间戳为空");
+            log.debug("token或用户名或时间戳为空");
             return false;
         }
         try {
@@ -179,7 +173,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 String currentTimeMillisRedis =
                         redis.get(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + username).toString();
                 if (currentTimeMillisRedis == null) {
-                    logger.debug("获取RefreshToken的key检查通过，但是取值时，它刚好过期，此时应该重新登陆");
+                    log.debug("获取RefreshToken的key检查通过，但是取值时，它刚好过期，此时应该重新登陆");
                     return false;
                 }
                 /*
@@ -207,16 +201,16 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     return true;
                     //如果是过期的accessToken，并且其时间戳已经与最新的refreshToken时间戳不符，则表示此token作废，请求失效。
                 } else if (Long.parseLong(assessTokenMillis) < (Long.parseLong(currentTimeMillisRedis))) {
-                    logger.debug("此accessToken已经完全过期，请重新登陆获取最新的accessToken");
+                    log.debug("此accessToken已经完全过期，请重新登陆获取最新的accessToken");
                     return false;
                 } else {
-                    logger.warn("出现accessToken的时间大于【晚于】refreshToken的时间！具体数据为：assessTokenMillis" +
+                    log.warn("出现accessToken的时间大于【晚于】refreshToken的时间！具体数据为：assessTokenMillis" +
                             "---" + assessTokenMillis + "   currentTimeMillisRedis---" + currentTimeMillisRedis);
                     return false;
                 }
             }
         } catch (Exception e) {
-            logger.error("系统异常：" + e.getMessage());
+            log.error("系统异常：" + e.getMessage());
         }
         //refreshToken过期
         return false;

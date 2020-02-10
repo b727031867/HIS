@@ -1,6 +1,6 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.User;
+import com.gxf.his.po.generate.User;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ public interface UserService {
 
     /**
      * 通过用户名查找用户
+     *
      * @param userName 用户名
      * @return 用户对象
      */
@@ -20,31 +21,34 @@ public interface UserService {
 
     /**
      * 删除用户
+     *
      * @param id 用户ID
-     * @return 受影响的行数
+     * @return 返回本次操作影响的行数
      */
     int deleteUser(Long id);
 
     /**
      * 批量删除用户
+     *
      * @param users 要被删除的用户列表
-     * @return 影响的行数
+     * @return 返回本次操作影响的行数
      */
     Integer deleteUserBatch(List<User> users);
 
     /**
      * 添加一位用户
+     *
      * @param user 用户对象
-     * @return 成功插入的用户ID
+     * @return 返回本次操作影响的行数
      */
-    Long addUser(User user);
+    int addUser(User user);
 
     /**
      * 更新用户信息
-     * @param user
-     * @return 更新影响的用户ID
+     *
+     * @param user 用户
+     * @return 用户的ID
      */
     Long updateUser(User user);
-
 
 }

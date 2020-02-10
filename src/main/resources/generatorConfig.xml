@@ -19,15 +19,21 @@
         <!-- 格式化XML代码 -->
         <property name="xmlFormatter"
                   value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
-
+        <!--使用自定义插件Lombok生成-->
+        <plugin type="org.mybatis.generator.plugins.LombokPlugin" >
+            <property name="hasLombok" value="true"/>
+        </plugin>
+        <!--序列化实体类-->
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!--实体类生成toString方法-->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+
         <!--不生成注释-->
         <commentGenerator>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <!--需要配置数据库连接-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3307/his?useSSL=false&amp;&amp;serverTimezone=GMT%2B8&amp;characterEncoding=utf-8"
                         userId="root"
                         password="123GONG123">
@@ -39,29 +45,29 @@
         </javaTypeResolver>
 
         <!--指定entity生成的位置-->
-        <javaModelGenerator targetPackage="com.gxf.his.po"
+        <javaModelGenerator targetPackage="com.gxf.his.po.generate"
                             targetProject="./src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!--sql映射文件生成的位置 mapper.xml-->
-        <sqlMapGenerator targetPackage="com.gxf.his.enmu"
+        <sqlMapGenerator targetPackage="com.gxf.his.mapper.generate"
                          targetProject="./src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!--指定DaoMapper生成的位置 mapper.java ANNOTATEDMAPPER表示使用注解，不产生xml-->
         <javaClientGenerator type="ANNOTATEDMAPPER"
-                             targetPackage="com.gxf.his.mapper"
+                             targetPackage="com.gxf.his.mapper.generate"
                              targetProject="./src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--table是指定每个表的生成策略，%表示全部生成,flat表示不单独为主键生成类-->
-        <!--<table tableName="entity_%" modelType="flat">-->
-            <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
-        <!--</table>-->
+        <!--table是指定每个表的生成策略，%表示全部生成,entity_%表示只生成entity开头的表,flat表示不单独为主键生成类-->
+        <table tableName="%" modelType="flat">
+            <domainObjectRenamingRule searchString="^Entity|^Ref" replaceString=""/>
+        </table>
         <!--<table tableName="entity_department"-->
         <!--domainObjectName="Department" modelType="flat"/>-->
         <!--<table tableName="entity_doctor" domainObjectName="Doctor"-->
@@ -72,12 +78,20 @@
         <!--modelType="flat"/>-->
         <!--<table tableName="entity_permission" domainObjectName="Permission"-->
         <!--modelType="flat"/>-->
+        <!--<table tableName="entity_role" domainObjectName=""-->
+        <!--modelType="flat"/>-->
         <!--<table tableName="entity_role" domainObjectName="Role"-->
-        <!--modelType="flat"/>-->
+        <!--modelType="flat">-->
+        <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+        <!--</table>-->
         <!--<table tableName="entity_scheduling" domainObjectName="Scheduling"-->
-        <!--modelType="flat"/>-->
+        <!--modelType="flat">-->
+        <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+        <!--</table>-->
         <!--<table tableName="entity_ticket" domainObjectName="Ticket"-->
-        <!--modelType="flat"/>-->
+        <!--modelType="flat">-->
+        <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+        <!--</table>-->
         <!--<table tableName="entity_medical_record" domainObjectName="MedicalRecord"-->
                <!--modelType="flat">-->
             <!--<domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
@@ -98,8 +112,25 @@
 <!--               modelType="flat">-->
 <!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
 <!--        </table>-->
-        <table tableName="ticket_resource" domainObjectName="TicketResource"
-               modelType="flat">
-        </table>
+<!--        <table tableName="entity_check_item" domainObjectName="CheckItem"-->
+<!--               modelType="flat">-->
+<!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+<!--        </table>-->
+<!--        <table tableName="entity_drug" domainObjectName="Drug"-->
+<!--               modelType="flat">-->
+<!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+<!--        </table>-->
+<!--        <table tableName="entity_drug_store" domainObjectName="DrugStore"-->
+<!--               modelType="flat">-->
+<!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+<!--        </table>-->
+<!--        <table tableName="entity_drug_toxicology" domainObjectName="DrugToxicology"-->
+<!--               modelType="flat">-->
+<!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+<!--        </table>-->
+<!--        <table tableName="entity_drug_store_batches" domainObjectName="DrugStoreBatches"-->
+<!--               modelType="flat">-->
+<!--            <domainObjectRenamingRule searchString="^Entity" replaceString=""/>-->
+<!--        </table>-->
     </context>
 </generatorConfiguration>

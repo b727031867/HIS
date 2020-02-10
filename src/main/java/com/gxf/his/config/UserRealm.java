@@ -5,9 +5,8 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.gxf.his.Const;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.PermissionException;
-import com.gxf.his.po.Permission;
-import com.gxf.his.po.Role;
-import com.gxf.his.po.User;
+import com.gxf.his.po.generate.Role;
+import com.gxf.his.po.generate.User;
 import com.gxf.his.service.PermissionService;
 import com.gxf.his.service.RoleService;
 import com.gxf.his.service.UserService;
@@ -19,15 +18,13 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -36,57 +33,16 @@ import java.util.Set;
  */
 public class UserRealm extends AuthorizingRealm {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
-    @Autowired
+    @Resource
     private RoleService roleService;
 
-    @Autowired
+    @Resource
     private PermissionService permissionService;
 
 
-//    /**
-//     * Authorization 授权
-//     *
-//     * @param principalCollection 认证信息的集合
-//     * @return 授权信息
-//     */
-//    @Override
-//    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-//        User user = (User) principalCollection.getPrimaryPrincipal();
-//        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        List<Role> roleList = roleService.findRolesByUserId(user.getUserId());
-//        Set<String> roleSet = new HashSet<>();
-//        List<Integer> roleIds = new ArrayList<>();
-//        for (Role role : roleList) {
-//            roleSet.add(role.getRoleName());
-//            roleIds.add(role.getRoleId());
-//        }
-//        // 放入角色信息
-//        authorizationInfo.setRoles(roleSet);
-//        // 放入权限信息
-//        List<String> permissionList = permissionService.findPermissionsByRoleId(roleIds);
-//        authorizationInfo.setStringPermissions(new HashSet<>(permissionList));
-//        return authorizationInfo;
-//    }
-//
-//    /**
-//     * 认证
-//     *
-//     * @param authToken 认证信息的集合
-//     * @return 授权信息
-//     */
-//    @Override
-//    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
-//        UsernamePasswordToken token = (UsernamePasswordToken) authToken;
-//        User user = userService.findByUserName(token.getUsername());
-//        if (user == null) {
-//            return null;
-//        }
-//        return new SimpleAuthenticationInfo(user, user.getUserPassword(), ByteSource.Util.bytes(user.getUserSalt()),
-//                getName());
-//    }
 
 
     @Override
@@ -107,7 +63,6 @@ public class UserRealm extends AuthorizingRealm {
         // 只支持JwtToken令牌类型
         return authenticationToken instanceof JwtToken;
     }
-
 
     /**
      * 定义如何获取用户的角色和权限的逻辑，给shiro做权限判断【授权处理】

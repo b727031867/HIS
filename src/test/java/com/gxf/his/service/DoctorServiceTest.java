@@ -1,10 +1,10 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
-import com.gxf.his.po.Department;
-import com.gxf.his.po.Doctor;
-import com.gxf.his.po.Scheduling;
-import com.gxf.his.po.User;
+import com.gxf.his.po.generate.Department;
+import com.gxf.his.po.generate.Doctor;
+import com.gxf.his.po.generate.Scheduling;
+import com.gxf.his.po.generate.User;
 import com.gxf.his.uitls.CombinationUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +56,7 @@ public class DoctorServiceTest {
     static int roomNumber = 15;
     static String[] floors = {"1", "2", "3", "4", "5", "6"};
     static String[] buildings = {"A", "B", "C"};
-    static String[] ticketPrice = {"17","25","30","200"};
+    static String[] ticketPrice = {"17", "25", "30", "200"};
     /**
      * 排班可选列表
      */
@@ -75,7 +75,7 @@ public class DoctorServiceTest {
     // 初始化工作日情况列表
     private static void init() {
         //上班周一到周日为1~7
-        ArrayList<String> is = new ArrayList<String>(Arrays.asList(workDates));
+        ArrayList<String> is = new ArrayList<>(Arrays.asList(workDates));
         //一周上班两天的所有可能情况
         ArrayList<String> twoWorkDates = CombinationUtil.combine(is, "", 2);
         ArrayList<String> threeWorkDates = CombinationUtil.combine(is, "", 3);
@@ -114,12 +114,12 @@ public class DoctorServiceTest {
         Random random = new Random();
         List<Department> departments = departmentService.getAllChildrenDepartments();
         for (int i = 0; i < generateDoctorNumber; i++) {
-            Department department = departments.get(random.nextInt(departments.size()-1));
+            Department department = departments.get(random.nextInt(departments.size() - 1));
             Doctor doctor = new Doctor();
             String userName = "test" + i;
             String password = "test";
             User user = UserController.doHashedCredentials(userName, password);
-            Long userId = userService.addUser(user);
+            userService.addUser(user);
             doctor.setDepartmentCode(department.getDepartmentCode());
             doctor.setDoctorIntroduction(department.getDepartmentIntroduction());
             doctor.setDoctorName(getName());
@@ -128,10 +128,10 @@ public class DoctorServiceTest {
             doctor.setTicketDayNum(ticketNumber);
             doctor.setTicketPrice(new BigDecimal(getRandomString(ticketPrice)));
             doctor.setTicketCurrentNum(random.nextInt(61));
-            doctor.setUserId(userId);
+            doctor.setUserId(user.getUserId());
             Scheduling scheduling = getScheduling();
-            Long id = schedulingService.addScheduling(scheduling);
-            doctor.setSchedulingId(id);
+            schedulingService.addScheduling(scheduling);
+            doctor.setSchedulingId(scheduling.getSchedulingId());
             doctorService.addDoctor(doctor);
         }
 
@@ -144,7 +144,7 @@ public class DoctorServiceTest {
      */
     private static Scheduling getScheduling() {
         Random random = new Random();
-        if(schedulingList.size() - 1 == 0){
+        if (schedulingList.size() - 1 == 0) {
             return schedulingList.get(0);
         }
         int index = random.nextInt(schedulingList.size() - 1);
@@ -168,6 +168,7 @@ public class DoctorServiceTest {
             for (Scheduling schedulingItem : schedulingList) {
                 if (schedulingItem.getSchedulingRoom().equals(workRoom) && schedulingItem.getSchedulingTime().contains(workDates)) {
                     flag = true;
+                    break;
                 }
             }
             scheduling.setSchedulingType(getRandomString(workTimes));
@@ -221,8 +222,8 @@ public class DoctorServiceTest {
         int index = random.nextInt(Surname.length - 1);
         String name = Surname[index]; //获得一个随机的姓氏
         int i = random.nextInt(3);//可以根据这个数设置产生的男女比例
+        int j = random.nextInt(girl.length() - 2);
         if (i == 2) {
-            int j = random.nextInt(girl.length() - 2);
             if (j % 2 == 0) {
 //                name = "女-" + name + girl.substring(j, j + 2);
                 name = name + girl.substring(j, j + 2);
@@ -232,7 +233,6 @@ public class DoctorServiceTest {
             }
 
         } else {
-            int j = random.nextInt(girl.length() - 2);
             if (j % 2 == 0) {
 //                name = "男-" + name + boy.substring(j, j + 2);
                 name = name + boy.substring(j, j + 2);

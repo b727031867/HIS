@@ -1,7 +1,7 @@
 package com.gxf.his.exception;
 
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.vo.ServerResponseVO;
+import com.gxf.his.po.vo.ServerResponseVO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.authz.UnauthorizedException;

@@ -1,10 +1,9 @@
 package com.gxf.his.mapper;
 
-import com.gxf.his.po.Cashier;
-import com.gxf.his.po.Doctor;
-import com.gxf.his.po.Patient;
-import com.gxf.his.po.User;
-import com.gxf.his.vo.DoctorUserVo;
+import com.gxf.his.po.generate.Cashier;
+import com.gxf.his.po.generate.Doctor;
+import com.gxf.his.po.generate.Patient;
+import com.gxf.his.po.generate.User;
 
 import java.util.List;
 import java.util.Map;

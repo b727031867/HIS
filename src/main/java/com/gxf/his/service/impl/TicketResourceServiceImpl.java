@@ -2,8 +2,8 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.TicketResourceException;
-import com.gxf.his.mapper.TicketResourceMapper;
-import com.gxf.his.po.TicketResource;
+import com.gxf.his.mapper.dao.ITicketResourceMapper;
+import com.gxf.his.po.generate.TicketResource;
 import com.gxf.his.service.TicketResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,12 +24,12 @@ import java.util.List;
 public class TicketResourceServiceImpl implements TicketResourceService {
 
     @Resource
-    private TicketResourceMapper ticketResourceMapper;
+    private ITicketResourceMapper iTicketResourceMapper;
 
     @Override
     public void addTicketResource(TicketResource ticketResource) {
         try {
-            ticketResourceMapper.insert(ticketResource);
+            iTicketResourceMapper.insert(ticketResource);
         } catch (Exception e) {
             log.error("票务资源保存失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_SAVE_FAIL);
@@ -39,7 +39,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     @Override
     public List<TicketResource> getTicketResourceByDoctorIdAndAvailableDate(Long doctorId, Date availableDateStart, Date availableDateEnd) {
         try {
-            return ticketResourceMapper.selectByDoctorIdAndAvailableDate(doctorId, availableDateStart,availableDateEnd);
+            return iTicketResourceMapper.selectByDoctorIdAndAvailableDate(doctorId, availableDateStart, availableDateEnd);
         } catch (Exception e) {
             log.error("票务资源查询失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_LIST_FAIL);
@@ -49,7 +49,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     @Override
     public TicketResource getTicketResourceById(Long ticketResourceId) {
         try {
-            return ticketResourceMapper.selectByPrimaryKey(ticketResourceId);
+            return iTicketResourceMapper.selectByPrimaryKey(ticketResourceId);
         } catch (Exception e) {
             log.error("票务资源查询失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_LIST_FAIL);
@@ -59,7 +59,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     @Override
     public Date getTicketResourceMaxDate() {
         try {
-            Date expirationDate = ticketResourceMapper.selectByMaxAvailableDate().getAvailableDate();
+            Date expirationDate = iTicketResourceMapper.selectByMaxAvailableDate().getAvailableDate();
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(expirationDate);
             calendar.add(Calendar.DATE, 1);
@@ -74,7 +74,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     @Override
     public Date getTicketResourceMinDate() {
         try {
-            Date startDate = ticketResourceMapper.selectByMaxAvailableDate().getAvailableDate();
+            Date startDate = iTicketResourceMapper.selectByMaxAvailableDate().getAvailableDate();
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(startDate);
             //只能提前七天预定，所以预定票的第七天减少六天则为放票当天的日期
@@ -90,7 +90,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     @Override
     public int updateTicketResource(TicketResource ticketResource) {
         try {
-            return ticketResourceMapper.updateByPrimaryKey(ticketResource);
+            return iTicketResourceMapper.updateByPrimaryKey(ticketResource);
         } catch (Exception e) {
             log.error("票务资源更新失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_UPDATE_FAIL);
@@ -100,7 +100,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     @Override
     public int deleteTicketResource(Date availableDate, Long doctorId) {
         try {
-            return ticketResourceMapper.deleteByDoctorIdAndAvailableDate(doctorId, availableDate);
+            return iTicketResourceMapper.deleteByDoctorIdAndAvailableDate(doctorId, availableDate);
         } catch (Exception e) {
             log.error("票务资源更新失败", e);
             throw new TicketResourceException(ServerResponseEnum.TICKET_RESOURCE_UPDATE_FAIL);

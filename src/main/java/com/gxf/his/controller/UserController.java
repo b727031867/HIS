@@ -3,27 +3,21 @@ package com.gxf.his.controller;
 import com.gxf.his.Const;
 import com.gxf.his.config.RedisClient;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.po.Doctor;
-import com.gxf.his.po.Patient;
-import com.gxf.his.po.User;
-import com.gxf.his.service.DoctorService;
+import com.gxf.his.po.vo.ServerResponseVO;
+import com.gxf.his.po.generate.Patient;
+import com.gxf.his.po.generate.User;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.JwtUtil;
-import com.gxf.his.vo.DoctorUserVo;
-import com.gxf.his.vo.PatientUserVo;
-import com.gxf.his.vo.ServerResponseVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.ServerResponse;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,22 +30,13 @@ import java.util.HashMap;
  */
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
-
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
-
-    @Autowired
-    public UserController(UserService service, PatientService pService,
-                          RedisClient redis) {
-        this.redis = redis;
-        userService = service;
-        patientService = pService;
-    }
-
+    @Resource
     private RedisClient redis;
-
+    @Resource
     private UserService userService;
-
+    @Resource
     private PatientService patientService;
 
     /**
@@ -80,12 +65,10 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         user = doHashedCredentials(user.getUserName(), user.getUserPassword());
-        if (user != null) {
-            Long i = userService.addUser(user);
-            if (i < 1) {
-                logger.error("注册时，数据插入异常");
-                return ServerResponseVO.error(ServerResponseEnum.REGISTERED_FAIL);
-            }
+        int i = userService.addUser(user);
+        if (i < 1) {
+            log.error("注册时，数据插入异常" + i);
+            return ServerResponseVO.error(ServerResponseEnum.REGISTERED_FAIL);
         }
 
         return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
@@ -102,10 +85,10 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         User user = doHashedCredentials(userName, password);
-        Long id = userService.addUser(user);
+        int id = userService.addUser(user);
         //病人关联用户
         Patient patient = new Patient();
-        patient.setUserId(id);
+        patient.setUserId(user.getUserId());
         patient.setPatientName(patientName);
         patientService.addPatient(patient);
         return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
@@ -127,16 +110,16 @@ public class UserController {
             User user =
                     userService.findByUserName(userName);
             if (user == null) {
-                logger.info("用户名不存在：" + userName);
+                log.info("用户名不存在：" + userName);
                 throw new UnknownAccountException("用户名或密码错误！");
             }
             //账户是否有效,1有效，0无效
             if (user.getUserStatus() == 0) {
-                logger.info("账户被锁定，账户的状态为：" + user.getUserStatus());
+                log.info("账户被锁定，账户的状态为：" + user.getUserStatus());
                 throw new LockedAccountException("账号已被锁定,请联系管理员！");
             }
             //当前账户的盐
-            logger.debug("查询到的用户的盐为：" + user.getUserSalt());
+            log.debug("查询到的用户的盐为：" + user.getUserSalt());
             //加密次数
             int hashIterations = Const.ENCRYPTION_NUM;
             //使用盐加密登陆密码 剩余
@@ -159,7 +142,7 @@ public class UserController {
                 msg.setMessage("登录成功");
                 msg.setCode(200);
             } else {
-                logger.info("密码错误，登陆输入的密码加密后为：" + sh.toHex() + "   数据库中的密码:" + user.getUserPassword());
+                log.info("密码错误，登陆输入的密码加密后为：" + sh.toHex() + "   数据库中的密码:" + user.getUserPassword());
                 throw new UnknownAccountException();
             }
             return msg;
@@ -170,7 +153,7 @@ public class UserController {
         } catch (IncorrectCredentialsException e) {
             return ServerResponseVO.error(ServerResponseEnum.INCORRECT_CREDENTIALS);
         } catch (AuthenticationException e) {
-            logger.error("认证异常！异常信息为：" + e.getMessage());
+            log.error("认证异常！异常信息为：" + e.getMessage());
             msg.setMessage("用户名或密码错误");
 
         } catch (Throwable e) {
@@ -195,14 +178,14 @@ public class UserController {
                     token = value;
                 }
             }
-            logger.debug("调用注销接口，进行注销的token是：" + token);
+            log.debug("调用注销接口，进行注销的token是：" + token);
             // 校验token是否为空
             if (StringUtils.isBlank(token)) {
-                logger.info("注销时，token为空");
+                log.info("注销时，token为空");
                 msg.setData("注销：Token为空");
             } else {
                 String userName = JwtUtil.getUsername(token);
-                logger.debug("注销时，token中获取的用户名为：" + userName);
+                log.debug("注销时，token中获取的用户名为：" + userName);
                 if (StringUtils.isBlank(userName)) {
                     msg.setData("token失效或不正确.");
                 } else {
@@ -219,7 +202,7 @@ public class UserController {
         } catch (Exception e) {
             msg.setCode(500);
             e.printStackTrace();
-            logger.error("注销异常： 原因为：" + e.getCause() + "信息为：" + e.getMessage());
+            log.error("注销异常： 原因为：" + e.getCause() + "信息为：" + e.getMessage());
         }
         return msg;
     }

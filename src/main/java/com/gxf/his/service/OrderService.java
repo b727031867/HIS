@@ -1,6 +1,6 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.Order;
+import com.gxf.his.po.vo.OrderVo;
 
 /**
  * @author GXF
@@ -15,21 +15,24 @@ public interface OrderService {
 
     /**
      * 添加一个订单及其订单项
+     *
      * @param order 要添加的订单
      */
-    void addOrder(Order order);
+    void addOrder(OrderVo order);
 
     /**
      * 删除一个订单及其订单项
+     *
      * @param orderId 要删除的订单ID
      */
     void deleteOrder(Long orderId);
 
     /**
      * 根据订单类型和资源ID获取订单资源
-     * @param orderType 订单类型编号
+     *
+     * @param orderType  订单类型编号
      * @param resourceId 资源ID
      * @return 具体的资源对象
      */
-    <T> T getResourceByOrderTypeAndId(Integer orderType,Long resourceId);
+    <T> T getResourceByOrderTypeAndId(Integer orderType, Long resourceId);
 }

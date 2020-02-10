@@ -1,8 +1,8 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.Doctor;
-import com.gxf.his.po.User;
-import com.gxf.his.vo.DoctorUserVo;
+import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.generate.Doctor;
+import com.gxf.his.po.generate.User;
 
 import java.util.List;
 
@@ -13,50 +13,59 @@ import java.util.List;
 public interface DoctorService {
     /**
      * 添加一位医生
+     *
      * @param doctor 需要添加的医生
+     * @return 返回本次操作影响的行数
      */
-    Long addDoctor(Doctor doctor);
+    int addDoctor(Doctor doctor);
 
     /**
-     * 删除一位医生
+     * 删除一位医生及其用户
+     *
      * @param doctorId 医生的Id
-     * @param userId 医生对应的用户Id
-     * @return 影响的行数
+     * @param userId   医生对应的用户Id
+     * @return @return 返回本次操作影响的行数
+     * @throws Exception 当删除一位医生时,没找到对应的用户,则会抛出异常
      */
-    void deleteDoctorAndUser (Long doctorId,Long userId) throws Exception;
+    int deleteDoctorAndUser(Long doctorId, Long userId) throws Exception;
 
     /**
      * 批量删除医生和其对应的用户
+     *
      * @param doctors 要删除的医生列表
-     * @param users 要删除的用户列表
-     * @return 影响的行数
+     * @param users   要删除的用户列表
+     * @return 返回本次操作影响的行数
      */
     Integer deleteDoctorAndUserBatch(List<Doctor> doctors, List<User> users);
 
     /**
      * 查询所有的医生
+     *
      * @return 所有的医生
      */
-    List<DoctorUserVo> getAllDoctors();
+    List<DoctorVo> getAllDoctors();
 
     /**
      * 根据部门编号查询医生
+     *
      * @param departmentCode 部门编号
      * @return 医生列表
      */
-    List<DoctorUserVo> getDoctorsByDepartmentCode(String departmentCode);
+    List<DoctorVo> getDoctorsByDepartmentCode(String departmentCode);
 
     /**
      * 根据属性查询医生
-     * @param doctorUserVo 医生的业务逻辑对象
+     *
+     * @param doctorVo 医生的业务逻辑对象
      * @return 医生列表
      */
-    List<DoctorUserVo> selectDoctorByAttribute(DoctorUserVo doctorUserVo);
+    List<DoctorVo> selectDoctorByAttribute(DoctorVo doctorVo);
 
     /**
      * 更新此医生的信息
-     * @param doctor
-     * @return 被更新医生的ID
+     *
+     * @param doctor 医生
+     * @return 返回本次操作影响的行数
      */
-    Long updateDoctor(Doctor doctor);
+    int updateDoctor(Doctor doctor);
 }

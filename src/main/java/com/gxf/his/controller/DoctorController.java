@@ -2,23 +2,19 @@ package com.gxf.his.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gxf.his.config.RedisClient;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.po.Department;
-import com.gxf.his.po.Doctor;
-import com.gxf.his.po.TicketResource;
-import com.gxf.his.po.User;
+import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.vo.ServerResponseVO;
+import com.gxf.his.po.generate.Department;
+import com.gxf.his.po.generate.Doctor;
+import com.gxf.his.po.generate.TicketResource;
+import com.gxf.his.po.generate.User;
 import com.gxf.his.service.DepartmentService;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.TicketResourceService;
 import com.gxf.his.service.UserService;
-import com.gxf.his.vo.DepartmentVo;
-import com.gxf.his.vo.DoctorUserVo;
-import com.gxf.his.vo.ServerResponseVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -33,25 +29,15 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/doctor")
+@Slf4j
 public class DoctorController {
-    private Logger logger = LoggerFactory.getLogger(DoctorController.class);
 
-    @Autowired
-    public DoctorController(DoctorService dservice, UserService uService, DepartmentService depService, RedisClient redis) {
-        this.redis = redis;
-        doctorService = dservice;
-        userService = uService;
-        departmentService = depService;
-    }
-
-    private RedisClient redis;
-
+    @Resource
     private DoctorService doctorService;
-
+    @Resource
     private UserService userService;
-
+    @Resource
     private DepartmentService departmentService;
-
     @Resource
     private TicketResourceService ticketResourceService;
 
@@ -61,13 +47,13 @@ public class DoctorController {
             defaultValue = "5") Integer size) {
         if (null == departmentCode) {
             PageHelper.startPage(page, size);
-            List<DoctorUserVo> doctors = doctorService.getAllDoctors();
-            PageInfo<DoctorUserVo> pageInfo = PageInfo.of(doctors);
+            List<DoctorVo> doctors = doctorService.getAllDoctors();
+            PageInfo<DoctorVo> pageInfo = PageInfo.of(doctors);
             return ServerResponseVO.success(pageInfo);
         }
         PageHelper.startPage(page, size);
-        List<DoctorUserVo> doctors = doctorService.getDoctorsByDepartmentCode(departmentCode);
-        PageInfo<DoctorUserVo> pageInfo = PageInfo.of(doctors);
+        List<DoctorVo> doctors = doctorService.getDoctorsByDepartmentCode(departmentCode);
+        PageInfo<DoctorVo> pageInfo = PageInfo.of(doctors);
         return ServerResponseVO.success(pageInfo);
     }
 
@@ -76,13 +62,13 @@ public class DoctorController {
         if (departmentCode == null || departmentCode.trim().isEmpty()) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        List<DoctorUserVo> departmentVos = doctorService.getDoctorsByDepartmentCode(departmentCode);
+        List<DoctorVo> departmentVos = doctorService.getDoctorsByDepartmentCode(departmentCode);
         //获取每位医生未来一周内的订票情况
-        for (DoctorUserVo doctorUserVo : departmentVos) {
+        for (DoctorVo doctorVo : departmentVos) {
             Date expirationDate = ticketResourceService.getTicketResourceMaxDate();
             Date startDate = ticketResourceService.getTicketResourceMinDate();
-            List<TicketResource> ticketResources = ticketResourceService.getTicketResourceByDoctorIdAndAvailableDate(doctorUserVo.getDoctorId(), startDate, expirationDate);
-            doctorUserVo.setTicketResources(ticketResources);
+            List<TicketResource> ticketResources = ticketResourceService.getTicketResourceByDoctorIdAndAvailableDate(doctorVo.getDoctorId(), startDate, expirationDate);
+            doctorVo.setTicketResources(ticketResources);
         }
         return ServerResponseVO.success(departmentVos);
     }
@@ -98,65 +84,65 @@ public class DoctorController {
         String doctorName = "doctorName";
         String doctorProfessionalTitle = "doctorProfessionalTitle";
         String departmentName = "departmentName";
-        DoctorUserVo doctorUserVo = new DoctorUserVo();
+        DoctorVo doctorVo = new DoctorVo();
         if (doctorName.equals(attribute)) {
-            doctorUserVo.setDoctorName(value);
+            doctorVo.setDoctorName(value);
         } else if (doctorProfessionalTitle.equals(attribute)) {
-            doctorUserVo.setDoctorProfessionalTitle(value);
+            doctorVo.setDoctorProfessionalTitle(value);
         } else if (departmentName.equals(attribute)) {
             List<Department> departments = departmentService.getDepartmentsByVaguelyDepartmentName(value);
-            doctorUserVo.setDepartments(departments);
+            doctorVo.setDepartments(departments);
         } else {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         PageHelper.startPage(page, size);
-        List<DoctorUserVo> doctors = doctorService.selectDoctorByAttribute(doctorUserVo);
-        PageInfo<DoctorUserVo> pageInfo = PageInfo.of(doctors);
+        List<DoctorVo> doctors = doctorService.selectDoctorByAttribute(doctorVo);
+        PageInfo<DoctorVo> pageInfo = PageInfo.of(doctors);
         return ServerResponseVO.success(pageInfo);
     }
 
     @PutMapping
-    public ServerResponseVO saveDoctorAndUser(@RequestBody DoctorUserVo doctorUserVo) {
-        logger.info("当前更新的医生信息为：" + doctorUserVo.toString());
+    public ServerResponseVO saveDoctorAndUser(@RequestBody DoctorVo doctorVo) {
+        log.info("当前更新的医生信息为：" + doctorVo.toString());
         Doctor doctor = new Doctor();
         //更新医生信息
-        doctor.setDoctorId(doctorUserVo.getDoctorId());
-        doctor.setEmployeeId(doctorUserVo.getEmployeeId());
-        doctor.setDoctorName(doctorUserVo.getDoctorName());
-        doctor.setDoctorProfessionalTitle(doctorUserVo.getDoctorProfessionalTitle());
-        doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
-        doctor.setDepartmentCode(doctorUserVo.getDepartment().getDepartmentCode());
-        doctor.setSchedulingId(doctorUserVo.getScheduling().getSchedulingId());
-        doctor.setUserId(doctorUserVo.getUser().getUserId());
-        doctor.setTicketDayNum(doctorUserVo.getTicketDayNum());
+        doctor.setDoctorId(doctorVo.getDoctorId());
+        doctor.setEmployeeId(doctorVo.getEmployeeId());
+        doctor.setDoctorName(doctorVo.getDoctorName());
+        doctor.setDoctorProfessionalTitle(doctorVo.getDoctorProfessionalTitle());
+        doctor.setDoctorIntroduction(doctorVo.getDoctorIntroduction());
+        doctor.setDepartmentCode(doctorVo.getDepartment().getDepartmentCode());
+        doctor.setSchedulingId(doctorVo.getScheduling().getSchedulingId());
+        doctor.setUserId(doctorVo.getUser().getUserId());
+        doctor.setTicketDayNum(doctorVo.getTicketDayNum());
         doctorService.updateDoctor(doctor);
         //更新用户信息
-        User user = doctorUserVo.getUser();
+        User user = doctorVo.getUser();
         userService.updateUser(user);
         return ServerResponseVO.success();
     }
 
     @PostMapping
-    public ServerResponseVO saveDoctor(@RequestBody DoctorUserVo doctorUserVo) {
-        if (StringUtils.isEmpty(doctorUserVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorUserVo.getUser().getUserPassword().trim())
-                || StringUtils.isEmpty(doctorUserVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorIntroduction().trim())
-                || StringUtils.isEmpty(doctorUserVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorUserVo.getDoctorProfessionalTitle().trim())
-                || StringUtils.isEmpty(doctorUserVo.getEmployeeId().trim())
+    public ServerResponseVO saveDoctor(@RequestBody DoctorVo doctorVo) {
+        if (StringUtils.isEmpty(doctorVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorVo.getUser().getUserPassword().trim())
+                || StringUtils.isEmpty(doctorVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorVo.getDoctorIntroduction().trim())
+                || StringUtils.isEmpty(doctorVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorVo.getDoctorProfessionalTitle().trim())
+                || StringUtils.isEmpty(doctorVo.getEmployeeId().trim())
         ) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        if (userService.findByUserName(doctorUserVo.getUser().getUserName()) != null) {
+        if (userService.findByUserName(doctorVo.getUser().getUserName()) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
-        User user = UserController.doHashedCredentials(doctorUserVo.getUser().getUserName(), doctorUserVo.getUser().getUserPassword());
-        Long userId = userService.addUser(user);
+        User user = UserController.doHashedCredentials(doctorVo.getUser().getUserName(), doctorVo.getUser().getUserPassword());
+        userService.addUser(user);
         Doctor doctor = new Doctor();
-        doctor.setDepartmentCode(doctorUserVo.getDepartment().getDepartmentCode());
-        doctor.setDoctorIntroduction(doctorUserVo.getDoctorIntroduction());
-        doctor.setDoctorName(doctorUserVo.getDoctorName());
-        doctor.setDoctorProfessionalTitle(doctorUserVo.getDoctorProfessionalTitle());
-        doctor.setEmployeeId(doctorUserVo.getEmployeeId());
-        doctor.setUserId(userId);
+        doctor.setDepartmentCode(doctorVo.getDepartment().getDepartmentCode());
+        doctor.setDoctorIntroduction(doctorVo.getDoctorIntroduction());
+        doctor.setDoctorName(doctorVo.getDoctorName());
+        doctor.setDoctorProfessionalTitle(doctorVo.getDoctorProfessionalTitle());
+        doctor.setEmployeeId(doctorVo.getEmployeeId());
+        doctor.setUserId(user.getUserId());
         doctorService.addDoctor(doctor);
         return ServerResponseVO.success();
     }
@@ -173,19 +159,19 @@ public class DoctorController {
     }
 
     @DeleteMapping("/batch")
-    public ServerResponseVO deleteDoctorsAndUsersByIds(@RequestBody List<DoctorUserVo> doctorUserVos) {
+    public ServerResponseVO deleteDoctorsAndUsersByIds(@RequestBody List<DoctorVo> doctorVos) {
         List<Doctor> doctors = new ArrayList<>(16);
         List<User> users = new ArrayList<>(16);
-        for (DoctorUserVo doctorUserVo : doctorUserVos) {
+        for (DoctorVo doctorVo : doctorVos) {
             Doctor doctor = new Doctor();
-            doctor.setDoctorId(doctorUserVo.getDoctorId());
+            doctor.setDoctorId(doctorVo.getDoctorId());
             doctors.add(doctor);
-            users.add(doctorUserVo.getUser());
+            users.add(doctorVo.getUser());
         }
         Integer a = doctorService.deleteDoctorAndUserBatch(doctors, users);
         //正常情况应该删除n个医生就有n个对应的用户也删除
         int b = 2;
-        if (doctorUserVos.size() * b == a) {
+        if (doctorVos.size() * b == a) {
             return ServerResponseVO.success();
         }
         return ServerResponseVO.error(ServerResponseEnum.DOCTOR_DELETE_FAIL);
