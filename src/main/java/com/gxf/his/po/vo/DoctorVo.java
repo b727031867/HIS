@@ -17,11 +17,11 @@ public class DoctorVo extends Doctor implements Serializable {
 
     private Department department;
 
-    private Scheduling scheduling;
+    private DoctorScheduling doctorScheduling;
 
     private User user;
 
-    private List<TicketResource> ticketResources;
+    private List<DoctorTicketResource> ticketResources;
 
     private List<Department> departments;
 }

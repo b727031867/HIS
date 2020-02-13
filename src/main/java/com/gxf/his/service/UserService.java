@@ -21,6 +21,7 @@ public interface UserService {
 
     /**
      * 根据主键获取用户
+     *
      * @param uid 用户ID
      * @return 用户对象
      */

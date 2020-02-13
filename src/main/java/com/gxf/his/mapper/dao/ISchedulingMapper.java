@@ -1,7 +1,7 @@
 package com.gxf.his.mapper.dao;
 
-import com.gxf.his.mapper.generate.SchedulingMapper;
-import com.gxf.his.po.generate.Scheduling;
+import com.gxf.his.mapper.generate.DoctorSchedulingMapper;
+import com.gxf.his.po.generate.DoctorScheduling;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Options;
  * @author 龚秀峰
  * 排班模块的DAO接口
  */
-public interface ISchedulingMapper extends SchedulingMapper {
+public interface ISchedulingMapper extends DoctorSchedulingMapper {
 
     /**
      * 插入排班信息
@@ -19,12 +19,12 @@ public interface ISchedulingMapper extends SchedulingMapper {
      * @return 影响的行数 注入主键
      */
     @Insert({
-            "insert into entity_scheduling (scheduling_id, scheduling_type, ",
+            "insert into entity_doctor_scheduling (scheduling_id, scheduling_type, ",
             "scheduling_time, scheduling_room)",
             "values (#{schedulingId,jdbcType=BIGINT}, #{schedulingType,jdbcType=VARCHAR}, ",
             "#{schedulingTime,jdbcType=VARCHAR}, #{schedulingRoom,jdbcType=VARCHAR})"
     })
     @Options(useGeneratedKeys = true, keyProperty = "schedulingId", keyColumn = "scheduling_id")
-    int insertAndInjectThePrimaryKey(Scheduling record);
+    int insertAndInjectThePrimaryKey(DoctorScheduling record);
 
 }

@@ -9,16 +9,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class PrescriptionList implements Serializable {
-    private Long prescriptionListId;
+public class PrescriptionExtraCost implements Serializable {
+    private Long prescriptionExtrachargesId;
 
-    private BigDecimal totalSpend;
+    private Long prescriptionId;
 
-    private Long patientId;
+    private Long operaterId;
 
-    private Long doctorId;
+    private BigDecimal amount;
 
-    private Date createDatetime;
+    private String remark;
+
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -28,11 +30,12 @@ public class PrescriptionList implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", prescriptionListId=").append(prescriptionListId);
-        sb.append(", totalSpend=").append(totalSpend);
-        sb.append(", patientId=").append(patientId);
-        sb.append(", doctorId=").append(doctorId);
-        sb.append(", createDatetime=").append(createDatetime);
+        sb.append(", prescriptionExtrachargesId=").append(prescriptionExtrachargesId);
+        sb.append(", prescriptionId=").append(prescriptionId);
+        sb.append(", operaterId=").append(operaterId);
+        sb.append(", amount=").append(amount);
+        sb.append(", remark=").append(remark);
+        sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

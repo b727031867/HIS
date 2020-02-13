@@ -1,6 +1,6 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.generate.Scheduling;
+import com.gxf.his.po.generate.DoctorScheduling;
 
 /**
  * @author 龚秀峰
@@ -14,7 +14,7 @@ public interface SchedulingService {
      * @param scheduling 排班信息类
      * @return 返回本次操作影响的行数
      */
-    int addScheduling(Scheduling scheduling);
+    int addScheduling(DoctorScheduling scheduling);
 
     /**
      * 删除一条排班信息
@@ -28,7 +28,7 @@ public interface SchedulingService {
      *
      * @param scheduling 排班信息
      */
-    int updateScheduling(Scheduling scheduling);
+    int updateScheduling(DoctorScheduling scheduling);
 
     /**
      * 查找一条排班信息
@@ -36,5 +36,5 @@ public interface SchedulingService {
      * @param id 排班信息的ID
      * @return 排班信息实体
      */
-    Scheduling selectSchedulingById(Long id);
+    DoctorScheduling selectSchedulingById(Long id);
 }

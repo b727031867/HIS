@@ -1,6 +1,6 @@
 package com.gxf.his.mapper.generate;
 
-import com.gxf.his.po.generate.MedicalRecord;
+import com.gxf.his.po.generate.PatientMedicalRecord;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -10,15 +10,15 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.type.JdbcType;
 
-public interface MedicalRecordMapper {
+public interface PatientMedicalRecordMapper {
     @Delete({
-        "delete from entity_medical_record",
+        "delete from entity_patient_medical_record",
         "where medical_record_id = #{medicalRecordId,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(Long medicalRecordId);
 
     @Insert({
-        "insert into entity_medical_record (medical_record_id, narrator, ",
+        "insert into entity_patient_medical_record (medical_record_id, narrator, ",
         "chief_complaint, past_history, ",
         "current_medical_history, auxiliary_inspection, ",
         "diagnosis, doctor_id, ",
@@ -29,13 +29,13 @@ public interface MedicalRecordMapper {
         "#{diagnosis,jdbcType=VARCHAR}, #{doctorId,jdbcType=BIGINT}, ",
         "#{patientId,jdbcType=BIGINT}, #{createDatetime,jdbcType=TIMESTAMP})"
     })
-    int insert(MedicalRecord record);
+    int insert(PatientMedicalRecord record);
 
     @Select({
         "select",
         "medical_record_id, narrator, chief_complaint, past_history, current_medical_history, ",
         "auxiliary_inspection, diagnosis, doctor_id, patient_id, create_datetime",
-        "from entity_medical_record",
+        "from entity_patient_medical_record",
         "where medical_record_id = #{medicalRecordId,jdbcType=BIGINT}"
     })
     @Results({
@@ -50,13 +50,13 @@ public interface MedicalRecordMapper {
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
         @Result(column="create_datetime", property="createDatetime", jdbcType=JdbcType.TIMESTAMP)
     })
-    MedicalRecord selectByPrimaryKey(Long medicalRecordId);
+    PatientMedicalRecord selectByPrimaryKey(Long medicalRecordId);
 
     @Select({
         "select",
         "medical_record_id, narrator, chief_complaint, past_history, current_medical_history, ",
         "auxiliary_inspection, diagnosis, doctor_id, patient_id, create_datetime",
-        "from entity_medical_record"
+        "from entity_patient_medical_record"
     })
     @Results({
         @Result(column="medical_record_id", property="medicalRecordId", jdbcType=JdbcType.BIGINT, id=true),
@@ -70,10 +70,10 @@ public interface MedicalRecordMapper {
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
         @Result(column="create_datetime", property="createDatetime", jdbcType=JdbcType.TIMESTAMP)
     })
-    List<MedicalRecord> selectAll();
+    List<PatientMedicalRecord> selectAll();
 
     @Update({
-        "update entity_medical_record",
+        "update entity_patient_medical_record",
         "set narrator = #{narrator,jdbcType=VARCHAR},",
           "chief_complaint = #{chiefComplaint,jdbcType=VARCHAR},",
           "past_history = #{pastHistory,jdbcType=VARCHAR},",
@@ -85,5 +85,5 @@ public interface MedicalRecordMapper {
           "create_datetime = #{createDatetime,jdbcType=TIMESTAMP}",
         "where medical_record_id = #{medicalRecordId,jdbcType=BIGINT}"
     })
-    int updateByPrimaryKey(MedicalRecord record);
+    int updateByPrimaryKey(PatientMedicalRecord record);
 }

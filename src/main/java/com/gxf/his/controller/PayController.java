@@ -1,10 +1,14 @@
 package com.gxf.his.controller;
 
+import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.vo.ServerResponseVO;
+import com.gxf.his.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @author 龚秀峰
@@ -12,16 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2020/2/10 17:19
  */
 @RestController
-@Slf4j
 @RequestMapping("/pay")
+@Slf4j
 public class PayController extends BaseController {
+    @Resource
+    private OrderService orderService;
 
     /**
      * 挂号付款接口
      */
     @PostMapping("/register")
     public <T> ServerResponseVO<T> payRegister(Long orderId){
-        return ServerResponseVO.success();
+        log.info("订单ID："+orderId);
+        if(null == orderId){
+            ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        if(orderService.payRegisterOrder(orderId)){
+            return ServerResponseVO.success();
+        }
+        return ServerResponseVO.error(ServerResponseEnum.ORDER_PAY_FAIL);
     }
 
     /**
@@ -40,3 +53,4 @@ public class PayController extends BaseController {
         return ServerResponseVO.success();
     }
 }
+

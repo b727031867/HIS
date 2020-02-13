@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class MedicalRecord implements Serializable {
+public class PatientMedicalRecord implements Serializable {
     private Long medicalRecordId;
 
     private String narrator;

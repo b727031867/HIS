@@ -1,10 +1,11 @@
 package com.gxf.his.controller;
 
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.po.generate.Department;
 import com.gxf.his.po.vo.DepartmentVo;
 import com.gxf.his.po.vo.ServerResponseVO;
-import com.gxf.his.po.generate.Department;
 import com.gxf.his.service.DepartmentService;
+import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @PostMapping("/add")
-    public ServerResponseVO addDepartment(Department department) {
+    public <T> ServerResponseVO<T> addDepartment(Department department) {
         if (null != department.getDepartmentCode() && StringUtils.isNotEmpty(department.getDepartmentIntroduction())
                 && StringUtils.isNotEmpty(department.getDepartmentName()) && department.getDepartmentParentId() != null) {
             departmentService.addDepartment(department);
@@ -37,7 +38,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/delete")
-    public ServerResponseVO deleteDepartment(Long departmentId) {
+    public <T> ServerResponseVO<T> deleteDepartment(Long departmentId) {
         if (null == departmentId) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
@@ -46,7 +47,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/top")
-    public ServerResponseVO getFartherAndChildrenDepartment() {
+    public <T> ServerResponseVO<T> getFartherAndChildrenDepartment() {
         List<Department> departments = departmentService.getFatherAndChildrenDepartments();
         List<DepartmentVo> departmentVos = new ArrayList<>(16);
         List<Department> childrenDepts = new ArrayList<>(16);
@@ -78,7 +79,7 @@ public class DepartmentController {
                 departmentVos.add(currentDepartmentVo);
             }
         }
-        return ServerResponseVO.success(departmentVos);
+        return MyUtil.cast(ServerResponseVO.success(departmentVos));
     }
 
 

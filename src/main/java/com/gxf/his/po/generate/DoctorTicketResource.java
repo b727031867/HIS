@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class TicketResource implements Serializable {
+public class DoctorTicketResource implements Serializable {
     private Long registeredResourceId;
 
     private Long doctorId;

@@ -1,8 +1,9 @@
 package com.gxf.his.po.vo;
 
+import com.gxf.his.po.generate.DoctorTicket;
+import com.gxf.his.po.generate.DoctorTicketResource;
 import com.gxf.his.po.generate.Order;
 import com.gxf.his.po.generate.OrderItem;
-import com.gxf.his.po.generate.TicketResource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,7 +22,11 @@ public class OrderVo extends Order implements Serializable {
 
     private List<OrderItem> orderItemList;
 
-    private List<TicketResource> ticketResourceList;
+    private List<OrderItemVo> orderVoItemList;
+
+    private List<DoctorTicketResource> ticketResourceList;
+
+    private DoctorTicket doctorTicket;
 
     private Date ticketStartTime;
 

@@ -1,8 +1,8 @@
 package com.gxf.his.service;
 
 import com.gxf.his.mapper.dao.ITicketResourceMapper;
+import com.gxf.his.po.generate.DoctorTicketResource;
 import com.gxf.his.po.vo.DoctorVo;
-import com.gxf.his.po.generate.TicketResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -97,10 +97,10 @@ public class TicketResourceServiceTest {
         }
         List<DoctorVo> doctorVos = doctorService.getAllDoctors();
         for (DoctorVo doctorVo : doctorVos) {
-            String[] workdays = doctorVo.getScheduling().getSchedulingTime().split(",");
+            String[] workdays = doctorVo.getDoctorScheduling().getSchedulingTime().split(",");
             // 为某位医生每个出诊日都插入票务资源
             for (String day : workdays) {
-                TicketResource ticketResource = new TicketResource();
+                DoctorTicketResource ticketResource = new DoctorTicketResource();
                 ticketResource.setDoctorId(doctorVo.getDoctorId());
                 ticketResource.setDay(day);
                 ticketResource.setAvailableDate(getDateByDay(day));

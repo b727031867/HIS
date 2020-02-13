@@ -1,10 +1,11 @@
 package com.gxf.his.task;
 
 import com.gxf.his.mapper.dao.ITicketResourceMapper;
+import com.gxf.his.po.generate.DoctorTicketResource;
 import com.gxf.his.po.vo.DoctorVo;
-import com.gxf.his.po.generate.TicketResource;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.OrderService;
+import com.gxf.his.service.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,6 +36,9 @@ public class Task {
 
     @Resource
     private OrderService orderService;
+
+    @Resource
+    private TicketService ticketService;
 
     private static List<Date> dateList = new ArrayList<>(8);
 
@@ -102,10 +106,10 @@ public class Task {
         }
         List<DoctorVo> doctorVos = doctorService.getAllDoctors();
         for (DoctorVo doctorVo : doctorVos) {
-            String[] workdays = doctorVo.getScheduling().getSchedulingTime().split(",");
+            String[] workdays = doctorVo.getDoctorScheduling().getSchedulingTime().split(",");
             // 为某位医生每个出诊日都插入票务资源
             for (String day : workdays) {
-                TicketResource ticketResource = new TicketResource();
+                DoctorTicketResource ticketResource = new DoctorTicketResource();
                 ticketResource.setDoctorId(doctorVo.getDoctorId());
                 ticketResource.setDay(day);
                 ticketResource.setAvailableDate(getDateByDay(day));
@@ -123,5 +127,15 @@ public class Task {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void checkExpireOrder() {
         orderService.getAndRemoveExpireOrders();
+    }
+
+    /**
+     * 每分钟查询过期的挂号
+     * 切换挂号信息状态为过期
+     */
+    @Async
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void checkExpiredTicket() {
+        ticketService.checkExpiredTicket();
     }
 }

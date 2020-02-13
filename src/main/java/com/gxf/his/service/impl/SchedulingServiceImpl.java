@@ -3,7 +3,7 @@ package com.gxf.his.service.impl;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.SchedulingException;
 import com.gxf.his.mapper.dao.ISchedulingMapper;
-import com.gxf.his.po.generate.Scheduling;
+import com.gxf.his.po.generate.DoctorScheduling;
 import com.gxf.his.service.SchedulingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class SchedulingServiceImpl implements SchedulingService {
     private ISchedulingMapper iSchedulingMapper;
 
     @Override
-    public int addScheduling(Scheduling scheduling) {
+    public int addScheduling(DoctorScheduling scheduling) {
         try {
             return iSchedulingMapper.insertAndInjectThePrimaryKey(scheduling);
         } catch (Exception e) {
@@ -42,7 +42,7 @@ public class SchedulingServiceImpl implements SchedulingService {
     }
 
     @Override
-    public int updateScheduling(Scheduling scheduling) {
+    public int updateScheduling(DoctorScheduling scheduling) {
         try {
             return iSchedulingMapper.updateByPrimaryKey(scheduling);
         } catch (Exception e) {
@@ -52,8 +52,8 @@ public class SchedulingServiceImpl implements SchedulingService {
     }
 
     @Override
-    public Scheduling selectSchedulingById(Long id) {
-        Scheduling scheduling;
+    public DoctorScheduling selectSchedulingById(Long id) {
+        DoctorScheduling scheduling;
         try {
             scheduling = iSchedulingMapper.selectByPrimaryKey(id);
         } catch (Exception e) {

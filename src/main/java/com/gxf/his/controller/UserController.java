@@ -3,12 +3,13 @@ package com.gxf.his.controller;
 import com.gxf.his.Const;
 import com.gxf.his.config.RedisClient;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
+import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.JwtUtil;
+import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
@@ -46,18 +47,18 @@ public class UserController {
     private String refreshTokenExpireTime;
 
     @GetMapping("/checkUsername")
-    public ServerResponseVO checkUsernameIsExists(@RequestParam(value = "userName") String userName) {
+    public <T> ServerResponseVO<T> checkUsernameIsExists(@RequestParam(value = "userName") String userName) {
         if (StringUtils.isEmpty(userName.trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         if (userService.findByUserName(userName) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
-        return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
+        return MyUtil.cast(ServerResponseVO.success(ServerResponseEnum.SUCCESS));
     }
 
     @PostMapping("/save")
-    public ServerResponseVO save(User user) {
+    public <T> ServerResponseVO<T> save(User user) {
         if (StringUtils.isEmpty(user.getUserName().trim()) || StringUtils.isEmpty(user.getUserPassword().trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
@@ -71,13 +72,13 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.REGISTERED_FAIL);
         }
 
-        return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
+        return MyUtil.cast(ServerResponseVO.success(ServerResponseEnum.SUCCESS));
     }
 
     @PostMapping("/registerPatient")
-    public ServerResponseVO registerPatient(@RequestParam(value = "userName") String userName,
-                                            @RequestParam(value = "userPassword") String password,
-                                            @RequestParam(value = "patientName") String patientName) {
+    public <T> ServerResponseVO<T> registerPatient(@RequestParam(value = "userName") String userName,
+                                                   @RequestParam(value = "userPassword") String password,
+                                                   @RequestParam(value = "patientName") String patientName) {
         if (StringUtils.isEmpty(userName.trim()) || StringUtils.isEmpty(password.trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
@@ -85,22 +86,22 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         User user = doHashedCredentials(userName, password);
-        int id = userService.addUser(user);
+        userService.addUser(user);
         //病人关联用户
         Patient patient = new Patient();
         patient.setUserId(user.getUserId());
         patient.setPatientName(patientName);
         patientService.addPatient(patient);
-        return ServerResponseVO.success(ServerResponseEnum.SUCCESS);
+        return MyUtil.cast(ServerResponseVO.success(ServerResponseEnum.SUCCESS));
     }
 
     @PostMapping("/login")
-    public ServerResponseVO login(@RequestParam(value = "userName") String userName,
-                                  @RequestParam(value = "userPassword") String password) {
+    public <T> ServerResponseVO<T> login(@RequestParam(value = "userName") String userName,
+                                         @RequestParam(value = "userPassword") String password) {
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        ServerResponseVO msg = new ServerResponseVO();
+        ServerResponseVO<T> msg = new ServerResponseVO<>();
         try {
             // 清除可能存在的shiro权限信息缓存
             if (redis.hasKey(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName)) {
@@ -138,7 +139,7 @@ public class UserController {
                 String token = JwtUtil.sign(userName, currentTimeMillis);
                 hashMap.put("token", token);
                 hashMap.put("id", user.getUserId().toString());
-                msg.setData(hashMap);
+                msg.setData(MyUtil.cast(hashMap));
                 msg.setMessage("登录成功");
                 msg.setCode(200);
             } else {
@@ -165,8 +166,8 @@ public class UserController {
 
 
     @GetMapping("/logout")
-    public ServerResponseVO logout(HttpServletRequest request) {
-        ServerResponseVO msg = new ServerResponseVO();
+    public <T> ServerResponseVO<T> logout(HttpServletRequest request) {
+        ServerResponseVO<T> msg = new ServerResponseVO<>();
         try {
             String token = "";
             // 获取头部信息
@@ -182,12 +183,12 @@ public class UserController {
             // 校验token是否为空
             if (StringUtils.isBlank(token)) {
                 log.info("注销时，token为空");
-                msg.setData("注销：Token为空");
+                msg.setData(MyUtil.cast("注销：Token为空"));
             } else {
                 String userName = JwtUtil.getUsername(token);
                 log.debug("注销时，token中获取的用户名为：" + userName);
                 if (StringUtils.isBlank(userName)) {
-                    msg.setData("token失效或不正确.");
+                    msg.setData(MyUtil.cast("token失效或不正确."));
                 } else {
                     // 清除shiro权限信息缓存
                     if (redis.hasKey(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName)) {

@@ -2,10 +2,15 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.PatientException;
+import com.gxf.his.mapper.dao.IOrderMapper;
 import com.gxf.his.mapper.dao.IPatientMapper;
+import com.gxf.his.mapper.dao.ITicketMapper;
+import com.gxf.his.po.generate.DoctorTicket;
+import com.gxf.his.po.vo.OrderVo;
 import com.gxf.his.po.vo.PatientVo;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
+import com.gxf.his.po.vo.TicketVo;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,7 +31,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Resource
     private IPatientMapper iPatientMapper;
-
+    @Resource
+    private ITicketMapper iTicketMapper;
+    @Resource
+    private IOrderMapper iOrderMapper;
     @Resource
     private UserService userService;
 
@@ -61,6 +70,11 @@ public class PatientServiceImpl implements PatientService {
             throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
         }
         return patient;
+    }
+
+    @Override
+    public List<TicketVo> getQueueRegisterOrder(Long patientId) {
+        return iTicketMapper.getUnusedAndUsingTickets(patientId);
     }
 
     @Override
@@ -126,5 +140,17 @@ public class PatientServiceImpl implements PatientService {
             e.printStackTrace();
             throw new PatientException(ServerResponseEnum.PATIENT_DELETE_FAIL);
         }
+    }
+
+    @Override
+    public HashMap<String, List<OrderVo>> getAllPatientOrders(Long patientId) {
+        List<OrderVo> registers = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId,0);
+        List<OrderVo> prescriptions = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId,1);
+        List<OrderVo> checks = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId,2);
+        HashMap<String,List<OrderVo>> map = new HashMap<>(4);
+        map.put("registers",registers);
+        map.put("prescriptions",prescriptions);
+        map.put("checks",checks);
+        return map;
     }
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class Ticket implements Serializable {
+public class DoctorTicket implements Serializable {
     private Long ticketId;
 
     private Integer ticketNumber;
@@ -19,6 +19,8 @@ public class Ticket implements Serializable {
 
     private Date ticketCreateTime;
 
+    private Date activeTime;
+
     private Date ticketValidityStart;
 
     private Date ticketValidityEnd;
@@ -27,7 +29,11 @@ public class Ticket implements Serializable {
 
     private Long patientId;
 
+    private Long registeredResourceId;
+
     private Long orderId;
+
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -42,11 +48,14 @@ public class Ticket implements Serializable {
         sb.append(", ticketType=").append(ticketType);
         sb.append(", ticketTimeType=").append(ticketTimeType);
         sb.append(", ticketCreateTime=").append(ticketCreateTime);
+        sb.append(", activeTime=").append(activeTime);
         sb.append(", ticketValidityStart=").append(ticketValidityStart);
         sb.append(", ticketValidityEnd=").append(ticketValidityEnd);
         sb.append(", doctorId=").append(doctorId);
         sb.append(", patientId=").append(patientId);
+        sb.append(", registeredResourceId=").append(registeredResourceId);
         sb.append(", orderId=").append(orderId);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

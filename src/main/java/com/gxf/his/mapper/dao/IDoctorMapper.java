@@ -17,6 +17,33 @@ import java.util.List;
 public interface IDoctorMapper extends DoctorMapper {
 
     /**
+     * 关联查询医生的所有信息
+     * @param doctorId 医生ID
+     * @return 医生
+     */
+    @Select({
+            "select",
+            "doctor_id, employee_id, doctor_name, doctor_professional_title, doctor_introduction, ",
+            "department_code, scheduling_id, user_id, ticket_day_num, ticket_price, ticket_current_num",
+            "from entity_doctor",
+            "where doctor_id = #{doctorId,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="employee_id", property="employeeId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="doctor_name", property="doctorName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="doctor_professional_title", property="doctorProfessionalTitle", jdbcType=JdbcType.VARCHAR),
+            @Result(column="doctor_introduction", property="doctorIntroduction", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_code", property="department", jdbcType=JdbcType.VARCHAR,one = @One(select = MapperConst.ONE_DEPARTMENT)),
+            @Result(column="scheduling_id", property="doctorScheduling", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_GENERATE_SCHEDULING)),
+            @Result(column="user_id", property="user", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_GENERATE_USER)),
+            @Result(column="ticket_day_num", property="ticketDayNum", jdbcType=JdbcType.INTEGER),
+            @Result(column="ticket_price", property="ticketPrice", jdbcType=JdbcType.DECIMAL),
+            @Result(column="ticket_current_num", property="ticketCurrentNum", jdbcType=JdbcType.INTEGER)
+    })
+    DoctorVo selectByPrimaryKeyRelated(Long doctorId);
+
+    /**
      * 批量删除医生
      *
      * @param doctors 医生列表
@@ -61,7 +88,7 @@ public interface IDoctorMapper extends DoctorMapper {
             @Result(column = "doctor_professional_title", property = "doctorProfessionalTitle", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_introduction", property = "doctorIntroduction", jdbcType = JdbcType.VARCHAR),
             @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT)),
-            @Result(column = "scheduling_id", property = "scheduling", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_SCHEDULING)),
+            @Result(column = "scheduling_id", property = "doctorScheduling", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_SCHEDULING)),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_USER)),
             @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER),
             @Result(column = "ticket_price", property = "ticketPrice", jdbcType = JdbcType.DECIMAL)

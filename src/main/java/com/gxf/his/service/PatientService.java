@@ -1,9 +1,13 @@
 package com.gxf.his.service;
 
+import com.gxf.his.po.generate.DoctorTicket;
+import com.gxf.his.po.vo.OrderVo;
 import com.gxf.his.po.vo.PatientVo;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
+import com.gxf.his.po.vo.TicketVo;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,6 +36,13 @@ public interface PatientService {
      * @return 患者
      */
     Patient getPatientByUid(Long uid);
+
+    /**
+     * 获取当前未使用和排队中的挂号信息
+     * @param patientId 患者ID
+     * @return 挂号信息列表
+     */
+    List<TicketVo> getQueueRegisterOrder(Long patientId);
 
     /**
      * 获取所有病人列表
@@ -73,4 +84,11 @@ public interface PatientService {
      * @return 本次删除影响的行数
      */
     int deletePatientAndUserBatch(List<Patient> patients, List<User> users);
+
+    /**
+     * 获取某个患者的所有订单
+     * @param patientId 患者ID
+     * @return 不同类型的订单列表 包括挂号单 处方单 检查单
+     */
+    HashMap<String,List<OrderVo>> getAllPatientOrders(Long patientId);
 }

@@ -1,9 +1,11 @@
 package com.gxf.his.po.generate;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class Cashier implements Serializable {

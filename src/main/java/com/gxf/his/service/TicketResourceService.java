@@ -1,6 +1,6 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.generate.TicketResource;
+import com.gxf.his.po.generate.DoctorTicketResource;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ public interface TicketResourceService {
      *
      * @param ticketResource 票务资源
      */
-    void addTicketResource(TicketResource ticketResource);
+    void addTicketResource(DoctorTicketResource ticketResource);
 
     /**
      * 获取当前已放票的票务资源
@@ -25,7 +25,7 @@ public interface TicketResourceService {
      * @param availableDateEnd   投放票务资源的过期日期
      * @return 票务资源
      */
-    List<TicketResource> getTicketResourceByDoctorIdAndAvailableDate(Long doctorId, Date availableDateStart, Date availableDateEnd);
+    List<DoctorTicketResource> getTicketResourceByDoctorIdAndAvailableDate(Long doctorId, Date availableDateStart, Date availableDateEnd);
 
     /**
      * 根据ID获取票务资源
@@ -33,7 +33,7 @@ public interface TicketResourceService {
      * @param ticketResourceId 票务资源的ID
      * @return 票务资源
      */
-    TicketResource getTicketResourceById(Long ticketResourceId);
+    DoctorTicketResource getTicketResourceById(Long ticketResourceId);
 
     /**
      * 获取当前已放票的票务资源过期日期 比如1月1号 00：00 放票 则 1月8日 00：00 是票务资源的过期日期
@@ -55,7 +55,7 @@ public interface TicketResourceService {
      * @param ticketResource 票务资源
      * @return 返回影响的行数
      */
-    int updateTicketResource(TicketResource ticketResource);
+    int updateTicketResource(DoctorTicketResource ticketResource);
 
     /**
      * 删除某天某医生一批票务资源

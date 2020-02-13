@@ -3,7 +3,7 @@ package com.gxf.his.service;
 import com.gxf.his.controller.UserController;
 import com.gxf.his.po.generate.Department;
 import com.gxf.his.po.generate.Doctor;
-import com.gxf.his.po.generate.Scheduling;
+import com.gxf.his.po.generate.DoctorScheduling;
 import com.gxf.his.po.generate.User;
 import com.gxf.his.uitls.CombinationUtil;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class DoctorServiceTest {
     /**
      * 排班可选列表
      */
-    static ArrayList<Scheduling> schedulingList = new ArrayList<>(generateDoctorNumber);
+    static ArrayList<DoctorScheduling> schedulingList = new ArrayList<>(generateDoctorNumber);
 
     /**
      * 可能出现的工作日列表
@@ -129,7 +129,7 @@ public class DoctorServiceTest {
             doctor.setTicketPrice(new BigDecimal(getRandomString(ticketPrice)));
             doctor.setTicketCurrentNum(random.nextInt(61));
             doctor.setUserId(user.getUserId());
-            Scheduling scheduling = getScheduling();
+            DoctorScheduling scheduling = getScheduling();
             schedulingService.addScheduling(scheduling);
             doctor.setSchedulingId(scheduling.getSchedulingId());
             doctorService.addDoctor(doctor);
@@ -142,13 +142,13 @@ public class DoctorServiceTest {
      *
      * @return 返回一个排班
      */
-    private static Scheduling getScheduling() {
+    private static DoctorScheduling getScheduling() {
         Random random = new Random();
         if (schedulingList.size() - 1 == 0) {
             return schedulingList.get(0);
         }
         int index = random.nextInt(schedulingList.size() - 1);
-        Scheduling scheduling = schedulingList.get(index);
+        DoctorScheduling scheduling = schedulingList.get(index);
         //每个医生都有不同的排班，不可能出现同时在相同地方上班
         schedulingList.remove(index);
         return scheduling;
@@ -159,13 +159,13 @@ public class DoctorServiceTest {
      */
     private static void setSchedulingList() {
         for (; schedulingList.size() < generateDoctorNumber; ) {
-            Scheduling scheduling = new Scheduling();
+            DoctorScheduling scheduling = new DoctorScheduling();
             String workDates = getWorkDays();
             String workRoom = getWorkRoom();
             //是否重复
             boolean flag = false;
             //检查已经保存的Scheduling，防止出现相同的排班情况，即上班周期重叠并且房间号完全相同
-            for (Scheduling schedulingItem : schedulingList) {
+            for (DoctorScheduling schedulingItem : schedulingList) {
                 if (schedulingItem.getSchedulingRoom().equals(workRoom) && schedulingItem.getSchedulingTime().contains(workDates)) {
                     flag = true;
                     break;

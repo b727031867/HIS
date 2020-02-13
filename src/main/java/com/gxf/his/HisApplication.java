@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableAsync
 @EnableScheduling
-@MapperScan("com.gxf.his.mapper")
+@MapperScan("com.gxf.his.mapper.*")
 @SpringBootApplication
 public class HisApplication {
 

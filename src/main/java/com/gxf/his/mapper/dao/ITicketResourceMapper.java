@@ -1,7 +1,7 @@
 package com.gxf.his.mapper.dao;
 
-import com.gxf.his.mapper.generate.TicketResourceMapper;
-import com.gxf.his.po.generate.TicketResource;
+import com.gxf.his.mapper.generate.DoctorTicketResourceMapper;
+import com.gxf.his.po.generate.DoctorTicketResource;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author 龚秀峰
  * 票务资源的DAO接口
  */
-public interface ITicketResourceMapper extends TicketResourceMapper {
+public interface ITicketResourceMapper extends DoctorTicketResourceMapper {
 
     /**
      * 根据医生ID和有效日期删除票务资源
@@ -25,7 +25,7 @@ public interface ITicketResourceMapper extends TicketResourceMapper {
      * @return 影响的行数
      */
     @Delete({
-            "delete from entity_ticket_resource",
+            "delete from entity_doctor_ticket_resource",
             "where doctor_id = #{doctorId,jdbcType=BIGINT} AND available_date = #{availableDate,jdbcType=DATE}"
     })
     int deleteByDoctorIdAndAvailableDate(Long doctorId, Date availableDate);
@@ -41,7 +41,7 @@ public interface ITicketResourceMapper extends TicketResourceMapper {
     @Select({
             "select",
             "registered_resource_id, doctor_id, `day`, ticket_last_number,available_date",
-            "from entity_ticket_resource",
+            "from entity_doctor_ticket_resource",
             "where doctor_id = #{doctorId,jdbcType=BIGINT} AND (available_date >= #{availableDateStart,jdbcType=DATE} AND available_date <= #{availableDateEnd,jdbcType=DATE} )"
     })
     @Results({
@@ -51,7 +51,7 @@ public interface ITicketResourceMapper extends TicketResourceMapper {
             @Result(column = "ticket_last_number", property = "ticketLastNumber", jdbcType = JdbcType.INTEGER),
             @Result(column = "available_date", property = "availableDate", jdbcType = JdbcType.DATE)
     })
-    List<TicketResource> selectByDoctorIdAndAvailableDate(Long doctorId, Date availableDateStart, Date availableDateEnd);
+    List<DoctorTicketResource> selectByDoctorIdAndAvailableDate(Long doctorId, Date availableDateStart, Date availableDateEnd);
 
     /**
      * 获取当前票务资源中最长的有效期
@@ -63,7 +63,7 @@ public interface ITicketResourceMapper extends TicketResourceMapper {
     @Select({
             "select",
             "available_date",
-            "from entity_ticket_resource",
+            "from entity_doctor_ticket_resource",
             "order by available_date DESC limit 1"
     })
     @Results({
@@ -73,6 +73,6 @@ public interface ITicketResourceMapper extends TicketResourceMapper {
             @Result(column = "ticket_last_number", property = "ticketLastNumber", jdbcType = JdbcType.INTEGER),
             @Result(column = "available_date", property = "availableDate", jdbcType = JdbcType.DATE)
     })
-    TicketResource selectByMaxAvailableDate();
+    DoctorTicketResource selectByMaxAvailableDate();
 
 }

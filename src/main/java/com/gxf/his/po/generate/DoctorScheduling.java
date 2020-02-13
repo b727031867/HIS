@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class Scheduling implements Serializable {
+public class DoctorScheduling implements Serializable {
     private Long schedulingId;
 
     private String schedulingType;

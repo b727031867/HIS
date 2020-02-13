@@ -61,10 +61,14 @@ public enum ServerResponseEnum {
     ORDER_DELETE_FAIL(121,"订单删除失败"),
     ORDER_LIST_FAIL(122,"订单查询失败"),
     ORDER_UPDATE_FAIL(123,"订单信息更新失败"),
+    ORDER_REPEAT_FAIL(123,"不能重复下单"),
+    ORDER_PAY_FAIL(124,"订单付款失败"),
     TICKET_SAVE_FAIL(130,"挂号信息保存失败"),
     TICKET_DELETE_FAIL(131,"挂号信息删除失败"),
     TICKET_LIST_FAIL(132,"挂号信息查询失败"),
-    TICKET_UPDATE_FAIL(133,"挂号信息更新失败");
+    TICKET_UPDATE_FAIL(133,"挂号信息更新失败"),
+    TICKET_QUEUE_FAIL(133,"挂号排队失败"),
+    TICKET_QUEUE_NULL(134,"当前暂无挂号");
     Integer code;
     String message;
 }

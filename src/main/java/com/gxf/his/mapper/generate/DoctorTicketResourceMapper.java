@@ -1,6 +1,6 @@
 package com.gxf.his.mapper.generate;
 
-import com.gxf.his.po.generate.TicketResource;
+import com.gxf.his.po.generate.DoctorTicketResource;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -10,27 +10,27 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.type.JdbcType;
 
-public interface TicketResourceMapper {
+public interface DoctorTicketResourceMapper {
     @Delete({
-        "delete from entity_ticket_resource",
+        "delete from entity_doctor_ticket_resource",
         "where registered_resource_id = #{registeredResourceId,jdbcType=BIGINT}"
     })
     int deleteByPrimaryKey(Long registeredResourceId);
 
     @Insert({
-        "insert into entity_ticket_resource (registered_resource_id, doctor_id, ",
+        "insert into entity_doctor_ticket_resource (registered_resource_id, doctor_id, ",
         "`day`, ticket_last_number, ",
         "available_date)",
         "values (#{registeredResourceId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}, ",
         "#{day,jdbcType=VARCHAR}, #{ticketLastNumber,jdbcType=INTEGER}, ",
         "#{availableDate,jdbcType=DATE})"
     })
-    int insert(TicketResource record);
+    int insert(DoctorTicketResource record);
 
     @Select({
         "select",
         "registered_resource_id, doctor_id, `day`, ticket_last_number, available_date",
-        "from entity_ticket_resource",
+        "from entity_doctor_ticket_resource",
         "where registered_resource_id = #{registeredResourceId,jdbcType=BIGINT}"
     })
     @Results({
@@ -40,12 +40,12 @@ public interface TicketResourceMapper {
         @Result(column="ticket_last_number", property="ticketLastNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="available_date", property="availableDate", jdbcType=JdbcType.DATE)
     })
-    TicketResource selectByPrimaryKey(Long registeredResourceId);
+    DoctorTicketResource selectByPrimaryKey(Long registeredResourceId);
 
     @Select({
         "select",
         "registered_resource_id, doctor_id, `day`, ticket_last_number, available_date",
-        "from entity_ticket_resource"
+        "from entity_doctor_ticket_resource"
     })
     @Results({
         @Result(column="registered_resource_id", property="registeredResourceId", jdbcType=JdbcType.BIGINT, id=true),
@@ -54,15 +54,15 @@ public interface TicketResourceMapper {
         @Result(column="ticket_last_number", property="ticketLastNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="available_date", property="availableDate", jdbcType=JdbcType.DATE)
     })
-    List<TicketResource> selectAll();
+    List<DoctorTicketResource> selectAll();
 
     @Update({
-        "update entity_ticket_resource",
+        "update entity_doctor_ticket_resource",
         "set doctor_id = #{doctorId,jdbcType=BIGINT},",
           "`day` = #{day,jdbcType=VARCHAR},",
           "ticket_last_number = #{ticketLastNumber,jdbcType=INTEGER},",
           "available_date = #{availableDate,jdbcType=DATE}",
         "where registered_resource_id = #{registeredResourceId,jdbcType=BIGINT}"
     })
-    int updateByPrimaryKey(TicketResource record);
+    int updateByPrimaryKey(DoctorTicketResource record);
 }

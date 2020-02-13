@@ -3,7 +3,7 @@ package com.gxf.his.service.impl;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.TicketResourceException;
 import com.gxf.his.mapper.dao.ITicketResourceMapper;
-import com.gxf.his.po.generate.TicketResource;
+import com.gxf.his.po.generate.DoctorTicketResource;
 import com.gxf.his.service.TicketResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     private ITicketResourceMapper iTicketResourceMapper;
 
     @Override
-    public void addTicketResource(TicketResource ticketResource) {
+    public void addTicketResource(DoctorTicketResource ticketResource) {
         try {
             iTicketResourceMapper.insert(ticketResource);
         } catch (Exception e) {
@@ -37,7 +37,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     }
 
     @Override
-    public List<TicketResource> getTicketResourceByDoctorIdAndAvailableDate(Long doctorId, Date availableDateStart, Date availableDateEnd) {
+    public List<DoctorTicketResource> getTicketResourceByDoctorIdAndAvailableDate(Long doctorId, Date availableDateStart, Date availableDateEnd) {
         try {
             return iTicketResourceMapper.selectByDoctorIdAndAvailableDate(doctorId, availableDateStart, availableDateEnd);
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     }
 
     @Override
-    public TicketResource getTicketResourceById(Long ticketResourceId) {
+    public DoctorTicketResource getTicketResourceById(Long ticketResourceId) {
         try {
             return iTicketResourceMapper.selectByPrimaryKey(ticketResourceId);
         } catch (Exception e) {
@@ -88,7 +88,7 @@ public class TicketResourceServiceImpl implements TicketResourceService {
     }
 
     @Override
-    public int updateTicketResource(TicketResource ticketResource) {
+    public int updateTicketResource(DoctorTicketResource ticketResource) {
         try {
             return iTicketResourceMapper.updateByPrimaryKey(ticketResource);
         } catch (Exception e) {

@@ -3,12 +3,12 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.po.vo.DoctorVo;
-import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.po.generate.Department;
 import com.gxf.his.po.generate.Doctor;
-import com.gxf.his.po.generate.TicketResource;
+import com.gxf.his.po.generate.DoctorTicketResource;
 import com.gxf.his.po.generate.User;
+import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.service.DepartmentService;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.TicketResourceService;
@@ -63,19 +63,19 @@ public class DoctorController extends BaseController {
         if (departmentCode == null || departmentCode.trim().isEmpty()) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        List<DoctorVo> departmentVos = doctorService.getDoctorsByDepartmentCode(departmentCode);
+        List<DoctorVo> doctorVos = doctorService.getDoctorsByDepartmentCode(departmentCode);
         //获取每位医生未来一周内的订票情况
-        for (DoctorVo doctorVo : departmentVos) {
+        for (DoctorVo doctorVo : doctorVos) {
             Date expirationDate = ticketResourceService.getTicketResourceMaxDate();
             Date startDate = ticketResourceService.getTicketResourceMinDate();
-            List<TicketResource> ticketResources = ticketResourceService.getTicketResourceByDoctorIdAndAvailableDate(doctorVo.getDoctorId(), startDate, expirationDate);
+            List<DoctorTicketResource> ticketResources = ticketResourceService.getTicketResourceByDoctorIdAndAvailableDate(doctorVo.getDoctorId(), startDate, expirationDate);
             doctorVo.setTicketResources(ticketResources);
         }
-        return MyUtil.cast(ServerResponseVO.success(departmentVos));
+        return MyUtil.cast(ServerResponseVO.success(doctorVos));
     }
 
     @GetMapping("/attribute")
-    public <T> ServerResponseVO<T>  getDoctorsByAttribute(@RequestParam(value = "attribute", defaultValue = "doctorName") String attribute
+    public <T> ServerResponseVO<T> getDoctorsByAttribute(@RequestParam(value = "attribute", defaultValue = "doctorName") String attribute
             , @RequestParam(value = "value") String value, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
 //        if(searchParamCheck(attribute,isAccurate,value)){TODO
@@ -103,7 +103,7 @@ public class DoctorController extends BaseController {
     }
 
     @PutMapping
-    public <T> ServerResponseVO<T>  saveDoctorAndUser(@RequestBody DoctorVo doctorVo) {
+    public <T> ServerResponseVO<T> saveDoctorAndUser(@RequestBody DoctorVo doctorVo) {
         log.info("当前更新的医生信息为：" + doctorVo.toString());
         Doctor doctor = new Doctor();
         //更新医生信息
@@ -113,7 +113,7 @@ public class DoctorController extends BaseController {
         doctor.setDoctorProfessionalTitle(doctorVo.getDoctorProfessionalTitle());
         doctor.setDoctorIntroduction(doctorVo.getDoctorIntroduction());
         doctor.setDepartmentCode(doctorVo.getDepartment().getDepartmentCode());
-        doctor.setSchedulingId(doctorVo.getScheduling().getSchedulingId());
+        doctor.setSchedulingId(doctorVo.getDoctorScheduling().getSchedulingId());
         doctor.setUserId(doctorVo.getUser().getUserId());
         doctor.setTicketDayNum(doctorVo.getTicketDayNum());
         doctorService.updateDoctor(doctor);
@@ -124,7 +124,7 @@ public class DoctorController extends BaseController {
     }
 
     @PostMapping
-    public <T> ServerResponseVO<T>  saveDoctor(@RequestBody DoctorVo doctorVo) {
+    public <T> ServerResponseVO<T> saveDoctor(@RequestBody DoctorVo doctorVo) {
         if (StringUtils.isEmpty(doctorVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorVo.getUser().getUserPassword().trim())
                 || StringUtils.isEmpty(doctorVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorVo.getDoctorIntroduction().trim())
                 || StringUtils.isEmpty(doctorVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorVo.getDoctorProfessionalTitle().trim())
@@ -149,8 +149,8 @@ public class DoctorController extends BaseController {
     }
 
     @DeleteMapping
-    public <T> ServerResponseVO<T>  deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,
-                                                          @RequestParam(name = "userId") Long userId) {
+    public <T> ServerResponseVO<T> deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,
+                                                                 @RequestParam(name = "userId") Long userId) {
         try {
             doctorService.deleteDoctorAndUser(doctorId, userId);
             return ServerResponseVO.success();
@@ -160,7 +160,7 @@ public class DoctorController extends BaseController {
     }
 
     @DeleteMapping("/batch")
-    public <T> ServerResponseVO<T>  deleteDoctorsAndUsersByIds(@RequestBody List<DoctorVo> doctorVos) {
+    public <T> ServerResponseVO<T> deleteDoctorsAndUsersByIds(@RequestBody List<DoctorVo> doctorVos) {
         List<Doctor> doctors = new ArrayList<>(16);
         List<User> users = new ArrayList<>(16);
         for (DoctorVo doctorVo : doctorVos) {

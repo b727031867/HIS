@@ -3,18 +3,23 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.po.vo.PatientVo;
-import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
+import com.gxf.his.po.vo.OrderVo;
+import com.gxf.his.po.vo.PatientVo;
+import com.gxf.his.po.vo.ServerResponseVO;
+import com.gxf.his.po.vo.TicketVo;
 import com.gxf.his.service.PatientService;
+import com.gxf.his.service.TicketService;
 import com.gxf.his.service.UserService;
+import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,19 +34,55 @@ public class PatientController {
     private PatientService patientService;
     @Resource
     private UserService userService;
+    @Resource
+    private TicketService ticketService;
 
 
     @GetMapping
-    public ServerResponseVO getPatients(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
+    public <T> ServerResponseVO<T> getPatients(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
         PageHelper.startPage(page, size);
         List<PatientVo> patients = patientService.getAllPatients();
         PageInfo<PatientVo> pageInfo = PageInfo.of(patients);
-        return ServerResponseVO.success(pageInfo);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
+    }
+
+    @PostMapping("/queue")
+    public <T> ServerResponseVO<T> startPatientQueue(@RequestParam(name = "ticketId") Long ticketId){
+        if(ticketId == null){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        if(!ticketService.doQueue(ticketId)){
+            return ServerResponseVO.error(ServerResponseEnum.TICKET_QUEUE_FAIL);
+        }
+        return ServerResponseVO.success();
+    }
+
+    @GetMapping("/queue")
+    public <T> ServerResponseVO<T> getPatientInQueue(Long uid){
+        if(uid == null){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        Patient patient = patientService.getPatientByUid(uid);
+        List<TicketVo> doctorTicketList = patientService.getQueueRegisterOrder(patient.getPatientId());
+        if(doctorTicketList == null){
+            return MyUtil.cast(ServerResponseVO.error(ServerResponseEnum.TICKET_QUEUE_NULL));
+        }
+        return MyUtil.cast(ServerResponseVO.success(doctorTicketList));
+    }
+
+    @GetMapping("/orderList")
+    public <T> ServerResponseVO<T> getPatientOrderList(Long uid){
+        if(null == uid || uid <0){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        Patient patient = patientService.getPatientByUid(uid);
+        HashMap<String, List<OrderVo>> allPatientOrders = patientService.getAllPatientOrders(patient.getPatientId());
+        return MyUtil.cast(ServerResponseVO.success(allPatientOrders));
     }
 
     @GetMapping("/attribute")
-    public ServerResponseVO getPatientsByAttribute(@RequestParam(value = "attribute", defaultValue = "patientName") String attribute
+    public <T> ServerResponseVO<T> getPatientsByAttribute(@RequestParam(value = "attribute", defaultValue = "patientName") String attribute
             , @RequestParam(value = "isAccurate") Boolean isAccurate, @RequestParam(value = "value") String value, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
         if (value == null || value.trim().length() == 0 || isAccurate == null) {
@@ -54,11 +95,11 @@ public class PatientController {
         PageHelper.startPage(page, size);
         List<PatientVo> patients = patientService.selectPatientByAttribute(patientVo);
         PageInfo<PatientVo> pageInfo = PageInfo.of(patients);
-        return ServerResponseVO.success(pageInfo);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
     @PutMapping
-    public ServerResponseVO savePatientAndUser(@RequestBody PatientVo patientVo) {
+    public <T> ServerResponseVO<T> savePatientAndUser(@RequestBody PatientVo patientVo) {
         log.info("当前更新的病人信息为：" + patientVo.toString());
         Patient patient = new Patient();
         patient.setPatientId(patientVo.getPatientId());
@@ -79,7 +120,7 @@ public class PatientController {
     }
 
     @PostMapping
-    public ServerResponseVO savePatient(@RequestBody PatientVo patientVo) {
+    public <T> ServerResponseVO<T> savePatient(@RequestBody PatientVo patientVo) {
         if (StringUtils.isEmpty(patientVo.getUser().getUserName().trim()) ||
                 StringUtils.isEmpty(patientVo.getUser().getUserPassword().trim()) ||
                 StringUtils.isEmpty(patientVo.getPatientPhone().trim()) ||
@@ -108,8 +149,8 @@ public class PatientController {
     }
 
     @DeleteMapping
-    public ServerResponseVO deletePatientAndUserByPatientId(@RequestParam(name = "patientId") Long patientId,
-                                                            @RequestParam(name = "userId") Long userId) {
+    public <T> ServerResponseVO<T> deletePatientAndUserByPatientId(@RequestParam(name = "patientId") Long patientId,
+                                                                   @RequestParam(name = "userId") Long userId) {
         try {
             patientService.deletePatientAndUser(patientId, userId);
             return ServerResponseVO.success();
@@ -119,7 +160,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/batch")
-    public ServerResponseVO deletePatientsAndUsersByIds(@RequestBody List<PatientVo> patientVos) {
+    public <T> ServerResponseVO<T> deletePatientsAndUsersByIds(@RequestBody List<PatientVo> patientVos) {
         List<Patient> patients = new ArrayList<>(16);
         List<User> users = new ArrayList<>(16);
         for (PatientVo patientVo : patientVos) {

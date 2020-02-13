@@ -1,9 +1,10 @@
 package com.gxf.his.controller;
 
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.po.generate.DoctorScheduling;
 import com.gxf.his.po.vo.ServerResponseVO;
-import com.gxf.his.po.generate.Scheduling;
 import com.gxf.his.service.SchedulingService;
+import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class SchedulingController {
     private SchedulingService schedulingService;
 
     @PostMapping
-    public ServerResponseVO addScheduling(Scheduling scheduling) {
+    public <T> ServerResponseVO<T> addScheduling(DoctorScheduling scheduling) {
         logger.info("要添加的Scheduling信息为：" + scheduling.toString());
         if (StringUtils.isNotEmpty(scheduling.getSchedulingRoom()) && StringUtils.isNotEmpty(scheduling.getSchedulingTime())
                 && scheduling.getSchedulingType() != null) {
@@ -37,17 +38,17 @@ public class SchedulingController {
     }
 
     @GetMapping
-    public ServerResponseVO getSchedulingById(Long schedulingId) {
+    public <T> ServerResponseVO<T> getSchedulingById(Long schedulingId) {
         logger.info("获取到的SchedulingId为：" + schedulingId);
         if (null != schedulingId) {
-            Scheduling scheduling = schedulingService.selectSchedulingById(schedulingId);
-            return ServerResponseVO.success(scheduling);
+            DoctorScheduling scheduling = schedulingService.selectSchedulingById(schedulingId);
+            return MyUtil.cast(ServerResponseVO.success(scheduling));
         }
         return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
     }
 
     @DeleteMapping
-    public ServerResponseVO deleteSchedulingById(Long schedulingId) {
+    public <T> ServerResponseVO<T> deleteSchedulingById(Long schedulingId) {
         logger.info("获取到的SchedulingId为：" + schedulingId);
         if (null != schedulingId) {
             schedulingService.deleteScheduling(schedulingId);
@@ -57,7 +58,7 @@ public class SchedulingController {
     }
 
     @PutMapping
-    public ServerResponseVO updateSchedulingById(Scheduling scheduling) {
+    public <T> ServerResponseVO<T> updateSchedulingById(DoctorScheduling scheduling) {
         logger.info("获取到的Scheduling信息为：" + scheduling.toString());
         schedulingService.updateScheduling(scheduling);
         return ServerResponseVO.success();
