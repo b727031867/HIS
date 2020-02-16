@@ -6,6 +6,7 @@ import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
 import com.gxf.his.po.vo.ServerResponseVO;
+import com.gxf.his.po.vo.UserVo;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.JwtUtil;
@@ -55,6 +56,39 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         return MyUtil.cast(ServerResponseVO.success(ServerResponseEnum.SUCCESS));
+    }
+
+    @PutMapping("/updatePassword")
+    public <T> ServerResponseVO<T> updatePassword(@RequestBody UserVo userVo) {
+        if (userVo == null || userVo.getNewPassword() == null || userVo.getRenewPassword() == null || userVo.getOldPassword() == null || userVo.getUserId() == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        User user = userService.getUserByPrimaryKey(userVo.getUserId());
+        if (user == null) {
+            return ServerResponseVO.error(ServerResponseEnum.USER_SELECT_FAIL);
+        }
+        //账户是否有效,1有效，0无效
+        if (user.getUserStatus() == 0) {
+            return ServerResponseVO.error(ServerResponseEnum.ACCOUNT_IS_DISABLED);
+        }
+        //加密次数
+        int hashIterations = Const.ENCRYPTION_NUM;
+        //使用盐加密登陆密码
+        SimpleHash sh = new SimpleHash(Const.ENCRYPTION, userVo.getOldPassword(),
+                user.getUserSalt(), hashIterations);
+        //如果加密后和数据库中的密码一致，说明旧密码正确，开始修改新密码
+        if (sh.toHex().equals(user.getUserPassword())) {
+            String password = userVo.getNewPassword();
+            String username = user.getUserName();
+            HashMap<String, String> map = calculateKey(username, password);
+            user.setUserSalt(map.get("saltDeCode"));
+            user.setUserPassword(map.get("hashDeCode"));
+            user.setAppId(Const.APP_ID);
+            userService.updateUserPassword(user);
+        } else {
+            return ServerResponseVO.error(ServerResponseEnum.INCORRECT_CREDENTIALS);
+        }
+        return ServerResponseVO.success();
     }
 
     @PostMapping("/save")
@@ -137,6 +171,11 @@ public class UserController {
                         Integer.parseInt(refreshTokenExpireTime));
                 //签发accessToken，时间戳为当前时间戳
                 String token = JwtUtil.sign(userName, currentTimeMillis);
+                //如果用户类型为患者 收银员 医生 则附加返回对应的实体ID
+                String loginEntityId = userService.getLoginEntityId(user.getUserId());
+                if (null != loginEntityId) {
+                    hashMap.put("loginId", loginEntityId);
+                }
                 hashMap.put("token", token);
                 hashMap.put("id", user.getUserId().toString());
                 msg.setData(MyUtil.cast(hashMap));
@@ -209,14 +248,42 @@ public class UserController {
     }
 
 
+    /**
+     * 实体注册时生成关联用户的方法
+     *
+     * @param userName 用户名
+     * @param password 密码
+     * @return 生成的用户对象
+     */
     public static User doHashedCredentials(String userName, String password) {
         User user = new User();
         user.setUserName(userName);
         //默认注册的用户状态是正常状态
         user.setUserStatus(new Byte("1"));
-        //使用密码和用户名和时间戳混合加密，生成盐
+        HashMap<String, String> results = calculateKey(userName, password);
+        user.setUserSalt(results.get("saltDeCode"));
+        user.setUserPassword(results.get("hashDeCode"));
+        //设置当前注册时间
+        Date now = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        ft.format(now);
+        user.setUserCreateDate(now);
+        user.setAppId(Const.APP_ID);
+        return user;
+    }
+
+    /**
+     * 密码加密与验证方法
+     *
+     * @param username         用户名
+     * @param password         明文密码
+     * @return saltDeCode 密码盐 hashDeCode 密文（加密后的密码）
+     */
+    private static HashMap<String, String> calculateKey(String username, String password) {
+        HashMap<String, String> results = new HashMap<>(8);
+        //使用密码和用户名和时间戳混合加密，生成盐 编码方式
         ByteSource salt =
-                ByteSource.Util.bytes(password + System.currentTimeMillis() + userName);
+                ByteSource.Util.bytes(password + System.currentTimeMillis() + username);
         String saltDeCode;
         String hashDeCode;
         //设置盐和密文的编码方式，并且使用盐加密密码
@@ -231,15 +298,9 @@ public class UserController {
                     saltDeCode, Const.ENCRYPTION_NUM);
             hashDeCode = sh.toBase64();
         }
-        user.setUserSalt(saltDeCode);
-        user.setUserPassword(hashDeCode);
-        //设置当前注册时间
-        Date now = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        ft.format(now);
-        user.setUserCreateDate(now);
-        user.setAppId(Const.APP_ID);
-        return user;
+        results.put("saltDeCode", saltDeCode);
+        results.put("hashDeCode", hashDeCode);
+        return results;
     }
 
 }

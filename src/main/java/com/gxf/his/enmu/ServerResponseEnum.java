@@ -34,6 +34,7 @@ public enum ServerResponseEnum {
     PATIENT_DELETE_FAIL(41,"病人删除失败"),
     PATIENT_LIST_FAIL(42,"病人查询失败"),
     PATIENT_UPDATE_FAIL(43,"病人信息更新失败"),
+    PATIENT_NO_EXITS(44,"病人不存在"),
     DOCTOR_SAVE_FAIL(50,"医生保存失败"),
     DOCTOR_LIST_FAIL(51,"医生查询失败"),
     DOCTOR_UPDATE_FAIL(52,"医生信息更新失败"),
@@ -68,7 +69,12 @@ public enum ServerResponseEnum {
     TICKET_LIST_FAIL(132,"挂号信息查询失败"),
     TICKET_UPDATE_FAIL(133,"挂号信息更新失败"),
     TICKET_QUEUE_FAIL(133,"挂号排队失败"),
-    TICKET_QUEUE_NULL(134,"当前暂无挂号");
+    TICKET_QUEUE_NULL(134,"当前暂无挂号"),
+    PATIENT_FILE_SAVE_FAIL(140,"病历保存失败"),
+    PATIENT_FILE_DELETE_FAIL(141,"病历删除失败"),
+    PATIENT_FILE_LIST_FAIL(142,"病历查询失败"),
+    PATIENT_FILE_UPDATE_FAIL(143,"病历信息更新失败"),
+    PATIENT_FILE_NO_EXITS(144,"病历不存在");
     Integer code;
     String message;
 }

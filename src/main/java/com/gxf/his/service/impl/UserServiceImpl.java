@@ -3,7 +3,13 @@ package com.gxf.his.service.impl;
 import com.gxf.his.controller.UserController;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.UserException;
+import com.gxf.his.mapper.dao.ICashierMapper;
+import com.gxf.his.mapper.dao.IDoctorMapper;
+import com.gxf.his.mapper.dao.IPatientMapper;
 import com.gxf.his.mapper.dao.IUserMapper;
+import com.gxf.his.po.generate.Cashier;
+import com.gxf.his.po.generate.Doctor;
+import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
 import com.gxf.his.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private IUserMapper iUserMapper;
+    @Resource
+    private IPatientMapper iPatientMapper;
+    @Resource
+    private ICashierMapper iCashierMapper;
+    @Resource
+    private IDoctorMapper iDoctorMapper;
 
     @Override
     public User findByUserName(String userName) throws UserException {
@@ -38,6 +50,23 @@ public class UserServiceImpl implements UserService {
         }
         return user;
 
+    }
+
+    @Override
+    public String getLoginEntityId(Long uid) {
+        Patient patient = iPatientMapper.selectByUid(uid);
+        if (patient != null) {
+            return patient.getPatientId().toString();
+        }
+        Cashier cashier = iCashierMapper.selectByUid(uid);
+        if (cashier != null) {
+            return cashier.getCashierId().toString();
+        }
+        Doctor doctor = iDoctorMapper.selectByUid(uid);
+        if (doctor != null) {
+            return doctor.getDoctorId().toString();
+        }
+        return null;
     }
 
     @Override
@@ -79,6 +108,17 @@ public class UserServiceImpl implements UserService {
             log.error("User插入失败!", e);
             throw new UserException(ServerResponseEnum.USER_SAVE_FAIL);
         }
+    }
+
+    @Override
+    public Long updateUserPassword(User user) {
+        try {
+            iUserMapper.updateByPrimaryKey(user);
+        } catch (Exception e) {
+            log.error("User更新失败!", e);
+            throw new UserException(ServerResponseEnum.USER_UPDATE_FAIL);
+        }
+        return user.getUserId();
     }
 
     @Override

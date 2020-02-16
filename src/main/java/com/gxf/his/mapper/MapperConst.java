@@ -15,6 +15,11 @@ public class MapperConst {
     public final static String ONE_GENERATE_SCHEDULING = "com.gxf.his.mapper.generate.DoctorSchedulingMapper.selectByPrimaryKey";
 
     /**
+     * 一对一关联病人档案信息
+     */
+    public final static String ONE_GENERATE_PATIENT_FILE = "com.gxf.his.mapper.generate.PatientFileMapper.selectByPrimaryKey";
+
+    /**
      * 一对一关联用户信息
      */
     public final static String ONE_GENERATE_USER = "com.gxf.his.mapper.generate.UserMapper.selectByPrimaryKey";
@@ -28,6 +33,11 @@ public class MapperConst {
      * 一对一关联检查项
      */
     public final static String ONE_GENERATE_CHECK_ITEM = "com.gxf.his.mapper.generate.CheckItemMapper.selectByPrimaryKey";
+
+    /**
+     * 一对一关联挂号信息
+     */
+    public final static String ONE_GENERATE_DOCTOR_TICKET = "com.gxf.his.mapper.generate.DoctorTicketMapper.selectByPrimaryKey";
 
     /**
      * 一对一关联部门编号

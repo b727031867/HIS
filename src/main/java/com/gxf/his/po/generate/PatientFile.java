@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class PatientFile implements Serializable {
-    private Long patientFile;
+    private Long patientFileId;
 
     private Long patientId;
 
@@ -50,7 +50,7 @@ public class PatientFile implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", patientFile=").append(patientFile);
+        sb.append(", patientFileId=").append(patientFileId);
         sb.append(", patientId=").append(patientId);
         sb.append(", emergencyContactName=").append(emergencyContactName);
         sb.append(", emergencyPhone=").append(emergencyPhone);

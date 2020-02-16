@@ -54,13 +54,14 @@ public interface IOrderMapper extends OrderMapper {
     @Results({
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT, id = true),
             @Result(column = "order_type", property = "orderType", jdbcType = JdbcType.INTEGER),
-            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT,one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
             @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_status", property = "orderStatus", jdbcType = JdbcType.VARCHAR),
             @Result(column = "order_total", property = "orderTotal", jdbcType = JdbcType.DECIMAL),
             @Result(column = "order_create_time", property = "orderCreateTime", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "order_expire_time", property = "orderExpireTime", jdbcType = JdbcType.TIMESTAMP),
-            @Result(column = "order_id", property = "orderVoItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_ALL))
+            @Result(column = "order_id", property = "orderVoItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_ALL)),
+            @Result(column = "order_id", property = "doctorTicket", one = @One(select = MapperConst.ONE_ORDER_DOCTOR_TICKET))
     })
     List<OrderVo> selectOrdersByPatientIdAndOrderType(Long patientId,Integer orderType);
 

@@ -20,6 +20,13 @@ public interface UserService {
     User findByUserName(String userName);
 
     /**
+     * 根据UID查询不同用户关联的实体ID
+     * @param uid 用户ID
+     * @return 关联的实体ID
+     */
+    String getLoginEntityId(Long uid);
+
+    /**
      * 根据主键获取用户
      *
      * @param uid 用户ID
@@ -50,6 +57,12 @@ public interface UserService {
      * @return 返回本次操作影响的行数
      */
     int addUser(User user);
+
+    /**
+     * 客户端更新密码
+     * @param user 用户
+     */
+    Long updateUserPassword(User user);
 
     /**
      * 更新用户信息

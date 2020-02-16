@@ -3,6 +3,7 @@ package com.gxf.his.mapper.dao;
 import com.gxf.his.mapper.Batch;
 import com.gxf.his.mapper.MapperConst;
 import com.gxf.his.mapper.generate.DoctorMapper;
+import com.gxf.his.po.generate.Cashier;
 import com.gxf.his.po.generate.Doctor;
 import com.gxf.his.po.vo.DoctorVo;
 import org.apache.ibatis.annotations.*;
@@ -15,6 +16,32 @@ import java.util.List;
  * 医生模块的DAO接口
  */
 public interface IDoctorMapper extends DoctorMapper {
+
+    /**
+     * 根据UID查询对应医生的信息
+     * @param uid 用户ID
+     * @return 医生对象
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_doctor",
+            "where user_id = #{uid,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="employee_id", property="employeeId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="doctor_name", property="doctorName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="doctor_professional_title", property="doctorProfessionalTitle", jdbcType=JdbcType.VARCHAR),
+            @Result(column="doctor_introduction", property="doctorIntroduction", jdbcType=JdbcType.VARCHAR),
+            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
+            @Result(column="scheduling_id", property="schedulingId", jdbcType=JdbcType.BIGINT),
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT),
+            @Result(column="ticket_day_num", property="ticketDayNum", jdbcType=JdbcType.INTEGER),
+            @Result(column="ticket_price", property="ticketPrice", jdbcType=JdbcType.DECIMAL),
+            @Result(column="ticket_current_num", property="ticketCurrentNum", jdbcType=JdbcType.INTEGER)
+    })
+    Doctor selectByUid(Long uid);
 
     /**
      * 关联查询医生的所有信息

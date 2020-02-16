@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.generate.Patient;
+import com.gxf.his.po.generate.PatientFile;
 import com.gxf.his.po.generate.User;
 import com.gxf.his.po.vo.OrderVo;
 import com.gxf.his.po.vo.PatientVo;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,6 +73,22 @@ public class PatientController {
         return MyUtil.cast(ServerResponseVO.success(doctorTicketList));
     }
 
+    @GetMapping("/onePatient")
+    public <T> ServerResponseVO<T> getPatientByUid(Long uid){
+        if(uid == null){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        PatientVo patient = patientService.getPatientByUidRelated(uid);
+        byte bt = 0;
+        if(patient.getPatientIsMarriage() == null){
+            patient.setPatientIsMarriage(bt);
+        }
+        if(patient.getPatientSex() == null){
+            patient.setPatientSex(bt);
+        }
+        return MyUtil.cast(ServerResponseVO.success(patient));
+    }
+
     @GetMapping("/orderList")
     public <T> ServerResponseVO<T> getPatientOrderList(Long uid){
         if(null == uid || uid <0){
@@ -110,13 +128,33 @@ public class PatientController {
         patient.setPatientPhone(patientVo.getPatientPhone());
         patient.setPatientSex(patientVo.getPatientSex());
         patient.setPatientMedicareCard(patientVo.getPatientMedicareCard());
-        patient.setUserId(patientVo.getUser().getUserId());
+        patient.setUserId(patientVo.getUserId());
+        if(null != patientVo.getUser()){
+            patient.setUserId(patientVo.getUser().getUserId());
+            //更新用户信息
+            User user = patientVo.getUser();
+            userService.updateUser(user);
+        }
         //更新病人信息
         patientService.updatePatient(patient);
-        //更新用户信息
-        User user = patientVo.getUser();
-        userService.updateUser(user);
         return ServerResponseVO.success();
+    }
+
+    /**
+     * 修改患者档案信息，若不存在档案则创建新的档案
+     * @param patientFile 患者档案
+     * @return 通用响应类
+     */
+    @PutMapping("/file")
+    public <T> ServerResponseVO<T> updateOrSavePatientFile(@RequestBody PatientFile patientFile) {
+        log.info("当前更新或的病人信息为：" + patientFile.toString());
+        if(null == patientFile.getPatientFileId()){
+            patientFile.setCreateTime(new Date());
+            patientService.addPatientFile(patientFile);
+        }else {
+            patientService.updatePatientFile(patientFile);
+        }
+        return MyUtil.cast(ServerResponseVO.success(patientFile));
     }
 
     @PostMapping

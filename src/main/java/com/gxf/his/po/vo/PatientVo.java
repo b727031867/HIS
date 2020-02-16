@@ -1,6 +1,7 @@
 package com.gxf.his.po.vo;
 
 import com.gxf.his.po.generate.Patient;
+import com.gxf.his.po.generate.PatientFile;
 import com.gxf.his.po.generate.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,8 @@ import java.io.Serializable;
 public class PatientVo extends Patient implements Serializable {
 
     private User user;
+
+    private PatientFile patientFile;
 
     /**
      * 查询对象的属性名称

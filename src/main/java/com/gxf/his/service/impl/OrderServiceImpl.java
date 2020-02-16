@@ -1,6 +1,5 @@
 package com.gxf.his.service.impl;
 
-import com.gxf.his.Const;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.OrderException;
 import com.gxf.his.mapper.dao.IDoctorMapper;
@@ -9,10 +8,8 @@ import com.gxf.his.mapper.dao.IOrderMapper;
 import com.gxf.his.mapper.dao.ITicketMapper;
 import com.gxf.his.po.generate.*;
 import com.gxf.his.po.vo.OrderVo;
-import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.service.OrderService;
 import com.gxf.his.service.TicketResourceService;
-import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +17,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +28,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+
 public class OrderServiceImpl implements OrderService {
 
 
@@ -180,31 +179,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public <T> T getResourceByOrderTypeAndId(Integer orderType, Long resourceId) {
-        //挂号单
-        if (Const.GH.equals(orderType)) {
-            return MyUtil.cast(ticketResourceService.getTicketResourceById(resourceId));
-        }
-        //处方单
-        if (Const.CF.equals(orderType)) {
-            //TODO
-        }
-        //检查单
-        if (Const.JC.equals(orderType)) {
-            //TODO
-        }
-        log.warn("未知的订单类型:" + orderType);
-        return null;
-    }
-
-    @Override
     public OrderVo getOrderByOrderId(Long orderId) {
         try {
             return iOrderMapper.selectRegisterOrderByOrderId(orderId);
-        }catch (Exception e){
-            log.warn("根据ID查询挂号订单失败",e);
+        } catch (Exception e) {
+            log.warn("根据ID查询挂号订单失败", e);
             throw new OrderException(ServerResponseEnum.ORDER_LIST_FAIL);
         }
+    }
+
+    @Override
+    public List<OrderVo> getUnPayOrdersByPatientId(Long patientId,Integer orderType) {
+        List<OrderVo> orderVos = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId, orderType);
+        List<OrderVo> unPayOrders = new ArrayList<>(16);
+        for (OrderVo orderVo : orderVos) {
+            if ("0".equals(orderVo.getOrderStatus())) {
+                unPayOrders.add(orderVo);
+            }
+        }
+        return unPayOrders;
     }
 
     @Override

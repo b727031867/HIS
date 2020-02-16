@@ -4,6 +4,7 @@ import com.gxf.his.po.generate.Order;
 import com.gxf.his.po.vo.OrderVo;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author GXF
@@ -49,20 +50,19 @@ public interface OrderService {
     void deleteOrder(Long orderId);
 
     /**
-     * 根据订单类型和资源ID获取订单资源
-     *
-     * @param orderType  订单类型编号
-     * @param resourceId 资源ID
-     * @return 具体的资源对象
-     */
-    <T> T getResourceByOrderTypeAndId(Integer orderType, Long resourceId);
-
-    /**
      * 根据订单ID获取订单
      * @param orderId 订单ID
      * @return 订单
      */
     OrderVo getOrderByOrderId(Long orderId);
+
+    /**
+     * 获取某位用户未付款的某种订单列表
+     * @param patientId 用户ID
+     * @param orderType 订单类型
+     * @return 订单列表
+     */
+    List<OrderVo> getUnPayOrdersByPatientId(Long patientId,Integer orderType);
 
     /**
      * 挂号付款

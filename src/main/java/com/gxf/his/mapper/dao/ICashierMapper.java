@@ -4,6 +4,7 @@ import com.gxf.his.mapper.Batch;
 import com.gxf.his.mapper.MapperConst;
 import com.gxf.his.mapper.generate.CashierMapper;
 import com.gxf.his.po.generate.Cashier;
+import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.vo.CashierVo;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
@@ -15,6 +16,27 @@ import java.util.List;
  * 收银员Mapper
  */
 public interface ICashierMapper extends CashierMapper {
+
+    /**
+     * 根据UID查询对应收银员的信息
+     * @param uid 用户ID
+     * @return 收银员对象
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_cashier",
+            "where user_id = #{uid,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column="cashier_id", property="cashierId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
+            @Result(column="entry_date", property="entryDate", jdbcType=JdbcType.DATE),
+            @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT)
+    })
+    Cashier selectByUid(Long uid);
 
     /**
      * 批量删除收银员

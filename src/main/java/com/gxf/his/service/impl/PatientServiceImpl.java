@@ -2,10 +2,13 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.PatientException;
+import com.gxf.his.exception.PatientFileException;
 import com.gxf.his.mapper.dao.IOrderMapper;
+import com.gxf.his.mapper.dao.IPatientFileMapper;
 import com.gxf.his.mapper.dao.IPatientMapper;
 import com.gxf.his.mapper.dao.ITicketMapper;
 import com.gxf.his.po.generate.DoctorTicket;
+import com.gxf.his.po.generate.PatientFile;
 import com.gxf.his.po.vo.OrderVo;
 import com.gxf.his.po.vo.PatientVo;
 import com.gxf.his.po.generate.Patient;
@@ -37,6 +40,8 @@ public class PatientServiceImpl implements PatientService {
     private IOrderMapper iOrderMapper;
     @Resource
     private UserService userService;
+    @Resource
+    private IPatientFileMapper iPatientFileMapper;
 
     @Override
     public void addPatient(Patient patient) throws PatientException {
@@ -65,6 +70,18 @@ public class PatientServiceImpl implements PatientService {
         Patient patient;
         try {
             patient = iPatientMapper.selectByUid(uid);
+        } catch (Exception e) {
+            log.error("根据UID查询病人失败", e);
+            throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
+        }
+        return patient;
+    }
+
+    @Override
+    public PatientVo getPatientByUidRelated(Long uid) {
+        PatientVo patient;
+        try {
+            patient = iPatientMapper.selectByUidRelated(uid);
         } catch (Exception e) {
             log.error("根据UID查询病人失败", e);
             throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
@@ -152,5 +169,25 @@ public class PatientServiceImpl implements PatientService {
         map.put("prescriptions",prescriptions);
         map.put("checks",checks);
         return map;
+    }
+
+    @Override
+    public void addPatientFile(PatientFile patientFile) {
+        try {
+            iPatientFileMapper.insertAndInjectThePrimaryKey(patientFile);
+        } catch (Exception e) {
+            log.warn("患者病历保存失败",e);
+            throw new PatientFileException(ServerResponseEnum.PATIENT_FILE_SAVE_FAIL);
+        }
+    }
+
+    @Override
+    public void updatePatientFile(PatientFile patientFile) {
+        try {
+            iPatientFileMapper.update(patientFile);
+        } catch (Exception e) {
+            log.warn("患者病历更新失败",e);
+            throw new PatientFileException(ServerResponseEnum.PATIENT_FILE_UPDATE_FAIL);
+        }
     }
 }

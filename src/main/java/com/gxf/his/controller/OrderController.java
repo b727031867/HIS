@@ -80,6 +80,12 @@ public class OrderController {
         return MyUtil.cast(ServerResponseVO.success(orderService.addRegisterOrder(orderVo, ticketInfo)));
     }
 
+    /**
+     * 根据订单ID查询订单
+     * @param orderId 订单ID
+     * @param <T> 通用响应泛型
+     * @return 订单信息
+     */
     @GetMapping
     public <T> ServerResponseVO<T> getRegisterOrder(String orderId){
         if(orderId == null){

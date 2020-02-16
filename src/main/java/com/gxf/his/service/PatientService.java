@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.po.generate.DoctorTicket;
+import com.gxf.his.po.generate.PatientFile;
 import com.gxf.his.po.vo.OrderVo;
 import com.gxf.his.po.vo.PatientVo;
 import com.gxf.his.po.generate.Patient;
@@ -36,6 +37,14 @@ public interface PatientService {
      * @return 患者
      */
     Patient getPatientByUid(Long uid);
+
+    /**
+     * 根据用户UID获取患者
+     * 并且关联查询档案
+     * @param uid 患者用户的UID
+     * @return 患者
+     */
+    PatientVo getPatientByUidRelated(Long uid);
 
     /**
      * 获取当前未使用和排队中的挂号信息
@@ -91,4 +100,16 @@ public interface PatientService {
      * @return 不同类型的订单列表 包括挂号单 处方单 检查单
      */
     HashMap<String,List<OrderVo>> getAllPatientOrders(Long patientId);
+
+    /**
+     * 插入一条病人档案信息
+     * @param patientFile 病人档案实体
+     */
+    void addPatientFile(PatientFile patientFile);
+
+    /**
+     * 更新一条病人档案信息
+     * @param patientFile 病人档案实体
+     */
+    void updatePatientFile(PatientFile patientFile);
 }

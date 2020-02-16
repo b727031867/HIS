@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+
 /**
  * @author 龚秀峰
  * @version 1.0
@@ -27,6 +28,8 @@ public class OrderVo extends Order implements Serializable {
     private List<DoctorTicketResource> ticketResourceList;
 
     private DoctorTicket doctorTicket;
+
+    private DoctorVo doctorVo;
 
     private Date ticketStartTime;
 

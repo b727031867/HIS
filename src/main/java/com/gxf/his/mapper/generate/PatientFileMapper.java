@@ -13,12 +13,12 @@ import org.apache.ibatis.type.JdbcType;
 public interface PatientFileMapper {
     @Delete({
         "delete from entity_patient_file",
-        "where patient_file = #{patientFile,jdbcType=BIGINT}"
+        "where patient_file_id = #{patientFileId,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Long patientFile);
+    int deleteByPrimaryKey(Long patientFileId);
 
     @Insert({
-        "insert into entity_patient_file (patient_file, patient_id, ",
+        "insert into entity_patient_file (patient_file_id, patient_id, ",
         "emergency_contact_name, emergency_phone, ",
         "emergency_relation, right_ear_hearing, ",
         "left_ear_hearing, right_vision, ",
@@ -26,7 +26,7 @@ public interface PatientFileMapper {
         "weight, blood_type, ",
         "personal_info, family_info, ",
         "create_time, update_time)",
-        "values (#{patientFile,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, ",
+        "values (#{patientFileId,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, ",
         "#{emergencyContactName,jdbcType=VARCHAR}, #{emergencyPhone,jdbcType=VARCHAR}, ",
         "#{emergencyRelation,jdbcType=VARCHAR}, #{rightEarHearing,jdbcType=INTEGER}, ",
         "#{leftEarHearing,jdbcType=INTEGER}, #{rightVision,jdbcType=DECIMAL}, ",
@@ -39,14 +39,14 @@ public interface PatientFileMapper {
 
     @Select({
         "select",
-        "patient_file, patient_id, emergency_contact_name, emergency_phone, emergency_relation, ",
+        "patient_file_id, patient_id, emergency_contact_name, emergency_phone, emergency_relation, ",
         "right_ear_hearing, left_ear_hearing, right_vision, left_vision, height, weight, ",
         "blood_type, personal_info, family_info, create_time, update_time",
         "from entity_patient_file",
-        "where patient_file = #{patientFile,jdbcType=BIGINT}"
+        "where patient_file_id = #{patientFileId,jdbcType=BIGINT}"
     })
     @Results({
-        @Result(column="patient_file", property="patientFile", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="patient_file_id", property="patientFileId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
         @Result(column="emergency_contact_name", property="emergencyContactName", jdbcType=JdbcType.VARCHAR),
         @Result(column="emergency_phone", property="emergencyPhone", jdbcType=JdbcType.VARCHAR),
@@ -63,17 +63,17 @@ public interface PatientFileMapper {
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    PatientFile selectByPrimaryKey(Long patientFile);
+    PatientFile selectByPrimaryKey(Long patientFileId);
 
     @Select({
         "select",
-        "patient_file, patient_id, emergency_contact_name, emergency_phone, emergency_relation, ",
+        "patient_file_id, patient_id, emergency_contact_name, emergency_phone, emergency_relation, ",
         "right_ear_hearing, left_ear_hearing, right_vision, left_vision, height, weight, ",
         "blood_type, personal_info, family_info, create_time, update_time",
         "from entity_patient_file"
     })
     @Results({
-        @Result(column="patient_file", property="patientFile", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="patient_file_id", property="patientFileId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
         @Result(column="emergency_contact_name", property="emergencyContactName", jdbcType=JdbcType.VARCHAR),
         @Result(column="emergency_phone", property="emergencyPhone", jdbcType=JdbcType.VARCHAR),
@@ -109,7 +109,7 @@ public interface PatientFileMapper {
           "family_info = #{familyInfo,jdbcType=VARCHAR},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP}",
-        "where patient_file = #{patientFile,jdbcType=BIGINT}"
+        "where patient_file_id = #{patientFileId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(PatientFile record);
 }
