@@ -74,7 +74,13 @@ public enum ServerResponseEnum {
     PATIENT_FILE_DELETE_FAIL(141,"病历删除失败"),
     PATIENT_FILE_LIST_FAIL(142,"病历查询失败"),
     PATIENT_FILE_UPDATE_FAIL(143,"病历信息更新失败"),
-    PATIENT_FILE_NO_EXITS(144,"病历不存在");
+    PATIENT_FILE_NO_EXITS(144,"病历不存在"),
+    DOCTOR_MEDICAL_TEMPLATE_SAVE_FAIL(150,"模板保存失败"),
+    DOCTOR_MEDICAL_TEMPLATE_DELETE_FAIL(151,"模板删除失败"),
+    DOCTOR_MEDICAL_TEMPLATE_LIST_FAIL(152,"模板查询失败"),
+    DOCTOR_MEDICAL_TEMPLATE_UPDATE_FAIL(153,"模板信息更新失败"),
+    WORD_CONVERSION_EXCEPTION(300,"文档转换异常"),
+    WORD_CONVERSION_IO_EXCEPTION(301,"解析【docx】文档为html时，出现IO异常");
     Integer code;
     String message;
 }

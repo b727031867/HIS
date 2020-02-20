@@ -93,7 +93,7 @@ public interface IDoctorMapper extends DoctorMapper {
             @Result(column = "doctor_professional_title", property = "doctorProfessionalTitle", jdbcType = JdbcType.VARCHAR),
             @Result(column = "doctor_introduction", property = "doctorIntroduction", jdbcType = JdbcType.VARCHAR),
             @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT)),
-            @Result(column = "scheduling_id", property = "scheduling", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_SCHEDULING)),
+            @Result(column = "scheduling_id", property = "doctorScheduling", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_SCHEDULING)),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_USER)),
             @Result(column = "ticket_day_num", property = "ticketDayNum", jdbcType = JdbcType.INTEGER),
             @Result(column = "ticket_price", property = "ticketPrice", jdbcType = JdbcType.DECIMAL),

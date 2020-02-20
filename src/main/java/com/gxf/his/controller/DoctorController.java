@@ -3,10 +3,7 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.po.generate.Department;
-import com.gxf.his.po.generate.Doctor;
-import com.gxf.his.po.generate.DoctorTicketResource;
-import com.gxf.his.po.generate.User;
+import com.gxf.his.po.generate.*;
 import com.gxf.his.po.vo.DoctorVo;
 import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.service.DepartmentService;
@@ -14,13 +11,17 @@ import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.TicketResourceService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.MyUtil;
+import com.gxf.his.uitls.OfficeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -78,9 +79,6 @@ public class DoctorController extends BaseController {
     public <T> ServerResponseVO<T> getDoctorsByAttribute(@RequestParam(value = "attribute", defaultValue = "doctorName") String attribute
             , @RequestParam(value = "value") String value, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",
             defaultValue = "5") Integer size) {
-//        if(searchParamCheck(attribute,isAccurate,value)){TODO
-//            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
-//        }
         //可能使用的查询属性
         String doctorName = "doctorName";
         String doctorProfessionalTitle = "doctorProfessionalTitle";

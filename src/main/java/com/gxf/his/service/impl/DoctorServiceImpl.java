@@ -110,4 +110,7 @@ public class DoctorServiceImpl implements DoctorService {
             throw new DoctorException(ServerResponseEnum.DOCTOR_UPDATE_FAIL);
         }
     }
+
+
+
 }
