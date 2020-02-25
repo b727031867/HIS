@@ -21,7 +21,11 @@ public class PatientMedicalRecord implements Serializable {
 
     private String auxiliaryInspection;
 
+    private String tgjc;
+
     private String diagnosis;
+
+    private String zlyj;
 
     private Long doctorId;
 
@@ -43,7 +47,9 @@ public class PatientMedicalRecord implements Serializable {
         sb.append(", pastHistory=").append(pastHistory);
         sb.append(", currentMedicalHistory=").append(currentMedicalHistory);
         sb.append(", auxiliaryInspection=").append(auxiliaryInspection);
+        sb.append(", tgjc=").append(tgjc);
         sb.append(", diagnosis=").append(diagnosis);
+        sb.append(", zlyj=").append(zlyj);
         sb.append(", doctorId=").append(doctorId);
         sb.append(", patientId=").append(patientId);
         sb.append(", createDatetime=").append(createDatetime);

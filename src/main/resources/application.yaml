@@ -13,6 +13,12 @@ mybatis:
 server:
   port: 8081
 spring:
+  #开启freemarker
+  freemarker:
+    enabled: true
+    content-type: text/html
+    #模板存放的位置
+    template-loader-path: classpath:/templates/
 #  配置返回Json的日期格式化
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -73,11 +79,11 @@ spring:
     # Redis数据库索引（默认为0）
     database: 0
     # Redis服务器地址
-    host: 120.78.91.253
+    host: 127.0.0.1
     # Redis服务器连接端口
-    port: 6665
+    port: 6555
     # Redis服务器连接密码（默认为空）
-    password: "gxffyq520"
+#    password: "gxffyq520"
     # 连接超时时间（毫秒）
     timeout: 5000
     jedis:

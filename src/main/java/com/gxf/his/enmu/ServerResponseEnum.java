@@ -39,6 +39,9 @@ public enum ServerResponseEnum {
     DOCTOR_LIST_FAIL(51,"医生查询失败"),
     DOCTOR_UPDATE_FAIL(52,"医生信息更新失败"),
     DOCTOR_DELETE_FAIL(53,"医生删除失败"),
+    DOCTOR_CALL_FAIL(54,"医生叫号失败"),
+    DOCTOR_GET_RANK_FAIL(55,"医生获取候诊总数和候诊排名失败!"),
+    DOCTOR_GET_TOTAL_RANK_FAIL(56,"获取此医生候诊总数失败!"),
     PERMISSION_SELECT_FAIL(60,"权限查询失败"),
     DEPARTMENTS_NOT_EXIST(70,"暂无此类型的科室"),
     DEPARTMENT_SAVE_FAIL(71,"科室保存失败"),
@@ -70,6 +73,7 @@ public enum ServerResponseEnum {
     TICKET_UPDATE_FAIL(133,"挂号信息更新失败"),
     TICKET_QUEUE_FAIL(133,"挂号排队失败"),
     TICKET_QUEUE_NULL(134,"当前暂无挂号"),
+    TICKET_CHANGE_STATUS_FAIL(135,"挂号状态修改失败！"),
     PATIENT_FILE_SAVE_FAIL(140,"病历保存失败"),
     PATIENT_FILE_DELETE_FAIL(141,"病历删除失败"),
     PATIENT_FILE_LIST_FAIL(142,"病历查询失败"),
@@ -79,6 +83,7 @@ public enum ServerResponseEnum {
     DOCTOR_MEDICAL_TEMPLATE_DELETE_FAIL(151,"模板删除失败"),
     DOCTOR_MEDICAL_TEMPLATE_LIST_FAIL(152,"模板查询失败"),
     DOCTOR_MEDICAL_TEMPLATE_UPDATE_FAIL(153,"模板信息更新失败"),
+    DOCTOR_MEDICAL_TEMPLATE_RENDER_FAIL(154,"模板渲染失败"),
     WORD_CONVERSION_EXCEPTION(300,"文档转换异常"),
     WORD_CONVERSION_IO_EXCEPTION(301,"解析【docx】文档为html时，出现IO异常");
     Integer code;

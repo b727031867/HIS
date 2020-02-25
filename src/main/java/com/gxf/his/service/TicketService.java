@@ -25,6 +25,14 @@ public interface TicketService {
     void checkExpiredTicket();
 
     /**
+     * 检查是否出现挂号排队中但是直到过期也没有被叫号的人
+     * 每天检查一次
+     * 切换挂号状态为过期
+     */
+    void checkExpiredTicketForUnCalling();
+
+
+    /**
      * 插入一条挂号记录
      *
      * @param ticket 挂号信息

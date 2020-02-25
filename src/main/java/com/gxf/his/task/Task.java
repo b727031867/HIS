@@ -138,4 +138,16 @@ public class Task {
     public void checkExpiredTicket() {
         ticketService.checkExpiredTicket();
     }
+
+    /**
+     * 每小时查询过期仍然没被叫号的挂号
+     * 切换挂号信息状态为过期
+     */
+    @Async
+    @Scheduled(cron = "0 0 0/1 * * ?")
+    public void getExpiredAndUnCallingTicket() {
+        ticketService.checkExpiredTicketForUnCalling();
+    }
+
+
 }

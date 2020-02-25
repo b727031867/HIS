@@ -21,19 +21,26 @@ import java.util.Date;
 @ToString
 public class TicketVo extends DoctorTicket {
 
-    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @NotNull
     private Date endTime;
 
     private DoctorVo doctorVo;
 
     private Patient patient;
 
+    private Long uid;
+
     /**
      * 本次挂号排队名次
      */
     private Integer rank;
+
+
+
+    /**
+     * 模板类型
+     */
+    private Integer type;
 }

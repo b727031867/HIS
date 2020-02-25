@@ -4,21 +4,20 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.generate.*;
-import com.gxf.his.po.vo.DoctorVo;
-import com.gxf.his.po.vo.ServerResponseVO;
-import com.gxf.his.service.DepartmentService;
-import com.gxf.his.service.DoctorService;
-import com.gxf.his.service.TicketResourceService;
-import com.gxf.his.service.UserService;
+import com.gxf.his.po.vo.*;
+import com.gxf.his.service.*;
 import com.gxf.his.uitls.MyUtil;
-import com.gxf.his.uitls.OfficeUtil;
+import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +41,69 @@ public class DoctorController extends BaseController {
     private DepartmentService departmentService;
     @Resource
     private TicketResourceService ticketResourceService;
+    @Resource
+    private TicketService ticketService;
+    @Resource
+    private TemplateService templateService;
+
+    @GetMapping("/outpatients")
+    public <T> ServerResponseVO<T> getOutpatients(@RequestParam("uid") Long uid, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endDate) {
+        if (uid == null || startDate == null || endDate == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        String doctorId = userService.getLoginEntityId(uid);
+        List<PatientVo> patientVos = doctorService.getOutpatients(Long.parseLong(doctorId), startDate, endDate);
+        return MyUtil.cast(ServerResponseVO.success(patientVos));
+    }
+
+    @GetMapping("/callNextPatients")
+    public <T> ServerResponseVO<T> getNextCallPatient(@RequestParam("uid") Long uid, @RequestParam(value = "rank", required = false, defaultValue = "0") Integer rank) {
+        if (uid == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        String doctorId = userService.getLoginEntityId(uid);
+        TicketVo ticketVo = doctorService.getCurrentRankPatient(Long.parseLong(doctorId), rank);
+        return MyUtil.cast(ServerResponseVO.success(ticketVo));
+    }
+
+    @GetMapping("/currentRankInfo")
+    public <T> ServerResponseVO<T> getCurrentPatientInfo(@RequestParam("uid") Long uid) {
+        if (uid == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        String doctorId = userService.getLoginEntityId(uid);
+        HashMap<String, String> info = doctorService.getCurrentRankInfo(Long.parseLong(doctorId), 4);
+        return MyUtil.cast(ServerResponseVO.success(info));
+    }
+
+    /**
+     * 根据医生的用户ID和总数类型
+     * 获取候诊总数或者叫号中的总数
+     * totalType状态类型 同挂号信息的status状态
+     *
+     * @param uid       医生的用户ID
+     * @param totalType 总数类型
+     * @return 总数
+     */
+    @GetMapping("/totalRank")
+    public <T> ServerResponseVO<T> getTotalRank(@RequestParam("uid") Long uid, @RequestParam("totalType") String totalType) {
+        if (uid == null || totalType == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        String doctorId = userService.getLoginEntityId(uid);
+        Integer total = doctorService.getTotalRank(Long.parseLong(doctorId), Integer.valueOf(totalType));
+        return MyUtil.cast(ServerResponseVO.success(total));
+    }
+
+    @GetMapping("/callingPatient")
+    public <T> ServerResponseVO<T> getCallingPatient(@RequestParam("uid") Long uid) {
+        if (uid == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        String doctorId = userService.getLoginEntityId(uid);
+        TicketVo ticketVo = doctorService.getCallingPatient(Long.parseLong(doctorId));
+        return MyUtil.cast(ServerResponseVO.success(ticketVo));
+    }
 
     @GetMapping
     public <T> ServerResponseVO<T> getDoctors(@RequestParam(required = false, name = "departmentCode") String departmentCode
@@ -145,6 +207,104 @@ public class DoctorController extends BaseController {
         doctorService.addDoctor(doctor);
         return ServerResponseVO.success();
     }
+
+    @PostMapping("/startSeeDoctor")
+    public <T> ServerResponseVO<T> startSeeDoctor(@RequestBody TicketVo ticketVo) {
+        if (ticketVo == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        //如果前端页面刷新丢失叫号的票务信息，则自动获取最早排队且叫号中的票务信息
+        if (ticketVo.getTicketId() == null) {
+            String doctorId = userService.getLoginEntityId(ticketVo.getUid());
+            ticketVo = doctorService.getCurrentRankPatient(Long.parseLong(doctorId), 0);
+            //丢失信息默认设置电子病历模板
+            ticketVo.setType(2);
+        }
+        DoctorVo doctorVo = doctorService.getDoctorByDoctorId(ticketVo.getDoctorVo().getDoctorId());
+        String doctorName = doctorVo.getDoctorName();
+        String departmentName = doctorVo.getDepartment().getDepartmentName();
+        String patientName = ticketVo.getPatient().getPatientName();
+        Integer patientAge = ticketVo.getPatient().getPatientAge();
+        Byte patientSexCode = ticketVo.getPatient().getPatientSex();
+        Byte patientIsMarriageCode = ticketVo.getPatient().getPatientIsMarriage();
+        if (patientName == null) {
+            patientName = "暂未设置姓名";
+        }
+        if (patientSexCode == null) {
+            patientSexCode = 0;
+        }
+        if (patientIsMarriageCode == null) {
+            patientIsMarriageCode = 0;
+        }
+        String patientSex = MyUtil.changeSex(patientSexCode);
+        String patientIsMarriage = MyUtil.changeMarriage(patientIsMarriageCode);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss");
+        String dateTime = dtf.format(now);
+        HashMap<String, String> map = new HashMap<>(8);
+        map.put("doctorName", doctorName);
+        map.put("departmentName", departmentName);
+        map.put("patientName", patientName);
+        if (patientAge == null) {
+            map.put("patientAge", "暂未设置年龄");
+        } else {
+            map.put("patientAge", patientAge + "岁");
+        }
+        map.put("patientSex", patientSex);
+        map.put("patientIsMarriage", patientIsMarriage);
+        map.put("dateTime", dateTime);
+        StringWriter result = new StringWriter();
+        String templateString = null;
+        List<TemplateVo> allTemplates = templateService.getAllTemplates();
+        for (TemplateVo allTemplate : allTemplates) {
+            if (allTemplate.getType() != null && allTemplate.getType().equals(ticketVo.getType())) {
+                templateString = allTemplate.getContent();
+            }
+        }
+        if (templateString == null) {
+            return ServerResponseVO.error(ServerResponseEnum.DOCTOR_MEDICAL_TEMPLATE_LIST_FAIL);
+        }
+        try {
+            Template t = new Template("电子病历", new StringReader(templateString));
+            t.process(map, result);
+            String content = result.toString();
+            //将这张票的状态变成就诊中
+            DoctorTicket ticketById = ticketService.getTicketById(ticketVo.getTicketId());
+            ticketById.setStatus(5);
+            ticketService.updateTicketInfo(ticketById);
+            return MyUtil.cast(ServerResponseVO.success(content));
+        } catch (Exception e) {
+            log.error("模板渲染出现异常", e);
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+    }
+
+    @PostMapping("/endSeeDoctor")
+    public <T> ServerResponseVO<T> endSeeDoctor(@RequestParam("uid") Long uid, @RequestParam(value = "doctorTicketId", required = false) Long doctorTicketId) {
+        if (doctorTicketId == null) {
+            if (uid == null) {
+                return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+            }
+            //如果为空,没有就诊中的患者，那么直接获取该医生最早的就诊中的患者
+            String doctorId = userService.getLoginEntityId(uid);
+            //将最近的就诊中的挂号状态置为已完成
+            DoctorTicket doctorTicket = doctorService.usedRecentVisitingDoctorTicket(doctorId);
+            return MyUtil.cast(ServerResponseVO.success(doctorTicket));
+        }
+        DoctorTicket doctorTicket = doctorService.endSeeDoctor(doctorTicketId);
+        //将当前订单置为已完成
+        return MyUtil.cast(ServerResponseVO.success(doctorTicket));
+    }
+
+    @PostMapping("/saveCaseHistory")
+    public <T> ServerResponseVO<T> saveCaseHistory( @RequestParam(value = "doctorTicketId") Long doctorTicketId, @RequestParam(value = "content") String content) {
+        if (doctorTicketId == null ||  content == null) {
+                return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        doctorService.saveCaseHistory(doctorTicketId,content);
+        return MyUtil.cast(ServerResponseVO.success());
+    }
+
 
     @DeleteMapping
     public <T> ServerResponseVO<T> deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,

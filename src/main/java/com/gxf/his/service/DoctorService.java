@@ -1,9 +1,14 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.vo.DoctorVo;
 import com.gxf.his.po.generate.Doctor;
+import com.gxf.his.po.generate.DoctorTicket;
 import com.gxf.his.po.generate.User;
+import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.vo.PatientVo;
+import com.gxf.his.po.vo.TicketVo;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -11,6 +16,49 @@ import java.util.List;
  * @date 2019-10-20
  */
 public interface DoctorService {
+
+    /**
+     * 获取某时间段某医生的门诊的患者信息
+     * 包括关联的电子病历以及处方单和检查单
+     *
+     * @param doctorId  医生ID
+     * @param startDate 就诊日期开始时间
+     * @param endDate   就诊日期结束时间
+     * @return 此时间段内就诊的患者信息及关联的病历、处方、检查单
+     */
+    List<PatientVo> getOutpatients(Long doctorId, Date startDate, Date endDate);
+
+    /**
+     * 某医生获取呼叫下一位患者
+     * @param doctorId 医生ID
+     * @param rank 上一位挂号者ID，如果没有上一位，则为0
+     * @return 票务信息
+     */
+    TicketVo getCurrentRankPatient(Long doctorId, Integer rank);
+
+    /**
+     * 某医生获取呼叫中患者的票务信息
+     * @param doctorId 医生ID
+     * @return 叫号中患者的票务信息
+     */
+    TicketVo getCallingPatient(Long doctorId);
+
+    /**
+     * 某医生获取当前候诊总人数以及当前就诊患者的排名
+     * @param doctorId 医生ID
+     * @param status 状态类型 同挂号信息的status状态
+     * @return 当前就诊的排名、以及总候诊数
+     */
+    HashMap<String,String> getCurrentRankInfo(Long doctorId,Integer status);
+
+    /**
+     * 查询某医生当前处于某种状态的患者的总数
+     * @param doctorId 医生ID
+     * @param status 状态类型 同挂号信息的status状态
+     * @return 当前总候诊数
+     */
+    Integer getTotalRank(Long doctorId,Integer status);
+
     /**
      * 添加一位医生
      *
@@ -37,6 +85,13 @@ public interface DoctorService {
      * @return 返回本次操作影响的行数
      */
     Integer deleteDoctorAndUserBatch(List<Doctor> doctors, List<User> users);
+
+    /**
+     * 根据医生ID获取医生
+     * @param doctorId 医生ID
+     * @return 医生
+     */
+    DoctorVo getDoctorByDoctorId(Long doctorId);
 
     /**
      * 查询所有的医生
@@ -69,4 +124,24 @@ public interface DoctorService {
      */
     int updateDoctor(Doctor doctor);
 
+    /**
+     * 让当前患者看病完毕
+     * @param doctorTicketId 挂号信息的ID
+     * @return 状态被改为挂号完毕的挂号信息
+     */
+    DoctorTicket endSeeDoctor( Long doctorTicketId);
+
+    /**
+     * 将最近的就诊中的挂号状态置为已完成
+     * @param doctorId 医生的ID
+     * @return 状态被改为挂号完毕的挂号信息
+     */
+    DoctorTicket usedRecentVisitingDoctorTicket(String doctorId);
+
+    /**
+     * 医生保存患者电子病历
+     * @param doctorTicketId 挂号信息的ID
+     * @param content 病历的内容
+     */
+    void saveCaseHistory(Long doctorTicketId,  String content);
 }

@@ -13,6 +13,10 @@ public class MedicalTemplate implements Serializable {
 
     private Integer type;
 
+    private String description;
+
+    private String title;
+
     private Integer status;
 
     private Long uploadId;
@@ -35,6 +39,8 @@ public class MedicalTemplate implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", medicalTemplateId=").append(medicalTemplateId);
         sb.append(", type=").append(type);
+        sb.append(", description=").append(description);
+        sb.append(", title=").append(title);
         sb.append(", status=").append(status);
         sb.append(", uploadId=").append(uploadId);
         sb.append(", uploaderType=").append(uploaderType);

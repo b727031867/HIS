@@ -21,17 +21,17 @@ public interface CheckItemMapper {
         "insert into entity_check_item (check_item_id, `name`, ",
         "`type`, price, cost, ",
         "create_time, update_time, ",
-        "operater_id)",
+        "operate_id)",
         "values (#{checkItemId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, ",
         "#{type,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{cost,jdbcType=DECIMAL}, ",
         "#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, ",
-        "#{operaterId,jdbcType=BIGINT})"
+        "#{operateId,jdbcType=BIGINT})"
     })
     int insert(CheckItem record);
 
     @Select({
         "select",
-        "check_item_id, `name`, `type`, price, cost, create_time, update_time, operater_id",
+        "check_item_id, `name`, `type`, price, cost, create_time, update_time, operate_id",
         "from entity_check_item",
         "where check_item_id = #{checkItemId,jdbcType=BIGINT}"
     })
@@ -43,13 +43,13 @@ public interface CheckItemMapper {
         @Result(column="cost", property="cost", jdbcType=JdbcType.DECIMAL),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="operater_id", property="operaterId", jdbcType=JdbcType.BIGINT)
+        @Result(column="operate_id", property="operateId", jdbcType=JdbcType.BIGINT)
     })
     CheckItem selectByPrimaryKey(Long checkItemId);
 
     @Select({
         "select",
-        "check_item_id, `name`, `type`, price, cost, create_time, update_time, operater_id",
+        "check_item_id, `name`, `type`, price, cost, create_time, update_time, operate_id",
         "from entity_check_item"
     })
     @Results({
@@ -60,7 +60,7 @@ public interface CheckItemMapper {
         @Result(column="cost", property="cost", jdbcType=JdbcType.DECIMAL),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="operater_id", property="operaterId", jdbcType=JdbcType.BIGINT)
+        @Result(column="operate_id", property="operateId", jdbcType=JdbcType.BIGINT)
     })
     List<CheckItem> selectAll();
 
@@ -72,7 +72,7 @@ public interface CheckItemMapper {
           "cost = #{cost,jdbcType=DECIMAL},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP},",
-          "operater_id = #{operaterId,jdbcType=BIGINT}",
+          "operate_id = #{operateId,jdbcType=BIGINT}",
         "where check_item_id = #{checkItemId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(CheckItem record);

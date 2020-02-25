@@ -19,10 +19,12 @@ public interface MedicalTemplateMapper {
 
     @Insert({
         "insert into entity_medical_template (medical_template_id, `type`, ",
+        "description, title, ",
         "`status`, upload_id, ",
         "uploader_type, update_datetime, ",
         "create_datetime, content)",
         "values (#{medicalTemplateId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, ",
+        "#{description,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, ",
         "#{status,jdbcType=INTEGER}, #{uploadId,jdbcType=BIGINT}, ",
         "#{uploaderType,jdbcType=INTEGER}, #{updateDatetime,jdbcType=TIMESTAMP}, ",
         "#{createDatetime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
@@ -31,14 +33,16 @@ public interface MedicalTemplateMapper {
 
     @Select({
         "select",
-        "medical_template_id, `type`, `status`, upload_id, uploader_type, update_datetime, ",
-        "create_datetime, content",
+        "medical_template_id, `type`, description, title, `status`, upload_id, uploader_type, ",
+        "update_datetime, create_datetime, content",
         "from entity_medical_template",
         "where medical_template_id = #{medicalTemplateId,jdbcType=BIGINT}"
     })
     @Results({
         @Result(column="medical_template_id", property="medicalTemplateId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
+        @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+        @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
         @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
         @Result(column="upload_id", property="uploadId", jdbcType=JdbcType.BIGINT),
         @Result(column="uploader_type", property="uploaderType", jdbcType=JdbcType.INTEGER),
@@ -50,13 +54,15 @@ public interface MedicalTemplateMapper {
 
     @Select({
         "select",
-        "medical_template_id, `type`, `status`, upload_id, uploader_type, update_datetime, ",
-        "create_datetime, content",
+        "medical_template_id, `type`, description, title, `status`, upload_id, uploader_type, ",
+        "update_datetime, create_datetime, content",
         "from entity_medical_template"
     })
     @Results({
         @Result(column="medical_template_id", property="medicalTemplateId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="type", property="type", jdbcType=JdbcType.INTEGER),
+        @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+        @Result(column="title", property="title", jdbcType=JdbcType.VARCHAR),
         @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
         @Result(column="upload_id", property="uploadId", jdbcType=JdbcType.BIGINT),
         @Result(column="uploader_type", property="uploaderType", jdbcType=JdbcType.INTEGER),
@@ -69,6 +75,8 @@ public interface MedicalTemplateMapper {
     @Update({
         "update entity_medical_template",
         "set `type` = #{type,jdbcType=INTEGER},",
+          "description = #{description,jdbcType=VARCHAR},",
+          "title = #{title,jdbcType=VARCHAR},",
           "`status` = #{status,jdbcType=INTEGER},",
           "upload_id = #{uploadId,jdbcType=BIGINT},",
           "uploader_type = #{uploaderType,jdbcType=INTEGER},",

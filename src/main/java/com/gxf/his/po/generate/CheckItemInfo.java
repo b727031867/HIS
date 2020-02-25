@@ -1,7 +1,6 @@
 package com.gxf.his.po.generate;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,22 +8,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class CheckItem implements Serializable {
+public class CheckItemInfo implements Serializable {
+    private Long checkItemInfoId;
+
     private Long checkItemId;
 
-    private String name;
+    private Long patientId;
 
-    private String type;
+    private Long doctorId;
 
-    private BigDecimal price;
-
-    private BigDecimal cost;
+    private Long operateId;
 
     private Date createTime;
 
-    private Date updateTime;
-
-    private Long operateId;
+    private String content;
 
     private static final long serialVersionUID = 1L;
 
@@ -34,14 +31,13 @@ public class CheckItem implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", checkItemInfoId=").append(checkItemInfoId);
         sb.append(", checkItemId=").append(checkItemId);
-        sb.append(", name=").append(name);
-        sb.append(", type=").append(type);
-        sb.append(", price=").append(price);
-        sb.append(", cost=").append(cost);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
+        sb.append(", patientId=").append(patientId);
+        sb.append(", doctorId=").append(doctorId);
         sb.append(", operateId=").append(operateId);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", content=").append(content);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

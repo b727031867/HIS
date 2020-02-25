@@ -23,7 +23,6 @@ public class TicketController {
     private TicketService ticketService;
     @PostMapping
     public <T>ServerResponseVO<T> addTicket(@RequestBody TicketVo ticketVo){
-        //TODO
         return ServerResponseVO.success();
     }
 
