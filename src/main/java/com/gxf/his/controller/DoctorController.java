@@ -305,7 +305,6 @@ public class DoctorController extends BaseController {
         return MyUtil.cast(ServerResponseVO.success());
     }
 
-
     @DeleteMapping
     public <T> ServerResponseVO<T> deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,
                                                                  @RequestParam(name = "userId") Long userId) {

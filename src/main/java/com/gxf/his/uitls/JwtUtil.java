@@ -4,10 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.gxf.his.config.RedisClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -32,8 +32,17 @@ public class JwtUtil {
      */
     private static String accessTokenExpireTime;
 
+    private static RedisClient redis;
+
+    @Autowired
+    public void setRedisClient(RedisClient redisClient) {
+        redis = redisClient;
+    }
+
+
     /**
      * 静态变量使用Setter注入
+     *
      * @param accessTokenExpireTime Token的过期时间
      */
     @Value("${config.accessToken-expireTime}")
@@ -53,6 +62,7 @@ public class JwtUtil {
 
     /**
      * 校验token是否正确
+     *
      * @param token 密钥
      * @return 是否验证成功
      */
@@ -62,18 +72,25 @@ public class JwtUtil {
             JWTVerifier verifier = JWT.require(algorithm).build();
             verifier.verify(token);
             return true;
-        } catch (TokenExpiredException e) {
-            log.info("accessToken过期！" + e.getMessage());
-            throw new TokenExpiredException("accessToken" +
-                    "过期");
-        } catch (JWTVerificationException e) {
-            log.info("accessToken不合法");
-            throw new JWTVerificationException(
-                    "accessToken" +
-                    "验证不合法");
-        } catch (Exception e) {
-            log.info("其他Token校验异常：" + e.getMessage());
+        } catch (UnsupportedEncodingException e) {
+            log.error("不支持的编码类型！", e);
         }
+//        } catch (TokenExpiredException e) {
+//            log.info("accessToken过期！" + e.getMessage());
+//            //如果refreshToken没过期,尝试续签accessToken
+//            if(redis.hasKey(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + username)){
+//
+//            }
+//            throw new TokenExpiredException("accessToken" +
+//                    "过期");
+//        } catch (JWTVerificationException e) {
+//            log.info("accessToken不合法");
+//            throw new JWTVerificationException(
+//                    "accessToken" +
+//                            "验证不合法");
+//        } catch (Exception e) {
+//            log.info("其他Token校验异常：" + e.getMessage());
+//        }
         return false;
     }
 

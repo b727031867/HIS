@@ -141,7 +141,7 @@ public class UserRealm extends AuthorizingRealm {
 
     private SimpleAuthenticationInfo loginCheck(String token, String username) {
         log.info("进行认证的Token是:" + token + "   当前登录的用户名是：" + username);
-        try {
+//        try {
             // 开始认证，必须AccessToken认证通过，且Redis中存在RefreshToken，且两个Token时间戳一致
             if (JwtUtil.verify(token) && redis.hasKey(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + username)) {
                 // 获取RefreshToken的时间戳
@@ -157,7 +157,7 @@ public class UserRealm extends AuthorizingRealm {
                         //放行认证
                         return new SimpleAuthenticationInfo(token, token, getName());
                     } else {
-                        log.debug("AccessToken和RefreshToken中的时间戳不一致");
+                        log.info("AccessToken和RefreshToken中的时间戳不一致");
                         throw new AuthorizationException("AccessToken和RefreshToken中的时间戳不一致");
                     }
                 }
@@ -165,18 +165,18 @@ public class UserRealm extends AuthorizingRealm {
                 log.info("Redis中refreshToken的缓存过期");
                 throw new AuthorizationException("会话过期，请重新登陆");
             }
-        } catch (TokenExpiredException e) {
-            log.info(e.getMessage());
-            //凭证过期
-            throw new ExpiredCredentialsException(e.getMessage());
-        } catch (JWTVerificationException e) {
-            log.info("accessToken其他认证异常：" + e.getMessage());
-            throw new UnsupportedTokenException(e.getMessage());
-        } catch (Exception e) {
-            log.error("accessToken验证时系统发生的其他异常：" + e.getMessage());
-        }
-        //其他认证异常
-        throw new AuthenticationException("未知的认证异常");
+//        } catch (TokenExpiredException e) {
+//            log.info(e.getMessage());
+//            //凭证过期
+//            throw new ExpiredCredentialsException(e.getMessage());
+//        } catch (JWTVerificationException e) {
+//            log.info("accessToken其他认证异常：" + e.getMessage());
+//            throw new UnsupportedTokenException(e.getMessage());
+//        } catch (Exception e) {
+//            log.error("accessToken验证时系统发生的其他异常：" + e.getMessage());
+//        }
+//        //其他认证异常
+//        throw new AuthenticationException("未知的认证异常");
     }
 
 }

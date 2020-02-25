@@ -67,7 +67,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             try {
                 this.executeLogin(request, response);
                 return true;
-            } catch (ExpiredCredentialsException e) {
+            } catch (TokenExpiredException e) {
+                log.info("尝试续签凭证!");
                 //凭证过期后，进行续签，如果refreshToken也过期，则需要重新登陆
                 if (this.refreshToken(request, response)) {
                     return true;
