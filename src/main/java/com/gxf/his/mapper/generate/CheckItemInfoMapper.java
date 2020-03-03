@@ -20,19 +20,19 @@ public interface CheckItemInfoMapper {
     @Insert({
         "insert into entity_check_item_info (check_item_info_id, check_item_id, ",
         "patient_id, doctor_id, ",
-        "operate_id, create_time, ",
-        "content)",
+        "ticket_id, operate_id, ",
+        "create_time, content)",
         "values (#{checkItemInfoId,jdbcType=BIGINT}, #{checkItemId,jdbcType=BIGINT}, ",
         "#{patientId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}, ",
-        "#{operateId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, ",
-        "#{content,jdbcType=LONGVARCHAR})"
+        "#{ticketId,jdbcType=BIGINT}, #{operateId,jdbcType=BIGINT}, ",
+        "#{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})"
     })
     int insert(CheckItemInfo record);
 
     @Select({
         "select",
-        "check_item_info_id, check_item_id, patient_id, doctor_id, operate_id, create_time, ",
-        "content",
+        "check_item_info_id, check_item_id, patient_id, doctor_id, ticket_id, operate_id, ",
+        "create_time, content",
         "from entity_check_item_info",
         "where check_item_info_id = #{checkItemInfoId,jdbcType=BIGINT}"
     })
@@ -41,6 +41,7 @@ public interface CheckItemInfoMapper {
         @Result(column="check_item_id", property="checkItemId", jdbcType=JdbcType.BIGINT),
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
         @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT),
+        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.BIGINT),
         @Result(column="operate_id", property="operateId", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="content", property="content", jdbcType=JdbcType.LONGVARCHAR)
@@ -49,8 +50,8 @@ public interface CheckItemInfoMapper {
 
     @Select({
         "select",
-        "check_item_info_id, check_item_id, patient_id, doctor_id, operate_id, create_time, ",
-        "content",
+        "check_item_info_id, check_item_id, patient_id, doctor_id, ticket_id, operate_id, ",
+        "create_time, content",
         "from entity_check_item_info"
     })
     @Results({
@@ -58,6 +59,7 @@ public interface CheckItemInfoMapper {
         @Result(column="check_item_id", property="checkItemId", jdbcType=JdbcType.BIGINT),
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
         @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT),
+        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.BIGINT),
         @Result(column="operate_id", property="operateId", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="content", property="content", jdbcType=JdbcType.LONGVARCHAR)
@@ -69,6 +71,7 @@ public interface CheckItemInfoMapper {
         "set check_item_id = #{checkItemId,jdbcType=BIGINT},",
           "patient_id = #{patientId,jdbcType=BIGINT},",
           "doctor_id = #{doctorId,jdbcType=BIGINT},",
+          "ticket_id = #{ticketId,jdbcType=BIGINT},",
           "operate_id = #{operateId,jdbcType=BIGINT},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "content = #{content,jdbcType=LONGVARCHAR}",

@@ -17,11 +17,11 @@ public class PrescriptionInfo implements Serializable {
 
     private Integer status;
 
-    private Integer packageNunber;
-
-    private Integer minNumber;
-
     private BigDecimal itemTotalPrice;
+
+    private String unit;
+
+    private Integer num;
 
     private static final long serialVersionUID = 1L;
 
@@ -35,9 +35,9 @@ public class PrescriptionInfo implements Serializable {
         sb.append(", prescriptionId=").append(prescriptionId);
         sb.append(", drugId=").append(drugId);
         sb.append(", status=").append(status);
-        sb.append(", packageNunber=").append(packageNunber);
-        sb.append(", minNumber=").append(minNumber);
         sb.append(", itemTotalPrice=").append(itemTotalPrice);
+        sb.append(", unit=").append(unit);
+        sb.append(", num=").append(num);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

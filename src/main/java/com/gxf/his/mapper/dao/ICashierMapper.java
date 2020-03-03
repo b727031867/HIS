@@ -71,7 +71,7 @@ public interface ICashierMapper extends CashierMapper {
             @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR),
             @Result(column = "phone", property = "phone", jdbcType = JdbcType.VARCHAR),
             @Result(column = "entry_date", property = "entryDate", jdbcType = JdbcType.DATE),
-            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT)),
+            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT_BY_DEPARTMENT_CODE)),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_USER))
     })
     List<CashierVo> selectCashierByAttribute(CashierVo cashierVo);
@@ -100,7 +100,7 @@ public interface ICashierMapper extends CashierMapper {
             @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR),
             @Result(column = "phone", property = "phone", jdbcType = JdbcType.VARCHAR),
             @Result(column = "entry_date", property = "entryDate", jdbcType = JdbcType.DATE),
-            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT)),
+            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT_BY_DEPARTMENT_CODE)),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_USER))
     })
     List<CashierVo> selectCashierByAccurateAttribute(CashierVo cashierVo);
@@ -120,7 +120,7 @@ public interface ICashierMapper extends CashierMapper {
             @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR),
             @Result(column = "phone", property = "phone", jdbcType = JdbcType.VARCHAR),
             @Result(column = "entry_date", property = "entryDate", jdbcType = JdbcType.DATE),
-            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT)),
+            @Result(column = "department_code", property = "department", jdbcType = JdbcType.VARCHAR, one = @One(select = MapperConst.ONE_DEPARTMENT_BY_DEPARTMENT_CODE)),
             @Result(column = "user_id", property = "user", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_USER))
     })
     List<CashierVo> selectAllCashierInfo();

@@ -190,4 +190,14 @@ public class PatientServiceImpl implements PatientService {
             throw new PatientFileException(ServerResponseEnum.PATIENT_FILE_UPDATE_FAIL);
         }
     }
+
+    @Override
+    public Patient getPatientByDoctorTicketId(Long doctorTicketId) {
+        try {
+            DoctorTicket doctorTicket = iTicketMapper.selectByPrimaryKey(doctorTicketId);
+            return iPatientMapper.selectByPrimaryKey(doctorTicket.getPatientId());
+        }catch (Exception e){
+            throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
+        }
+    }
 }

@@ -4,7 +4,10 @@ import com.gxf.his.mapper.MapperConst;
 import com.gxf.his.mapper.generate.DoctorTicketMapper;
 import com.gxf.his.po.generate.DoctorTicket;
 import com.gxf.his.po.vo.TicketVo;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.type.JdbcType;
 
 import java.util.Date;
@@ -88,7 +91,7 @@ public interface ITicketMapper extends DoctorTicketMapper {
             "select",
             "*",
             "from entity_doctor_ticket",
-            "where (status = 1 OR status = 5) AND ticket_validity_start <= #{end,jdbcType=TIMESTAMP} AND ticket_validity_start >= #{start,jdbcType=TIMESTAMP} order by active_time DESC "
+            "where status != 3 AND (active_time between #{start,jdbcType=TIMESTAMP} AND #{end,jdbcType=TIMESTAMP} ) order by active_time DESC "
     })
     @Results({
             @Result(column = "ticket_id", property = "ticketId", jdbcType = JdbcType.BIGINT, id = true),
@@ -107,6 +110,37 @@ public interface ITicketMapper extends DoctorTicketMapper {
     })
     List<DoctorTicket> selectTicketByActiveTimeAndDoctorId(Long doctorId, Date start, Date end);
 
+    /**
+     * 根据时间范围和医生ID查询
+     * 完成就诊和就诊中的挂号信息列表
+     *
+     * @param doctorId 医生ID
+     * @param start    开始时间
+     * @param end      结束时间
+     * @return 挂号信息列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_doctor_ticket",
+            "where (status = 1 OR status = 5) AND active_time <= #{end,jdbcType=TIMESTAMP} AND active_time >= #{start,jdbcType=TIMESTAMP} order by active_time DESC "
+    })
+    @Results({
+            @Result(column = "ticket_id", property = "ticketId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "ticket_number", property = "ticketNumber", jdbcType = JdbcType.INTEGER),
+            @Result(column = "ticket_type", property = "ticketType", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "ticket_time_type", property = "ticketTimeType", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "ticket_create_time", property = "ticketCreateTime", jdbcType = JdbcType.TIMESTAMP),
+            @Result(column = "active_time", property = "activeTime", jdbcType = JdbcType.TIMESTAMP),
+            @Result(column = "ticket_validity_start", property = "ticketValidityStart", jdbcType = JdbcType.TIMESTAMP),
+            @Result(column = "ticket_validity_end", property = "ticketValidityEnd", jdbcType = JdbcType.TIMESTAMP),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "registered_resource_id", property = "registeredResourceId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "status", property = "status", jdbcType = JdbcType.INTEGER)
+    })
+    List<DoctorTicket> selectTicketHistory(Long doctorId, Date start, Date end);
 
     /**
      * 根据患者ID获取患者
@@ -247,13 +281,16 @@ public interface ITicketMapper extends DoctorTicketMapper {
      *
      * @param doctorId 医生ID
      * @param rank     排队的名次
+     * @param start    今天的凌晨
+     * @param end      明天的凌晨
      * @return 患者的挂号信息
      */
     @Select({
             "select",
             "*",
             "from entity_doctor_ticket",
-            "where doctor_id = #{doctorId,jdbcType=BIGINT} AND status = 4 AND ticket_number =  #{rank,jdbcType=INTEGER} "
+            "where doctor_id = #{doctorId,jdbcType=BIGINT} AND status = 4 AND ticket_number =  #{rank,jdbcType=INTEGER} AND  ",
+            "(active_time between #{start,jdbcType=TIMESTAMP} AND #{end,jdbcType=TIMESTAMP} ) "
     })
     @Results({
             @Result(column = "ticket_id", property = "ticketId", jdbcType = JdbcType.BIGINT, id = true),
@@ -265,12 +302,14 @@ public interface ITicketMapper extends DoctorTicketMapper {
             @Result(column = "ticket_validity_start", property = "ticketValidityStart", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "ticket_validity_end", property = "ticketValidityEnd", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
             @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT),
             @Result(column = "registered_resource_id", property = "registeredResourceId", jdbcType = JdbcType.BIGINT),
             @Result(column = "status", property = "status", jdbcType = JdbcType.INTEGER)
     })
-    TicketVo getQueuePatientByDoctorIdAndRank(Long doctorId, Integer rank);
+    TicketVo getQueuePatientByDoctorIdAndRank(Long doctorId, Integer rank, Date start, Date end);
 
     /**
      * 根据医生ID获取呼叫中患者的票务信息
@@ -295,6 +334,8 @@ public interface ITicketMapper extends DoctorTicketMapper {
             @Result(column = "ticket_validity_end", property = "ticketValidityEnd", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
             @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT),
             @Result(column = "registered_resource_id", property = "registeredResourceId", jdbcType = JdbcType.BIGINT),
             @Result(column = "status", property = "status", jdbcType = JdbcType.INTEGER)
@@ -391,7 +432,9 @@ public interface ITicketMapper extends DoctorTicketMapper {
             @Result(column = "ticket_validity_start", property = "ticketValidityStart", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "ticket_validity_end", property = "ticketValidityEnd", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
             @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT),
             @Result(column = "registered_resource_id", property = "registeredResourceId", jdbcType = JdbcType.BIGINT),
             @Result(column = "status", property = "status", jdbcType = JdbcType.INTEGER)
@@ -445,7 +488,8 @@ public interface ITicketMapper extends DoctorTicketMapper {
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT),
             @Result(column = "status", property = "status", jdbcType = JdbcType.INTEGER),
             @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
-            @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT))
+            @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "ticket_id", property = "patientMedicalRecord", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_PATIENT_MEDICAL_RECORD_BY_TICKET_ID))
     })
     TicketVo selectByPrimaryKeyRelative(Long ticketId);
 
@@ -479,5 +523,6 @@ public interface ITicketMapper extends DoctorTicketMapper {
             @Result(column = "status", property = "status", jdbcType = JdbcType.INTEGER)
     })
     DoctorTicket selectByOrderId(Long orderId);
+
 
 }

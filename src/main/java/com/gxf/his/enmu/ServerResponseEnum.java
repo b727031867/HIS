@@ -84,6 +84,14 @@ public enum ServerResponseEnum {
     DOCTOR_MEDICAL_TEMPLATE_LIST_FAIL(152,"模板查询失败"),
     DOCTOR_MEDICAL_TEMPLATE_UPDATE_FAIL(153,"模板信息更新失败"),
     DOCTOR_MEDICAL_TEMPLATE_RENDER_FAIL(154,"模板渲染失败"),
+    DRUG_SAVE_FAIL(160,"药品保存失败"),
+    DRUG_DELETE_FAIL(161,"药品删除失败"),
+    DRUG_LIST_FAIL(162,"药品查询失败"),
+    DRUG_UPDATE_FAIL(163,"`药品信息更新失败"),
+    PRESCRIPTION_SAVE_FAIL(170,"处方单保存失败"),
+    PRESCRIPTION_DELETE_FAIL(171,"处方单删除失败"),
+    PRESCRIPTION_LIST_FAIL(172,"处方单查询失败"),
+    PRESCRIPTION_UPDATE_FAIL(173,"`处方单信息更新失败"),
     WORD_CONVERSION_EXCEPTION(300,"文档转换异常"),
     WORD_CONVERSION_IO_EXCEPTION(301,"解析【docx】文档为html时，出现IO异常");
     Integer code;

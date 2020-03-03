@@ -23,20 +23,23 @@ public interface PatientMedicalRecordMapper {
         "current_medical_history, auxiliary_inspection, ",
         "tgjc, diagnosis, ",
         "zlyj, doctor_id, patient_id, ",
-        "create_datetime)",
+        "ticket_id, create_datetime, ",
+        "content)",
         "values (#{medicalRecordId,jdbcType=BIGINT}, #{narrator,jdbcType=VARCHAR}, ",
         "#{chiefComplaint,jdbcType=VARCHAR}, #{pastHistory,jdbcType=VARCHAR}, ",
         "#{currentMedicalHistory,jdbcType=VARCHAR}, #{auxiliaryInspection,jdbcType=VARCHAR}, ",
         "#{tgjc,jdbcType=VARCHAR}, #{diagnosis,jdbcType=VARCHAR}, ",
         "#{zlyj,jdbcType=VARCHAR}, #{doctorId,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, ",
-        "#{createDatetime,jdbcType=TIMESTAMP})"
+        "#{ticketId,jdbcType=BIGINT}, #{createDatetime,jdbcType=TIMESTAMP}, ",
+        "#{content,jdbcType=LONGVARCHAR})"
     })
     int insert(PatientMedicalRecord record);
 
     @Select({
         "select",
         "medical_record_id, narrator, chief_complaint, past_history, current_medical_history, ",
-        "auxiliary_inspection, tgjc, diagnosis, zlyj, doctor_id, patient_id, create_datetime",
+        "auxiliary_inspection, tgjc, diagnosis, zlyj, doctor_id, patient_id, ticket_id, ",
+        "create_datetime, content",
         "from entity_patient_medical_record",
         "where medical_record_id = #{medicalRecordId,jdbcType=BIGINT}"
     })
@@ -52,14 +55,17 @@ public interface PatientMedicalRecordMapper {
         @Result(column="zlyj", property="zlyj", jdbcType=JdbcType.VARCHAR),
         @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT),
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
-        @Result(column="create_datetime", property="createDatetime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.BIGINT),
+        @Result(column="create_datetime", property="createDatetime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="content", property="content", jdbcType=JdbcType.LONGVARCHAR)
     })
     PatientMedicalRecord selectByPrimaryKey(Long medicalRecordId);
 
     @Select({
         "select",
         "medical_record_id, narrator, chief_complaint, past_history, current_medical_history, ",
-        "auxiliary_inspection, tgjc, diagnosis, zlyj, doctor_id, patient_id, create_datetime",
+        "auxiliary_inspection, tgjc, diagnosis, zlyj, doctor_id, patient_id, ticket_id, ",
+        "create_datetime, content",
         "from entity_patient_medical_record"
     })
     @Results({
@@ -74,7 +80,9 @@ public interface PatientMedicalRecordMapper {
         @Result(column="zlyj", property="zlyj", jdbcType=JdbcType.VARCHAR),
         @Result(column="doctor_id", property="doctorId", jdbcType=JdbcType.BIGINT),
         @Result(column="patient_id", property="patientId", jdbcType=JdbcType.BIGINT),
-        @Result(column="create_datetime", property="createDatetime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="ticket_id", property="ticketId", jdbcType=JdbcType.BIGINT),
+        @Result(column="create_datetime", property="createDatetime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="content", property="content", jdbcType=JdbcType.LONGVARCHAR)
     })
     List<PatientMedicalRecord> selectAll();
 
@@ -90,7 +98,9 @@ public interface PatientMedicalRecordMapper {
           "zlyj = #{zlyj,jdbcType=VARCHAR},",
           "doctor_id = #{doctorId,jdbcType=BIGINT},",
           "patient_id = #{patientId,jdbcType=BIGINT},",
-          "create_datetime = #{createDatetime,jdbcType=TIMESTAMP}",
+          "ticket_id = #{ticketId,jdbcType=BIGINT},",
+          "create_datetime = #{createDatetime,jdbcType=TIMESTAMP},",
+          "content = #{content,jdbcType=LONGVARCHAR}",
         "where medical_record_id = #{medicalRecordId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(PatientMedicalRecord record);

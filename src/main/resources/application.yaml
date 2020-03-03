@@ -107,7 +107,7 @@ config:
   # AccessToken过期时间(秒)
   accessToken-expireTime: 7200
   # RefreshToken过期时间(秒)
-  refreshToken-expireTime: 604800
+  refreshToken-expireTime: 86400
 #  # Shiro缓存过期时间(秒)(一般设置与AccessToken过期时间一致) 此处CustomCache读取失败，待解决
 #  shiro-cache-expireTime: 7200
 ## 其它配置 - end  

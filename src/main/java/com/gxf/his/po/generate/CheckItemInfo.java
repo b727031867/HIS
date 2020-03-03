@@ -17,6 +17,8 @@ public class CheckItemInfo implements Serializable {
 
     private Long doctorId;
 
+    private Long ticketId;
+
     private Long operateId;
 
     private Date createTime;
@@ -35,6 +37,7 @@ public class CheckItemInfo implements Serializable {
         sb.append(", checkItemId=").append(checkItemId);
         sb.append(", patientId=").append(patientId);
         sb.append(", doctorId=").append(doctorId);
+        sb.append(", ticketId=").append(ticketId);
         sb.append(", operateId=").append(operateId);
         sb.append(", createTime=").append(createTime);
         sb.append(", content=").append(content);

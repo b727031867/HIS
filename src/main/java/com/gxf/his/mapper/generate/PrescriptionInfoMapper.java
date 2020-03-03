@@ -19,18 +19,18 @@ public interface PrescriptionInfoMapper {
 
     @Insert({
         "insert into entity_prescription_info (prescription_info_id, prescription_id, ",
-        "drug_id, `status`, package_nunber, ",
-        "min_number, item_total_price)",
+        "drug_id, `status`, item_total_price, ",
+        "unit, num)",
         "values (#{prescriptionInfoId,jdbcType=BIGINT}, #{prescriptionId,jdbcType=BIGINT}, ",
-        "#{drugId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{packageNunber,jdbcType=INTEGER}, ",
-        "#{minNumber,jdbcType=INTEGER}, #{itemTotalPrice,jdbcType=DECIMAL})"
+        "#{drugId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{itemTotalPrice,jdbcType=DECIMAL}, ",
+        "#{unit,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER})"
     })
     int insert(PrescriptionInfo record);
 
     @Select({
         "select",
-        "prescription_info_id, prescription_id, drug_id, `status`, package_nunber, min_number, ",
-        "item_total_price",
+        "prescription_info_id, prescription_id, drug_id, `status`, item_total_price, ",
+        "unit, num",
         "from entity_prescription_info",
         "where prescription_info_id = #{prescriptionInfoId,jdbcType=BIGINT}"
     })
@@ -39,16 +39,16 @@ public interface PrescriptionInfoMapper {
         @Result(column="prescription_id", property="prescriptionId", jdbcType=JdbcType.BIGINT),
         @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT),
         @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
-        @Result(column="package_nunber", property="packageNunber", jdbcType=JdbcType.INTEGER),
-        @Result(column="min_number", property="minNumber", jdbcType=JdbcType.INTEGER),
-        @Result(column="item_total_price", property="itemTotalPrice", jdbcType=JdbcType.DECIMAL)
+        @Result(column="item_total_price", property="itemTotalPrice", jdbcType=JdbcType.DECIMAL),
+        @Result(column="unit", property="unit", jdbcType=JdbcType.VARCHAR),
+        @Result(column="num", property="num", jdbcType=JdbcType.INTEGER)
     })
     PrescriptionInfo selectByPrimaryKey(Long prescriptionInfoId);
 
     @Select({
         "select",
-        "prescription_info_id, prescription_id, drug_id, `status`, package_nunber, min_number, ",
-        "item_total_price",
+        "prescription_info_id, prescription_id, drug_id, `status`, item_total_price, ",
+        "unit, num",
         "from entity_prescription_info"
     })
     @Results({
@@ -56,9 +56,9 @@ public interface PrescriptionInfoMapper {
         @Result(column="prescription_id", property="prescriptionId", jdbcType=JdbcType.BIGINT),
         @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT),
         @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
-        @Result(column="package_nunber", property="packageNunber", jdbcType=JdbcType.INTEGER),
-        @Result(column="min_number", property="minNumber", jdbcType=JdbcType.INTEGER),
-        @Result(column="item_total_price", property="itemTotalPrice", jdbcType=JdbcType.DECIMAL)
+        @Result(column="item_total_price", property="itemTotalPrice", jdbcType=JdbcType.DECIMAL),
+        @Result(column="unit", property="unit", jdbcType=JdbcType.VARCHAR),
+        @Result(column="num", property="num", jdbcType=JdbcType.INTEGER)
     })
     List<PrescriptionInfo> selectAll();
 
@@ -67,9 +67,9 @@ public interface PrescriptionInfoMapper {
         "set prescription_id = #{prescriptionId,jdbcType=BIGINT},",
           "drug_id = #{drugId,jdbcType=BIGINT},",
           "`status` = #{status,jdbcType=INTEGER},",
-          "package_nunber = #{packageNunber,jdbcType=INTEGER},",
-          "min_number = #{minNumber,jdbcType=INTEGER},",
-          "item_total_price = #{itemTotalPrice,jdbcType=DECIMAL}",
+          "item_total_price = #{itemTotalPrice,jdbcType=DECIMAL},",
+          "unit = #{unit,jdbcType=VARCHAR},",
+          "num = #{num,jdbcType=INTEGER}",
         "where prescription_info_id = #{prescriptionInfoId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(PrescriptionInfo record);

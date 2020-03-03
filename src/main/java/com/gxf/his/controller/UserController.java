@@ -47,6 +47,15 @@ public class UserController {
     @Value("${config.refreshToken-expireTime}")
     private String refreshTokenExpireTime;
 
+    @GetMapping("/uid")
+    public <T> ServerResponseVO<T> getUserInfoByUid(@RequestParam(value = "uid") Long uid) {
+        if (uid == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        Long id = userService.getLoginEntityId(uid);
+        return MyUtil.cast(ServerResponseVO.success(id));
+    }
+
     @GetMapping("/checkUsername")
     public <T> ServerResponseVO<T> checkUsernameIsExists(@RequestParam(value = "userName") String userName) {
         if (StringUtils.isEmpty(userName.trim())) {
@@ -168,13 +177,13 @@ public class UserController {
                 String currentTimeMillis = String.valueOf(System.currentTimeMillis());
                 redis.set(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + userName,
                         currentTimeMillis,
-                        Integer.parseInt(refreshTokenExpireTime));
+                        Long.parseLong(refreshTokenExpireTime));
                 //签发accessToken，时间戳为当前时间戳
                 String token = JwtUtil.sign(userName, currentTimeMillis);
                 //如果用户类型为患者 收银员 医生 则附加返回对应的实体ID
-                String loginEntityId = userService.getLoginEntityId(user.getUserId());
+                Long loginEntityId = userService.getLoginEntityId(user.getUserId());
                 if (null != loginEntityId) {
-                    hashMap.put("loginId", loginEntityId);
+                    hashMap.put("loginId", loginEntityId.toString());
                 }
                 hashMap.put("token", token);
                 hashMap.put("id", user.getUserId().toString());

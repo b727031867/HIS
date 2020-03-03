@@ -141,7 +141,7 @@ public class UserRealm extends AuthorizingRealm {
 
     private SimpleAuthenticationInfo loginCheck(String token, String username) {
         log.info("进行认证的Token是:" + token + "   当前登录的用户名是：" + username);
-//        try {
+        try {
             // 开始认证，必须AccessToken认证通过，且Redis中存在RefreshToken，且两个Token时间戳一致
             if (JwtUtil.verify(token) && redis.hasKey(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + username)) {
                 // 获取RefreshToken的时间戳
@@ -152,24 +152,25 @@ public class UserRealm extends AuthorizingRealm {
                     log.debug("【解密token中的时间戳失败】或【Redis中的缓存刚好过期，导致取值失败】");
                     throw new AuthorizationException("获取时间戳失败，请检查token合法性后重试！");
                 } else {
-                    // 获取AccessToken时间戳，与RefreshToken的时间戳对比
-                    if (accessTokenMillis.equals(currentTimeMillisRedis)) {
+                    // 获取AccessToken时间戳小于RefreshToken的时间戳
+                    if (Long.parseLong(accessTokenMillis)<=Long.parseLong(currentTimeMillisRedis)) {
                         //放行认证
                         return new SimpleAuthenticationInfo(token, token, getName());
                     } else {
-                        log.info("AccessToken和RefreshToken中的时间戳不一致");
-                        throw new AuthorizationException("AccessToken和RefreshToken中的时间戳不一致");
+                        log.info("AccessToken大于RefreshToken中的时间戳");
+                        throw new AuthorizationException("AccessToken大于RefreshToken中的时间戳");
                     }
                 }
             } else {
                 log.info("Redis中refreshToken的缓存过期");
                 throw new AuthorizationException("会话过期，请重新登陆");
             }
-//        } catch (TokenExpiredException e) {
-//            log.info(e.getMessage());
-//            //凭证过期
-//            throw new ExpiredCredentialsException(e.getMessage());
-//        } catch (JWTVerificationException e) {
+        } catch (TokenExpiredException e) {
+            log.info(e.getMessage());
+            //凭证过期,抛出认证异常
+            throw new CredentialsException(e.getMessage());
+        }
+//        catch (JWTVerificationException e) {
 //            log.info("accessToken其他认证异常：" + e.getMessage());
 //            throw new UnsupportedTokenException(e.getMessage());
 //        } catch (Exception e) {

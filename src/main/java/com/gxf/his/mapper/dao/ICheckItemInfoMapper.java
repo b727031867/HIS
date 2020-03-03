@@ -38,9 +38,34 @@ public interface ICheckItemInfoMapper extends CheckItemInfoMapper {
             @Result(column = "check_item_id", property = "checkItemId", jdbcType = JdbcType.BIGINT),
             @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
             @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "ticket_id", property = "ticketId", jdbcType = JdbcType.BIGINT),
             @Result(column = "operate_id", property = "operateId", jdbcType = JdbcType.BIGINT),
             @Result(column = "create_time", property = "createTime", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "content", property = "content", jdbcType = JdbcType.LONGVARCHAR)
     })
     List<CheckItemInfo> selectCheckItemInfoByDoctorIdAndPatientIdAndRange(Long doctorId, Long patientId, Date start, Date end);
+
+    /**
+     * 根据挂号信息ID查询某次挂号开具的检查项列表
+     *
+     * @param ticketId  挂号信息ID
+     * @return 检查项列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_check_item_info",
+            "where ticket_id = #{ticketId,jdbcType=BIGINT} "
+    })
+    @Results({
+            @Result(column = "check_item_info_id", property = "checkItemInfoId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "check_item_id", property = "checkItemId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "ticket_id", property = "ticketId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "operate_id", property = "operateId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "create_time", property = "createTime", jdbcType = JdbcType.TIMESTAMP),
+            @Result(column = "content", property = "content", jdbcType = JdbcType.LONGVARCHAR)
+    })
+    List<CheckItemInfo> selectCheckItemInfosByTicketId(Long ticketId);
 }

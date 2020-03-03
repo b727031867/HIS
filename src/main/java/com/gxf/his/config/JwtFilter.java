@@ -7,6 +7,7 @@ import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.uitls.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.authc.pam.UnsupportedTokenException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
@@ -67,7 +68,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             try {
                 this.executeLogin(request, response);
                 return true;
-            } catch (TokenExpiredException e) {
+            } catch (UnsupportedTokenException e) {
+                msg = e.getMessage();
+                log.warn("JWT签名校验失败:" + e.getMessage());
+            } catch (CredentialsException e) {
                 log.info("尝试续签凭证!");
                 //凭证过期后，进行续签，如果refreshToken也过期，则需要重新登陆
                 if (this.refreshToken(request, response)) {
@@ -77,9 +81,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     this.response403(response, msg);
                     return false;
                 }
-            } catch (UnsupportedTokenException e) {
-                msg = e.getMessage();
-                log.warn("JWT签名校验失败:" + e.getMessage());
             } catch (Exception e) {
                 msg = e.getMessage();
             }
@@ -180,13 +181,13 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 /*
                  * 获取当前AccessToken中的时间戳，与RefreshToken的时间戳对比，刷新过期的AccessToken
                  */
-                if (Long.parseLong(assessTokenMillis) == (Long.parseLong(currentTimeMillisRedis))) {
+                if (Long.parseLong(assessTokenMillis) <= (Long.parseLong(currentTimeMillisRedis))) {
                     // 获取当前最新时间戳
                     String currentTimeMillis = String.valueOf(System.currentTimeMillis());
                     // 设置RefreshToken中的时间戳为当前最新时间戳，且刷新过期时间重新为30分钟过期(配置文件可配置refreshTokenExpireTime属性)
                     redis.set(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + username,
                             currentTimeMillis,
-                            Integer.parseInt(redis.getRefreshTokenExpireTime()));
+                            Long.parseLong(redis.getRefreshTokenExpireTime()));
                     // 刷新AccessToken，设置时间戳为当前最新时间戳
                     token = JwtUtil.sign(username, currentTimeMillis);
                     // 将新刷新的AccessToken再次进行Shiro的登录
@@ -200,10 +201,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                     httpServletResponse.setHeader("Authorization", token);
                     httpServletResponse.setHeader("Access-Control-Expose-Headers", "Authorization");
                     return true;
-                    //如果是过期的accessToken，并且其时间戳已经与最新的refreshToken时间戳不符，则表示此token作废，请求失效。
-                } else if (Long.parseLong(assessTokenMillis) < (Long.parseLong(currentTimeMillisRedis))) {
-                    log.debug("此accessToken已经完全过期，请重新登陆获取最新的accessToken");
-                    return false;
                 } else {
                     log.warn("出现accessToken的时间大于【晚于】refreshToken的时间！具体数据为：assessTokenMillis" +
                             "---" + assessTokenMillis + "   currentTimeMillisRedis---" + currentTimeMillisRedis);

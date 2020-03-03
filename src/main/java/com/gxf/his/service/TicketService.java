@@ -1,6 +1,9 @@
 package com.gxf.his.service;
 
 import com.gxf.his.po.generate.DoctorTicket;
+import com.gxf.his.po.generate.Prescription;
+import com.gxf.his.po.vo.PrescriptionVo;
+import com.gxf.his.po.vo.TicketVo;
 
 import java.util.List;
 
@@ -31,6 +34,15 @@ public interface TicketService {
      */
     void checkExpiredTicketForUnCalling();
 
+    /**
+     * 某医生获取呼叫下一位患者
+     *
+     * @param doctorId 医生ID
+     * @param rank     上一位挂号者ID，如果没有上一位，则为0
+     * @return 票务信息
+     */
+    TicketVo getCurrentRankPatient(Long doctorId, Integer rank);
+
 
     /**
      * 插入一条挂号记录
@@ -49,12 +61,12 @@ public interface TicketService {
     List<DoctorTicket> getTicketByPatientId(Long patientId);
 
     /**
-     * 根据患者ID获取所有挂号记录 没有使用
+     * 根据挂号信息ID获取所有挂号记录
      *
      * @param doctorTicketId 挂号信息ID
      * @return 挂号信息
      */
-    DoctorTicket getTicketById(Long doctorTicketId);
+    TicketVo getTicketById(Long doctorTicketId);
 
     /**
      * 根据患者ID获取暂未就诊的挂号信息列表
@@ -80,4 +92,10 @@ public interface TicketService {
      */
     int deleteTicketByPrimaryKey(Long ticketId);
 
+    /**
+     * 获取某位医生应该叫号的号数
+     * @param doctorId 医生ID
+     * @return 号数
+     */
+    Integer getCurrentDoctorRank(Long doctorId);
 }

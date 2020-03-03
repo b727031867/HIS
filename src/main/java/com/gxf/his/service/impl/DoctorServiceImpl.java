@@ -5,7 +5,6 @@ import com.gxf.his.exception.DoctorException;
 import com.gxf.his.mapper.dao.*;
 import com.gxf.his.po.generate.*;
 import com.gxf.his.po.vo.DoctorVo;
-import com.gxf.his.po.vo.PatientVo;
 import com.gxf.his.po.vo.TicketVo;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.UserService;
@@ -40,80 +39,60 @@ public class DoctorServiceImpl implements DoctorService {
     @Resource
     private IPrescriptionMapper iPrescriptionMapper;
     @Resource
+    private IPrescriptionInfoMapper iPrescriptionInfoMapper;
+    @Resource
+    private IPrescriptionExtraCostMapper iPrescriptionExtraCostMapper;
+    @Resource
     private ICheckItemInfoMapper iCheckItemInfoMapper;
     @Resource
-    private IPatientMedicalRecord iPatientMedicalRecord;
+    private IPatientMedicalRecordMapper iPatientMedicalRecordMapper;
 
     @Override
-    public List<PatientVo> getOutpatients(Long doctorId, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startDate, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endDate) {
+    public List<TicketVo> getOutpatients(Long doctorId, @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
         //根据挂号激活时间（开始排队的时间）获取患者列表，包含就诊中的与就诊完毕的人
-        List<DoctorTicket> tickets = iTicketMapper.selectTicketByActiveTimeAndDoctorId(doctorId, startDate, endDate);
-        List<PatientVo> patients = new ArrayList<>(16);
+        List<DoctorTicket> tickets = iTicketMapper.selectTicketHistory(doctorId, startDate, endDate);
+        List<TicketVo> ticketVos = new ArrayList<>(tickets.size());
         for (DoctorTicket ticket : tickets) {
-            PatientVo patientVo = new PatientVo();
+            TicketVo ticketVo = new TicketVo();
+            ticketVo.setRank(ticket.getTicketNumber());
+            ticketVo.setTicketId(ticket.getTicketId());
+            ticketVo.setTicketNumber(ticket.getTicketNumber());
+            ticketVo.setTicketType(ticket.getTicketType());
+            ticketVo.setTicketCreateTime(ticket.getTicketCreateTime());
+            ticketVo.setActiveTime(ticket.getActiveTime());
+            ticketVo.setTicketValidityStart(ticket.getTicketValidityStart());
+            ticketVo.setTicketValidityEnd(ticket.getTicketValidityEnd());
+            ticketVo.setDoctorId(ticket.getDoctorId());
+            ticketVo.setPatientId(ticket.getPatientId());
+            ticketVo.setRegisteredResourceId(ticket.getRegisteredResourceId());
+            ticketVo.setOrderId(ticket.getOrderId());
+            ticketVo.setStatus(ticket.getStatus());
             //获取患者信息
             Patient patient = iPatientMapper.selectByPrimaryKey(ticket.getPatientId());
-            patientVo.setPatient(patient);
+            ticketVo.setPatient(patient);
             //获取处方单信息
-            List<Prescription> prescriptions = iPrescriptionMapper.selectPrescriptionByDoctorIdAndPatientIdAndRange(doctorId, patient.getPatientId(), startDate, endDate);
-            patientVo.setPrescriptions(prescriptions);
+            Prescription prescription = iPrescriptionMapper.selectPrescriptionByTicketId(ticket.getTicketId());
+            ticketVo.setPrescription(prescription);
             //获取检查单信息
-            List<CheckItemInfo> checkItemInfos = iCheckItemInfoMapper.selectCheckItemInfoByDoctorIdAndPatientIdAndRange(doctorId, patient.getPatientId(), startDate, endDate);
-            patientVo.setCheckItemInfos(checkItemInfos);
+            List<CheckItemInfo> checkItemInfos = iCheckItemInfoMapper.selectCheckItemInfosByTicketId(ticket.getTicketId());
+            ticketVo.setCheckItemInfos(checkItemInfos);
             //电子病历信息
-            List<PatientMedicalRecord> patientMedicalRecords = iPatientMedicalRecord.selectPatientMedicalRecordByDoctorIdAndPatientIdAndRange(doctorId, patient.getPatientId(), startDate, endDate);
-            patientVo.setPatientMedicalRecords(patientMedicalRecords);
-            patients.add(patientVo);
+            PatientMedicalRecord patientMedicalRecord = iPatientMedicalRecordMapper.selectPatientMedicalRecordByTicketId(ticket.getTicketId());
+            ticketVo.setPatientMedicalRecord(patientMedicalRecord);
+            ticketVos.add(ticketVo);
         }
-        return patients;
+        return ticketVos;
     }
 
-    @Override
-    public TicketVo getCurrentRankPatient(Long doctorId, Integer rank) {
-        //如果为0 表示当前是第一次打开就诊页面或者没有候诊中的患者而有叫号中的患者
-        if (rank == 0) {
-            //优先查找叫号中的病人，所以找出挂号时间最早的叫号中的病人
-            TicketVo ticketVo = iTicketMapper.getPatientByShouldBeCalled(doctorId, 6);
-            //如果没有叫号中，则查看有没有候诊病人
-            if (ticketVo == null) {
-                //获取候诊中的的病人
-                TicketVo waitingTicket = iTicketMapper.getPatientByShouldBeCalled(doctorId, 4);
-                waitingTicket.setStatus(6);
-                iTicketMapper.updateByPrimaryKey(waitingTicket);
-                return waitingTicket;
-            } else {
-                //有叫号中的患者，则将叫号中的患者返回开始就诊
-                return ticketVo;
-            }
-        }
-        TicketVo currentPatient = iTicketMapper.getQueuePatientByDoctorIdAndRank(doctorId, rank);
-        currentPatient.setDoctorId(currentPatient.getDoctorVo().getDoctorId());
-        currentPatient.setPatientId(currentPatient.getPatient().getPatientId());
-        //设置为叫号中
-        currentPatient.setStatus(6);
-        iTicketMapper.updateByPrimaryKey(currentPatient);
-        //设置此排名之前的排队中的人错过叫号
-        List<TicketVo> doctorTickets = iTicketMapper.getUsingTicketsByDoctorId(doctorId);
-        for (TicketVo doctorTicket : doctorTickets) {
-            if (doctorTicket.getTicketNumber() != null) {
-                //让小于等于上一位rank并且在排队中的挂号者错过挂号
-                if (doctorTicket.getTicketNumber() < rank) {
-                    doctorTicket.setStatus(2);
-                    doctorTicket.setPatientId(doctorTicket.getPatient().getPatientId());
-                    iTicketMapper.updateByPrimaryKey(doctorTicket);
-                }
-            } else {
-                log.error("数据异常！出现排队但是却没有计算排名的情况!");
-                throw new DoctorException(ServerResponseEnum.DOCTOR_CALL_FAIL);
-            }
-        }
-        return currentPatient;
-    }
 
     @Override
     public TicketVo getCallingPatient(Long doctorId) {
         try {
-            return iTicketMapper.getCallingPatient(doctorId);
+            TicketVo callingPatient = iTicketMapper.getCallingPatient(doctorId);
+            //将该叫号中得信息改为就诊中
+            callingPatient.setStatus(5);
+            iTicketMapper.updateByPrimaryKey(callingPatient);
+            return callingPatient;
         } catch (Exception e) {
             log.error("叫号中票务信息查询失败", e);
             throw new DoctorException(ServerResponseEnum.TICKET_LIST_FAIL);
@@ -273,9 +252,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public DoctorTicket usedRecentVisitingDoctorTicket(String doctorId) {
+    public DoctorTicket usedRecentVisitingDoctorTicket(Long id) {
         try {
-            Long id = Long.parseLong(doctorId);
             TicketVo ticketVo = iTicketMapper.getPatientByShouldBeCalled(id, 5);
             //当前没有需要就诊完毕的挂号
             if (ticketVo == null) {
@@ -293,7 +271,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void saveCaseHistory(Long doctorTicketId, String content) {
+    public PatientMedicalRecord saveCaseHistory(Long doctorTicketId, String content) {
         try {
             TicketVo ticketVo = iTicketMapper.selectByPrimaryKeyRelative(doctorTicketId);
             //解析content，转换成电子病历
@@ -318,15 +296,31 @@ public class DoctorServiceImpl implements DoctorService {
             patientMedicalRecord.setDiagnosis(zdyj.substring(zdyj.indexOf("：") + 1));
             //诊疗意见
             patientMedicalRecord.setZlyj(zlyj.substring(zlyj.indexOf("：") + 1));
+            patientMedicalRecord.setContent(content);
             patientMedicalRecord.setDoctorId(ticketVo.getDoctorVo().getDoctorId());
             patientMedicalRecord.setPatientId(ticketVo.getPatient().getPatientId());
+            patientMedicalRecord.setTicketId(doctorTicketId);
             patientMedicalRecord.setCreateDatetime(new Date());
-            iPatientMedicalRecord.insertAndInjectPrimaryKey(patientMedicalRecord);
+            iPatientMedicalRecordMapper.insertAndInjectPrimaryKey(patientMedicalRecord);
+            return patientMedicalRecord;
         } catch (Exception e) {
             log.error("病历插入失败!", e);
             throw new DoctorException(ServerResponseEnum.PATIENT_FILE_SAVE_FAIL);
         }
 
+    }
+
+
+
+    @Override
+    public DoctorVo getDoctorByDoctorTicketId(Long doctorTicketId) {
+        try {
+            DoctorTicket doctorTicket = iTicketMapper.selectByPrimaryKey(doctorTicketId);
+            return iDoctorMapper.selectByPrimaryKeyRelated(doctorTicket.getDoctorId());
+        } catch (Exception e) {
+            log.error("根据挂号信息ID查询医生失败", e);
+            throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);
+        }
     }
 
 

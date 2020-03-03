@@ -1,16 +1,15 @@
 package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.exception.DoctorException;
 import com.gxf.his.exception.TicketException;
 import com.gxf.his.mapper.dao.ITicketMapper;
-import com.gxf.his.mapper.dao.ITicketResourceMapper;
 import com.gxf.his.po.generate.DoctorTicket;
 import com.gxf.his.po.vo.TicketVo;
 import com.gxf.his.service.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
@@ -25,10 +24,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class TicketServiceImpl implements TicketService {
+    private long dayMillisecond = 24 * 60 * 60 * 1000L;
     @Resource
     private ITicketMapper iTicketMapper;
-    @Resource
-    private ITicketResourceMapper iTicketResourceMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -38,27 +36,20 @@ public class TicketServiceImpl implements TicketService {
         if (doctorTicket == null) {
             return false;
         }
-        long dayMillisecond = 24 * 60 * 60 * 1000L;
-        //计算今日某医生就诊中或者就诊完毕患者的总数
-        List<DoctorTicket> tickets = iTicketMapper.selectTicketByActiveTimeAndDoctorId(doctorTicket.getDoctorId(), getDateZero(0L), getDateZero(dayMillisecond));
-        //获取还有多少位患者在前方
-        TicketVo ticketVo = iTicketMapper.countTicketQueue(doctorTicket.getRegisteredResourceId());
-        //计算本日排名
-        if (tickets.size() == 0 && ticketVo.getRank() == 0) {
+        doctorTicket.setActiveTime(new Date());
+        iTicketMapper.updateByPrimaryKey(doctorTicket);
+        //计算今日某医生就诊中、就诊完毕、叫号中、错过叫号的总患者数
+        Date start = getDateZero(0L);
+        Date end = getDateZero(dayMillisecond);
+        List<DoctorTicket> tickets = iTicketMapper.selectTicketByActiveTimeAndDoctorId(doctorTicket.getDoctorId(),start ,end);
+        //计算当前挂号排队的排名
+        if (tickets.size() == 0) {
             //今天是第一位就诊患者
             doctorTicket.setTicketNumber(1);
-        } else if (tickets.size() != 0 && ticketVo.getRank() == 0) {
-            //没有人在你前面 所以排队号码为就诊完毕与就诊中的总数+1
+        } else {
             doctorTicket.setTicketNumber(tickets.size() + 1);
-        } else if (tickets.size() != 0 && ticketVo.getRank() != 0) {
-            //有人拍你前面，并且有已经就诊中或者就诊完毕的人，则应该为两方相加 + 1
-            doctorTicket.setTicketNumber(tickets.size() + ticketVo.getRank() + 1);
-        } else if (tickets.size() == 0 && ticketVo.getRank() != 0) {
-            //有人排你前面，医生还没开始就诊，则直接排前面的人+1
-            doctorTicket.setTicketNumber(ticketVo.getRank() + 1);
         }
         doctorTicket.setStatus(4);
-        doctorTicket.setActiveTime(new Date());
         iTicketMapper.updateByPrimaryKey(doctorTicket);
         return true;
     }
@@ -106,11 +97,11 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public DoctorTicket getTicketById(Long doctorTicketId) {
+    public TicketVo getTicketById(Long doctorTicketId) {
         try {
-            return iTicketMapper.selectByPrimaryKey(doctorTicketId);
+            return iTicketMapper.selectByPrimaryKeyRelative(doctorTicketId);
         } catch (Exception e) {
-            log.error("获取挂号信息失败", e);
+            log.error("关联的获取挂号信息失败", e);
             throw new TicketException(ServerResponseEnum.TICKET_LIST_FAIL);
         }
     }
@@ -143,6 +134,38 @@ public class TicketServiceImpl implements TicketService {
             log.error("删除挂号信息失败", e);
             throw new TicketException(ServerResponseEnum.TICKET_DELETE_FAIL);
         }
+    }
+
+    @Override
+    public Integer getCurrentDoctorRank(Long doctorId) {
+        TicketVo nextUsingTicketRank = iTicketMapper.getNextUsingTicketRank(doctorId);
+        return nextUsingTicketRank.getTicketNumber();
+    }
+
+    @Override
+    public TicketVo getCurrentRankPatient(Long doctorId, Integer ticketNumber) {
+        Date start = getDateZero(0L);
+        Date end = getDateZero(dayMillisecond);
+        TicketVo ticketVo = iTicketMapper.getQueuePatientByDoctorIdAndRank(doctorId, ticketNumber,start,end);
+        //设置为叫号中
+        ticketVo.setStatus(6);
+        iTicketMapper.updateByPrimaryKey(ticketVo);
+        //让此排名之前排队中的人错过叫号
+        List<TicketVo> doctorTickets = iTicketMapper.getUsingTicketsByDoctorId(doctorId);
+        for (TicketVo doctorTicket : doctorTickets) {
+            if (doctorTicket.getTicketNumber() != null) {
+                //让小于等于上一位rank并且在排队中的挂号者错过挂号
+                if (doctorTicket.getTicketNumber() < ticketNumber) {
+                    doctorTicket.setStatus(2);
+                    doctorTicket.setPatientId(doctorTicket.getPatient().getPatientId());
+                    iTicketMapper.updateByPrimaryKey(doctorTicket);
+                }
+            } else {
+                log.error("数据异常！出现排队但是却没有计算排名的情况!");
+                throw new DoctorException(ServerResponseEnum.DOCTOR_CALL_FAIL);
+            }
+        }
+        return ticketVo;
     }
 
 

@@ -6,10 +6,7 @@ import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.PatientFile;
 import com.gxf.his.po.generate.User;
-import com.gxf.his.po.vo.OrderVo;
-import com.gxf.his.po.vo.PatientVo;
-import com.gxf.his.po.vo.ServerResponseVO;
-import com.gxf.his.po.vo.TicketVo;
+import com.gxf.his.po.vo.*;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.TicketService;
 import com.gxf.his.service.UserService;
@@ -39,6 +36,14 @@ public class PatientController {
     @Resource
     private TicketService ticketService;
 
+    @GetMapping("/doctorTicketId")
+    public <T> ServerResponseVO<T> getDoctorByDoctorTicketId(@RequestParam("doctorTicketId") Long doctorTicketId) {
+        if (doctorTicketId == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        Patient patient = patientService.getPatientByDoctorTicketId(doctorTicketId);
+        return MyUtil.cast(ServerResponseVO.success(patient));
+    }
 
     @GetMapping
     public <T> ServerResponseVO<T> getPatients(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",

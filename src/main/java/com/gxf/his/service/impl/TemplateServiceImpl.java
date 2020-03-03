@@ -2,7 +2,7 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.TemplateException;
-import com.gxf.his.mapper.dao.IMedicalTemplate;
+import com.gxf.his.mapper.dao.IMedicalTemplateMapper;
 import com.gxf.his.po.generate.MedicalTemplate;
 import com.gxf.his.po.vo.TemplateVo;
 import com.gxf.his.service.TemplateService;
@@ -21,12 +21,12 @@ import java.util.List;
 @Slf4j
 public class TemplateServiceImpl implements TemplateService {
     @Resource
-    private IMedicalTemplate iMedicalTemplate;
+    private IMedicalTemplateMapper iMedicalTemplateMapper;
 
     @Override
     public List<TemplateVo> getAllTemplates() {
         try {
-            return iMedicalTemplate.selectAllTemplates();
+            return iMedicalTemplateMapper.selectAllTemplates();
         } catch (Exception e) {
             log.error("模板查询失败！", e);
             throw new TemplateException(ServerResponseEnum.DOCTOR_MEDICAL_TEMPLATE_LIST_FAIL);
@@ -36,7 +36,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public int deleteTemplate(Long medicalTemplateId) {
         try {
-            return iMedicalTemplate.deleteByPrimaryKey(medicalTemplateId);
+            return iMedicalTemplateMapper.deleteByPrimaryKey(medicalTemplateId);
         } catch (Exception e) {
             throw new TemplateException(ServerResponseEnum.DOCTOR_MEDICAL_TEMPLATE_DELETE_FAIL);
         }
@@ -46,9 +46,9 @@ public class TemplateServiceImpl implements TemplateService {
     public Long saveOrUpdateTemplate(MedicalTemplate doctorMedicalTemplate) {
         try {
             if (doctorMedicalTemplate.getMedicalTemplateId() == null) {
-                iMedicalTemplate.insertAndInjectId(doctorMedicalTemplate);
+                iMedicalTemplateMapper.insertAndInjectId(doctorMedicalTemplate);
             } else {
-                iMedicalTemplate.updateByPrimaryKey(doctorMedicalTemplate);
+                iMedicalTemplateMapper.updateByPrimaryKey(doctorMedicalTemplate);
             }
             return doctorMedicalTemplate.getMedicalTemplateId();
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public MedicalTemplate getMedicalTemplateById(Long medicalTemplateId) {
         try {
-            return iMedicalTemplate.selectByPrimaryKey(medicalTemplateId);
+            return iMedicalTemplateMapper.selectByPrimaryKey(medicalTemplateId);
         } catch (Exception e) {
             log.error("查询模板失败", e);
             throw new TemplateException(ServerResponseEnum.DOCTOR_MEDICAL_TEMPLATE_LIST_FAIL);

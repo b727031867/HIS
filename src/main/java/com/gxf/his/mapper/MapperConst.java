@@ -40,9 +40,16 @@ public class MapperConst {
     public final static String ONE_GENERATE_DOCTOR_TICKET = "com.gxf.his.mapper.generate.DoctorTicketMapper.selectByPrimaryKey";
 
     /**
-     * 一对一关联部门编号
+     * 通过挂号信息ID
+     * 一对一关联病历信息
      */
-    public final static String ONE_DEPARTMENT = "com.gxf.his.mapper.dao.IDepartmentMapper.selectByDepartmentCode";
+    public final static String ONE_PATIENT_MEDICAL_RECORD_BY_TICKET_ID = "com.gxf.his.mapper.dao.IPatientMedicalRecordMapper.selectPatientMedicalRecordByTicketId";
+
+    /**
+     * 通过部门编号
+     * 一对一关联部门
+     */
+    public final static String ONE_DEPARTMENT_BY_DEPARTMENT_CODE = "com.gxf.his.mapper.dao.IDepartmentMapper.selectByDepartmentCode";
 
     /**
      * 一对一关联订单的挂号信息
@@ -64,6 +71,21 @@ public class MapperConst {
      */
     public final static String ONE_TICKET_PATIENT = "com.gxf.his.mapper.dao.IPatientMapper.selectByPrimaryKey";
 
+    /**
+     * 一对一关联药品库存
+     */
+    public final static String ONE_DRUG_STORE = "com.gxf.his.mapper.dao.IDrugstoreMapper.selectDrugStoresByDrugId";
+
+    /**
+     * 一对一关联药品业务类
+     */
+    public final static String ONE_DRUG_VO = "com.gxf.his.mapper.dao.IDrugMapper.selectDrugByDrugId";
+
+    /**
+     * 一对一关联额外收费
+     */
+    public final static String ONE_PRESCRIPTION_EXTRA_COST = "com.gxf.his.mapper.dao.IPrescriptionExtraCostMapper.selectByPrescriptionId";
+
     //**************************************一对多关联方法**************************************
 
     /**
@@ -76,4 +98,11 @@ public class MapperConst {
      * 获取所有关联信息
      */
     public final static String MANY_ORDER_ITEM_ALL = "com.gxf.his.mapper.dao.IOrderItemMapper.findOrderItemsByOrderIdRelated";
+
+    /**
+     * 一对多关联处方单的处方项
+     * 获取所有关联信息
+     */
+    public final static String MANY_DRUG_ITEM_ALL = "com.gxf.his.mapper.dao.IPrescriptionInfoMapper.selectPrescriptionInfosByPrescriptionId";
+
 }

@@ -24,7 +24,7 @@ public interface UserService {
      * @param uid 用户ID
      * @return 关联的实体ID
      */
-    String getLoginEntityId(Long uid);
+    Long getLoginEntityId(Long uid);
 
     /**
      * 根据主键获取用户

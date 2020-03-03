@@ -53,18 +53,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getLoginEntityId(Long uid) {
+    public Long getLoginEntityId(Long uid) {
         Patient patient = iPatientMapper.selectByUid(uid);
         if (patient != null) {
-            return patient.getPatientId().toString();
+            return patient.getPatientId();
         }
         Cashier cashier = iCashierMapper.selectByUid(uid);
         if (cashier != null) {
-            return cashier.getCashierId().toString();
+            return cashier.getCashierId();
         }
         Doctor doctor = iDoctorMapper.selectByUid(uid);
         if (doctor != null) {
-            return doctor.getDoctorId().toString();
+            return doctor.getDoctorId();
         }
         return null;
     }

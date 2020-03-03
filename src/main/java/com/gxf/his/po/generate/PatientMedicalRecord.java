@@ -31,7 +31,11 @@ public class PatientMedicalRecord implements Serializable {
 
     private Long patientId;
 
+    private Long ticketId;
+
     private Date createDatetime;
+
+    private String content;
 
     private static final long serialVersionUID = 1L;
 
@@ -52,7 +56,9 @@ public class PatientMedicalRecord implements Serializable {
         sb.append(", zlyj=").append(zlyj);
         sb.append(", doctorId=").append(doctorId);
         sb.append(", patientId=").append(patientId);
+        sb.append(", ticketId=").append(ticketId);
         sb.append(", createDatetime=").append(createDatetime);
+        sb.append(", content=").append(content);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

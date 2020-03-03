@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class PrescriptionExtraCost implements Serializable {
-    private Long prescriptionExtrachargesId;
+    private Long prescriptionExtraCostId;
 
     private Long prescriptionId;
 
-    private Long operaterId;
+    private Long operateId;
 
     private BigDecimal amount;
 
@@ -30,9 +30,9 @@ public class PrescriptionExtraCost implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", prescriptionExtrachargesId=").append(prescriptionExtrachargesId);
+        sb.append(", prescriptionExtraCostId=").append(prescriptionExtraCostId);
         sb.append(", prescriptionId=").append(prescriptionId);
-        sb.append(", operaterId=").append(operaterId);
+        sb.append(", operateId=").append(operateId);
         sb.append(", amount=").append(amount);
         sb.append(", remark=").append(remark);
         sb.append(", createTime=").append(createTime);

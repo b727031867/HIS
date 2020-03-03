@@ -22,6 +22,16 @@ public class PatientVo extends Patient implements Serializable {
     private PatientFile patientFile;
 
     /**
+     * 关联挂号信息
+     */
+    private DoctorTicket doctorTicket;
+
+    /**
+     * 关联的处方单列表
+     */
+    private Prescription prescription;
+
+    /**
      * 关联的处方单列表
      */
     private List<Prescription> prescriptions;
@@ -56,4 +66,8 @@ public class PatientVo extends Patient implements Serializable {
      */
     private String value;
 
+    /**
+     * 模板的类型
+     */
+    private Integer type;
 }

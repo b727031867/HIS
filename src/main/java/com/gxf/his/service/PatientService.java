@@ -112,4 +112,11 @@ public interface PatientService {
      * @param patientFile 病人档案实体
      */
     void updatePatientFile(PatientFile patientFile);
+
+    /**
+     * 根据挂号信息ID查询患者信息
+     * @param doctorTicketId 挂号信息ID
+     * @return 患者信息
+     */
+    Patient getPatientByDoctorTicketId(Long doctorTicketId);
 }

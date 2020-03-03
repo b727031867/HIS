@@ -13,47 +13,45 @@ import org.apache.ibatis.type.JdbcType;
 public interface PrescriptionExtraCostMapper {
     @Delete({
         "delete from entity_prescription_extra_cost",
-        "where prescription_extracharges_id = #{prescriptionExtrachargesId,jdbcType=BIGINT}"
+        "where prescription_extra_cost_id = #{prescriptionExtraCostId,jdbcType=BIGINT}"
     })
-    int deleteByPrimaryKey(Long prescriptionExtrachargesId);
+    int deleteByPrimaryKey(Long prescriptionExtraCostId);
 
     @Insert({
-        "insert into entity_prescription_extra_cost (prescription_extracharges_id, prescription_id, ",
-        "operater_id, amount, ",
+        "insert into entity_prescription_extra_cost (prescription_extra_cost_id, prescription_id, ",
+        "operate_id, amount, ",
         "remark, create_time)",
-        "values (#{prescriptionExtrachargesId,jdbcType=BIGINT}, #{prescriptionId,jdbcType=BIGINT}, ",
-        "#{operaterId,jdbcType=BIGINT}, #{amount,jdbcType=DECIMAL}, ",
+        "values (#{prescriptionExtraCostId,jdbcType=BIGINT}, #{prescriptionId,jdbcType=BIGINT}, ",
+        "#{operateId,jdbcType=BIGINT}, #{amount,jdbcType=DECIMAL}, ",
         "#{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})"
     })
     int insert(PrescriptionExtraCost record);
 
     @Select({
         "select",
-        "prescription_extracharges_id, prescription_id, operater_id, amount, remark, ",
-        "create_time",
+        "prescription_extra_cost_id, prescription_id, operate_id, amount, remark, create_time",
         "from entity_prescription_extra_cost",
-        "where prescription_extracharges_id = #{prescriptionExtrachargesId,jdbcType=BIGINT}"
+        "where prescription_extra_cost_id = #{prescriptionExtraCostId,jdbcType=BIGINT}"
     })
     @Results({
-        @Result(column="prescription_extracharges_id", property="prescriptionExtrachargesId", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="prescription_extra_cost_id", property="prescriptionExtraCostId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="prescription_id", property="prescriptionId", jdbcType=JdbcType.BIGINT),
-        @Result(column="operater_id", property="operaterId", jdbcType=JdbcType.BIGINT),
+        @Result(column="operate_id", property="operateId", jdbcType=JdbcType.BIGINT),
         @Result(column="amount", property="amount", jdbcType=JdbcType.DECIMAL),
         @Result(column="remark", property="remark", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    PrescriptionExtraCost selectByPrimaryKey(Long prescriptionExtrachargesId);
+    PrescriptionExtraCost selectByPrimaryKey(Long prescriptionExtraCostId);
 
     @Select({
         "select",
-        "prescription_extracharges_id, prescription_id, operater_id, amount, remark, ",
-        "create_time",
+        "prescription_extra_cost_id, prescription_id, operate_id, amount, remark, create_time",
         "from entity_prescription_extra_cost"
     })
     @Results({
-        @Result(column="prescription_extracharges_id", property="prescriptionExtrachargesId", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="prescription_extra_cost_id", property="prescriptionExtraCostId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="prescription_id", property="prescriptionId", jdbcType=JdbcType.BIGINT),
-        @Result(column="operater_id", property="operaterId", jdbcType=JdbcType.BIGINT),
+        @Result(column="operate_id", property="operateId", jdbcType=JdbcType.BIGINT),
         @Result(column="amount", property="amount", jdbcType=JdbcType.DECIMAL),
         @Result(column="remark", property="remark", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP)
@@ -63,11 +61,11 @@ public interface PrescriptionExtraCostMapper {
     @Update({
         "update entity_prescription_extra_cost",
         "set prescription_id = #{prescriptionId,jdbcType=BIGINT},",
-          "operater_id = #{operaterId,jdbcType=BIGINT},",
+          "operate_id = #{operateId,jdbcType=BIGINT},",
           "amount = #{amount,jdbcType=DECIMAL},",
           "remark = #{remark,jdbcType=VARCHAR},",
           "create_time = #{createTime,jdbcType=TIMESTAMP}",
-        "where prescription_extracharges_id = #{prescriptionExtrachargesId,jdbcType=BIGINT}"
+        "where prescription_extra_cost_id = #{prescriptionExtraCostId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(PrescriptionExtraCost record);
 }

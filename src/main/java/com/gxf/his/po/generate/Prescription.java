@@ -14,9 +14,11 @@ public class Prescription implements Serializable {
 
     private BigDecimal totalSpend;
 
+    private String doctorAdvice;
+
     private Long patientId;
 
-    private String doctorAdvice;
+    private Long ticketId;
 
     private Long doctorId;
 
@@ -32,8 +34,9 @@ public class Prescription implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", prescriptionId=").append(prescriptionId);
         sb.append(", totalSpend=").append(totalSpend);
-        sb.append(", patientId=").append(patientId);
         sb.append(", doctorAdvice=").append(doctorAdvice);
+        sb.append(", patientId=").append(patientId);
+        sb.append(", ticketId=").append(ticketId);
         sb.append(", doctorId=").append(doctorId);
         sb.append(", createDatetime=").append(createDatetime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
