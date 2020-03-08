@@ -2,9 +2,7 @@ package com.gxf.his.mapper.dao;
 
 import com.gxf.his.mapper.generate.PrescriptionExtraCostMapper;
 import com.gxf.his.po.generate.PrescriptionExtraCost;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
 /**
@@ -35,4 +33,20 @@ public interface IPrescriptionExtraCostMapper extends PrescriptionExtraCostMappe
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP)
     })
     PrescriptionExtraCost selectByPrescriptionId(Long prescriptionId);
+
+    /**
+     * 插入一个额外收费项并且注入ID
+     * @param record 额外收费项
+     * @return 本次操作影响的行数
+     */
+    @Insert({
+            "insert into entity_prescription_extra_cost (prescription_extra_cost_id, prescription_id, ",
+            "operate_id, amount, ",
+            "remark, create_time)",
+            "values (#{prescriptionExtraCostId,jdbcType=BIGINT}, #{prescriptionId,jdbcType=BIGINT}, ",
+            "#{operateId,jdbcType=BIGINT}, #{amount,jdbcType=DECIMAL}, ",
+            "#{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})"
+    })
+    @Options(useGeneratedKeys = true, keyProperty = "prescriptionExtraCostId", keyColumn = "prescription_extra_cost_id")
+    int insertAndInjectId(PrescriptionExtraCost record);
 }

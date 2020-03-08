@@ -3,17 +3,9 @@ package com.gxf.his.service.impl;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.PatientException;
 import com.gxf.his.exception.PatientFileException;
-import com.gxf.his.mapper.dao.IOrderMapper;
-import com.gxf.his.mapper.dao.IPatientFileMapper;
-import com.gxf.his.mapper.dao.IPatientMapper;
-import com.gxf.his.mapper.dao.ITicketMapper;
-import com.gxf.his.po.generate.DoctorTicket;
-import com.gxf.his.po.generate.PatientFile;
-import com.gxf.his.po.vo.OrderVo;
-import com.gxf.his.po.vo.PatientVo;
-import com.gxf.his.po.generate.Patient;
-import com.gxf.his.po.generate.User;
-import com.gxf.his.po.vo.TicketVo;
+import com.gxf.his.mapper.dao.*;
+import com.gxf.his.po.generate.*;
+import com.gxf.his.po.vo.*;
 import com.gxf.his.service.PatientService;
 import com.gxf.his.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +34,14 @@ public class PatientServiceImpl implements PatientService {
     private UserService userService;
     @Resource
     private IPatientFileMapper iPatientFileMapper;
+    @Resource
+    private IPrescriptionMapper iPrescriptionMapper;
+    @Resource
+    private IPrescriptionExtraCostMapper iPrescriptionExtraCostMapper;
+    @Resource
+    private IDoctorMapper iDoctorMapper;
+    @Resource
+    private IPrescriptionInfoMapper iPrescriptionInfoMapper;
 
     @Override
     public void addPatient(Patient patient) throws PatientException {
@@ -161,13 +161,31 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public HashMap<String, List<OrderVo>> getAllPatientOrders(Long patientId) {
-        List<OrderVo> registers = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId,0);
-        List<OrderVo> prescriptions = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId,1);
-        List<OrderVo> checks = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId,2);
-        HashMap<String,List<OrderVo>> map = new HashMap<>(4);
-        map.put("registers",registers);
-        map.put("prescriptions",prescriptions);
-        map.put("checks",checks);
+        List<OrderVo> registers = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId, 0);
+        List<OrderVo> prescriptions = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId, 1);
+        if (prescriptions != null && prescriptions.size() > 0) {
+            for (OrderVo orderVo : prescriptions) {
+                //查询处方单的详细信息
+                if (orderVo.getPrescriptionId() != null) {
+                    PrescriptionVo prescriptionVo = new PrescriptionVo();
+                    Prescription prescription = iPrescriptionMapper.selectByPrimaryKey(orderVo.getPrescriptionId());
+                    PrescriptionExtraCost prescriptionExtraCost = iPrescriptionExtraCostMapper.selectByPrescriptionId(orderVo.getPrescriptionId());
+                    List<PrescriptionInfoVo> prescriptionInfoVos = iPrescriptionInfoMapper.selectPrescriptionInfosByPrescriptionId(orderVo.getPrescriptionId());
+                    prescriptionVo.setPrescription(prescription);
+                    prescriptionVo.setPrescriptionInfoVos(prescriptionInfoVos);
+                    prescriptionVo.setPrescriptionExtraCost(prescriptionExtraCost);
+                    //获取患者与医生信息
+                    Patient patient = iPatientMapper.selectByPrimaryKey(patientId);
+                    DoctorVo doctorVo = iDoctorMapper.selectByPrimaryKeyRelated(orderVo.getDoctorId());
+                    prescriptionVo.setPatient(patient);
+                    prescriptionVo.setDoctorVo(doctorVo);
+                    orderVo.setPrescriptionVo(prescriptionVo);
+                }
+            }
+        }
+        HashMap<String, List<OrderVo>> map = new HashMap<>(4);
+        map.put("registers", registers);
+        map.put("prescriptions", prescriptions);
         return map;
     }
 
@@ -176,7 +194,7 @@ public class PatientServiceImpl implements PatientService {
         try {
             iPatientFileMapper.insertAndInjectThePrimaryKey(patientFile);
         } catch (Exception e) {
-            log.warn("患者病历保存失败",e);
+            log.warn("患者病历保存失败", e);
             throw new PatientFileException(ServerResponseEnum.PATIENT_FILE_SAVE_FAIL);
         }
     }
@@ -186,7 +204,7 @@ public class PatientServiceImpl implements PatientService {
         try {
             iPatientFileMapper.update(patientFile);
         } catch (Exception e) {
-            log.warn("患者病历更新失败",e);
+            log.warn("患者病历更新失败", e);
             throw new PatientFileException(ServerResponseEnum.PATIENT_FILE_UPDATE_FAIL);
         }
     }
@@ -196,7 +214,7 @@ public class PatientServiceImpl implements PatientService {
         try {
             DoctorTicket doctorTicket = iTicketMapper.selectByPrimaryKey(doctorTicketId);
             return iPatientMapper.selectByPrimaryKey(doctorTicket.getPatientId());
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new PatientException(ServerResponseEnum.PATIENT_LIST_FAIL);
         }
     }

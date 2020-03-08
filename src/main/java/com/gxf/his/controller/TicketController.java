@@ -9,7 +9,6 @@ import com.gxf.his.po.vo.TicketVo;
 import com.gxf.his.service.DoctorService;
 import com.gxf.his.service.TemplateService;
 import com.gxf.his.service.TicketService;
-import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.MyUtil;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +30,6 @@ import java.util.List;
 @RequestMapping("/ticket")
 @Slf4j
 public class TicketController {
-    @Resource
-    private UserService userService;
     @Resource
     private TicketService ticketService;
     @Resource

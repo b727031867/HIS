@@ -11,6 +11,7 @@ import com.gxf.his.po.generate.Cashier;
 import com.gxf.his.po.generate.Doctor;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
+import com.gxf.his.po.vo.CashierVo;
 import com.gxf.his.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.MyBatisSystemException;
@@ -58,9 +59,9 @@ public class UserServiceImpl implements UserService {
         if (patient != null) {
             return patient.getPatientId();
         }
-        Cashier cashier = iCashierMapper.selectByUid(uid);
-        if (cashier != null) {
-            return cashier.getCashierId();
+        CashierVo cashierVo = iCashierMapper.selectByUid(uid);
+        if (cashierVo != null) {
+            return cashierVo.getCashierId();
         }
         Doctor doctor = iDoctorMapper.selectByUid(uid);
         if (doctor != null) {

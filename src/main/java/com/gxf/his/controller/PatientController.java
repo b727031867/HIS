@@ -55,48 +55,48 @@ public class PatientController {
     }
 
     @PostMapping("/queue")
-    public <T> ServerResponseVO<T> startPatientQueue(@RequestParam(name = "ticketId") Long ticketId){
-        if(ticketId == null){
+    public <T> ServerResponseVO<T> startPatientQueue(@RequestParam(name = "ticketId") Long ticketId) {
+        if (ticketId == null) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        if(!ticketService.doQueue(ticketId)){
+        if (!ticketService.doQueue(ticketId)) {
             return ServerResponseVO.error(ServerResponseEnum.TICKET_QUEUE_FAIL);
         }
         return ServerResponseVO.success();
     }
 
     @GetMapping("/queue")
-    public <T> ServerResponseVO<T> getPatientInQueue(Long uid){
-        if(uid == null){
+    public <T> ServerResponseVO<T> getPatientInQueue(Long uid) {
+        if (uid == null) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         Patient patient = patientService.getPatientByUid(uid);
         List<TicketVo> doctorTicketList = patientService.getQueueRegisterOrder(patient.getPatientId());
-        if(doctorTicketList == null){
+        if (doctorTicketList == null) {
             return MyUtil.cast(ServerResponseVO.error(ServerResponseEnum.TICKET_QUEUE_NULL));
         }
         return MyUtil.cast(ServerResponseVO.success(doctorTicketList));
     }
 
     @GetMapping("/onePatient")
-    public <T> ServerResponseVO<T> getPatientByUid(Long uid){
-        if(uid == null){
+    public <T> ServerResponseVO<T> getPatientByUid(Long uid) {
+        if (uid == null) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         PatientVo patient = patientService.getPatientByUidRelated(uid);
         byte bt = 0;
-        if(patient.getPatientIsMarriage() == null){
+        if (patient.getPatientIsMarriage() == null) {
             patient.setPatientIsMarriage(bt);
         }
-        if(patient.getPatientSex() == null){
+        if (patient.getPatientSex() == null) {
             patient.setPatientSex(bt);
         }
         return MyUtil.cast(ServerResponseVO.success(patient));
     }
 
     @GetMapping("/orderList")
-    public <T> ServerResponseVO<T> getPatientOrderList(Long uid){
-        if(null == uid || uid <0){
+    public <T> ServerResponseVO<T> getPatientOrderList(Long uid) {
+        if (null == uid || uid < 0) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         Patient patient = patientService.getPatientByUid(uid);
@@ -134,7 +134,7 @@ public class PatientController {
         patient.setPatientSex(patientVo.getPatientSex());
         patient.setPatientMedicareCard(patientVo.getPatientMedicareCard());
         patient.setUserId(patientVo.getUserId());
-        if(null != patientVo.getUser()){
+        if (null != patientVo.getUser()) {
             patient.setUserId(patientVo.getUser().getUserId());
             //更新用户信息
             User user = patientVo.getUser();
@@ -147,16 +147,17 @@ public class PatientController {
 
     /**
      * 修改患者档案信息，若不存在档案则创建新的档案
+     *
      * @param patientFile 患者档案
      * @return 通用响应类
      */
     @PutMapping("/file")
     public <T> ServerResponseVO<T> updateOrSavePatientFile(@RequestBody PatientFile patientFile) {
         log.info("当前更新或的病人信息为：" + patientFile.toString());
-        if(null == patientFile.getPatientFileId()){
+        if (null == patientFile.getPatientFileId()) {
             patientFile.setCreateTime(new Date());
             patientService.addPatientFile(patientFile);
-        }else {
+        } else {
             patientService.updatePatientFile(patientFile);
         }
         return MyUtil.cast(ServerResponseVO.success(patientFile));

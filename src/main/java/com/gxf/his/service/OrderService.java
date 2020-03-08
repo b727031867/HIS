@@ -13,9 +13,14 @@ import java.util.List;
 public interface OrderService {
 
     /**
-     * 获取并且删除过期未付款的订单
+     * 获取并且删除过期未付款的挂号订单
      */
-    void getAndRemoveExpireOrders();
+    void getAndRemoveExpireDoctorTicketOrders();
+
+    /**
+     * 获取并且删除过期未付款的处方单订单
+     */
+    void getAndRemoveExpirePrescriptionOrders();
 
     /**
      * 检查当前是否重复挂号
@@ -71,4 +76,16 @@ public interface OrderService {
      */
     Boolean payRegisterOrder(Long orderId);
 
+    /**
+     * 处方单付款
+     * @param orderId 订单ID
+     * @return 是否成功付款
+     */
+    Boolean payPrescription(Long orderId);
+
+    /**
+     * 处方单退款
+     * @param orderId 订单Id
+     */
+    void refundOrderById(Long orderId);
 }

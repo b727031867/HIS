@@ -12,9 +12,11 @@ public class OrderItem implements Serializable {
 
     private Long orderId;
 
-    private Long prescriptionId;
+    private Long prescriptionInfoId;
 
     private Long ticketResourceId;
+
+    private Long prescriptionExtraCostId;
 
     private Long checkItemId;
 
@@ -28,8 +30,9 @@ public class OrderItem implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", orderItemId=").append(orderItemId);
         sb.append(", orderId=").append(orderId);
-        sb.append(", prescriptionId=").append(prescriptionId);
+        sb.append(", prescriptionInfoId=").append(prescriptionInfoId);
         sb.append(", ticketResourceId=").append(ticketResourceId);
+        sb.append(", prescriptionExtraCostId=").append(prescriptionExtraCostId);
         sb.append(", checkItemId=").append(checkItemId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

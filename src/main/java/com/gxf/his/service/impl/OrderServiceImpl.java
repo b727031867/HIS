@@ -2,12 +2,9 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.OrderException;
-import com.gxf.his.mapper.dao.IDoctorMapper;
-import com.gxf.his.mapper.dao.IOrderItemMapper;
-import com.gxf.his.mapper.dao.IOrderMapper;
-import com.gxf.his.mapper.dao.ITicketMapper;
+import com.gxf.his.mapper.dao.*;
 import com.gxf.his.po.generate.*;
-import com.gxf.his.po.vo.OrderVo;
+import com.gxf.his.po.vo.*;
 import com.gxf.his.service.OrderService;
 import com.gxf.his.service.TicketResourceService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,18 +38,26 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private ITicketMapper iTicketMapper;
     @Resource
+    private IPrescriptionInfoMapper iPrescriptionInfoMapper;
+    @Resource
+    private IPrescriptionMapper iPrescriptionMapper;
+    @Resource
+    private IPrescriptionExtraCostMapper iPrescriptionExtraCostMapper;
+    @Resource
     private IDoctorMapper iDoctorMapper;
+    @Resource
+    private IPatientMapper iPatientMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void getAndRemoveExpireOrders() {
+    public void getAndRemoveExpireDoctorTicketOrders() {
         try {
             //删除订单信息
-            List<OrderVo> orders = iOrderMapper.selectExpireOrder();
+            List<OrderVo> orders = iOrderMapper.selectExpireOrderByOrderType(0);
             for (OrderVo order : orders) {
                 iOrderMapper.deleteByPrimaryKey(order.getOrderId());
                 //删除订单项前归还订单中的资源
-                List<OrderItem> orderItems = iOrderItemMapper.findOrderItemsByOrderId(order.getOrderId());
+                List<OrderItem> orderItems = iOrderItemMapper.findOrderItemsByOrderIdNoRelated(order.getOrderId());
                 for (OrderItem orderItem : orderItems) {
                     releaseResources(orderItem);
                 }
@@ -69,6 +74,22 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             log.error("查询并且删除过期订单失败", e);
             throw new OrderException(ServerResponseEnum.ORDER_LIST_FAIL);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void getAndRemoveExpirePrescriptionOrders() {
+        try {
+            //订单状态置为已过期
+            List<OrderVo> orders = iOrderMapper.selectExpireOrderByOrderType(1);
+            for (OrderVo order : orders) {
+                order.setOrderStatus("3");
+                iOrderMapper.updateByPrimaryKey(order);
+            }
+        } catch (Exception e) {
+            log.error("处方单过期失败", e);
+            throw new OrderException(ServerResponseEnum.ORDER_STATUS_CHANGE_FAIL);
         }
     }
 
@@ -91,33 +112,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addOrderPrescription(OrderVo order) {
-//        try {
-//            Long orderId = order.getOrderId();
-//            BigDecimal totalPrice = BigDecimal.ZERO;
-//            for (OrderItem orderItem : orderItemList) {
-//                //处方单
-//                if (null != orderItem.getDrugId()) {
-//                    //计算总价
-//                    Drug drug = iDrugMapper.selectByPrimaryKey(orderItem.getDrugId());
-//                    //TODO
-////                    totalPrice = totalPrice.add(drug.get.multiply(new BigDecimal(orderItem.getDrugQuantities())));
-//                }  else if (null != orderItem.getCheckItemId()) {
-//                    //检查单 TODO
-//                } else {
-//                    log.warn("未知的订单项");
-//                    throw new Exception("未知的订单项");
-//                }
-//                orderItem.setOrderId(orderId);
-//                orderItem.setOrderItemTotal(totalPrice);
-//                iOrderItemMapper.insert(orderItem);
-//            }
-//            order.setOrderTotal(totalPrice);
-//            iOrderMapper.insert(order);
-//        } catch (Exception e) {
-//            log.error("订单添加失败", e);
-//            throw new OrderException(ServerResponseEnum.ORDER_SAVE_FAIL);
-//        }
+    public void addOrderPrescription(OrderVo orderVo) {
+        //插入订单并且获取订单ID
+        iOrderMapper.insertAndInjectId(orderVo);
+        //处方项以及额外收费项的列表
+        List<OrderItemVo> orderVoItemList = orderVo.getOrderVoItemList();
+        for (OrderItemVo orderItemVo : orderVoItemList) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(orderVo.getOrderId());
+            if (orderItemVo.getPrescriptionInfo() != null) {
+                orderItem.setPrescriptionInfoId(orderItemVo.getPrescriptionInfo().getPrescriptionInfoId());
+            }
+            if (orderItemVo.getPrescriptionExtraCost() != null) {
+                orderItem.setPrescriptionExtraCostId(orderItemVo.getPrescriptionExtraCost().getPrescriptionExtraCostId());
+            }
+            iOrderItemMapper.insert(orderItem);
+        }
+
     }
 
     @Override
@@ -189,11 +200,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderVo> getUnPayOrdersByPatientId(Long patientId,Integer orderType) {
+    public List<OrderVo> getUnPayOrdersByPatientId(Long patientId, Integer orderType) {
         List<OrderVo> orderVos = iOrderMapper.selectOrdersByPatientIdAndOrderType(patientId, orderType);
         List<OrderVo> unPayOrders = new ArrayList<>(16);
         for (OrderVo orderVo : orderVos) {
             if ("0".equals(orderVo.getOrderStatus())) {
+                //关联查询处方项以及额外收费
+                if(orderVo.getPrescriptionId() != null){
+                    PrescriptionVo prescriptionVo = new PrescriptionVo();
+                    Prescription prescription = iPrescriptionMapper.selectByPrimaryKey(orderVo.getPrescriptionId());
+                    PrescriptionExtraCost prescriptionExtraCost = iPrescriptionExtraCostMapper.selectByPrescriptionId(orderVo.getPrescriptionId());
+                    List<PrescriptionInfoVo> prescriptionInfoVos = iPrescriptionInfoMapper.selectPrescriptionInfosByPrescriptionId(orderVo.getPrescriptionId());
+                    prescriptionVo.setPrescription(prescription);
+                    prescriptionVo.setPrescriptionInfoVos(prescriptionInfoVos);
+                    prescriptionVo.setPrescriptionExtraCost(prescriptionExtraCost);
+                    //获取患者与医生信息
+                    Patient patient = iPatientMapper.selectByPrimaryKey(patientId);
+                    DoctorVo doctorVo = iDoctorMapper.selectByPrimaryKeyRelated(orderVo.getDoctorId());
+                    prescriptionVo.setPatient(patient);
+                    prescriptionVo.setDoctorVo(doctorVo);
+                    orderVo.setPrescriptionVo(prescriptionVo);
+                }
                 unPayOrders.add(orderVo);
             }
         }
@@ -213,6 +240,35 @@ public class OrderServiceImpl implements OrderService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Boolean payPrescription(Long orderId) {
+        Order order = iOrderMapper.selectByPrimaryKey(orderId);
+        if (null != order) {
+            order.setOrderStatus("1");
+            iOrderMapper.updateByPrimaryKey(order);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void refundOrderById(Long orderId) {
+        try {
+            Order order = iOrderMapper.selectByPrimaryKey(orderId);
+            String payStatus = "1";
+            if(payStatus.equals(order.getOrderStatus())){
+                order.setOrderStatus("2");
+                iOrderMapper.updateByPrimaryKey(order);
+            }else {
+                log.warn("只有已付款得订单才能退款");
+                throw new OrderException(ServerResponseEnum.ORDER_STATUS_CHANGE_FAIL);
+            }
+        }catch (Exception e){
+            throw new OrderException(ServerResponseEnum.ORDER_STATUS_CHANGE_FAIL);
+        }
     }
 
     private void releaseResources(OrderItem orderItem) {

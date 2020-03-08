@@ -2,6 +2,7 @@ package com.gxf.his.po.vo;
 
 import com.gxf.his.po.generate.Drug;
 import com.gxf.his.po.generate.DrugStore;
+import com.gxf.his.po.generate.DrugToxicology;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,6 +22,11 @@ public class DrugVo extends Drug {
      * 药品关联药品药品库存
      */
     private DrugStore drugStore;
+
+    /**
+     * 关联的药品毒理信息
+     */
+    private DrugToxicology drugToxicology;
 
     /**
      * 购买这药品的数量

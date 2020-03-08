@@ -28,7 +28,7 @@ public class CashierServiceTest {
         for (int i = 0; i < 300; i++) {
             Cashier cashier = new Cashier();
             String userName = "testCashier" + i;
-            String password = "test";
+            String password = "123456";
             User user = UserController.doHashedCredentials(userName, password);
             userService.addUser(user);
             cashier.setPhone(PatientServiceTest.getPhoneNumber());

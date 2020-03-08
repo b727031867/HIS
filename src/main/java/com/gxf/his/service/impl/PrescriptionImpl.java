@@ -1,15 +1,13 @@
 package com.gxf.his.service.impl;
 
+import com.gxf.his.Const;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.PrescriptionException;
-import com.gxf.his.mapper.dao.IPrescriptionExtraCostMapper;
-import com.gxf.his.mapper.dao.IPrescriptionInfoMapper;
-import com.gxf.his.mapper.dao.IPrescriptionMapper;
+import com.gxf.his.mapper.dao.*;
 import com.gxf.his.po.generate.Prescription;
 import com.gxf.his.po.generate.PrescriptionExtraCost;
-import com.gxf.his.po.vo.DrugVo;
-import com.gxf.his.po.vo.PrescriptionInfoVo;
-import com.gxf.his.po.vo.PrescriptionVo;
+import com.gxf.his.po.vo.*;
+import com.gxf.his.service.OrderService;
 import com.gxf.his.service.PrescriptionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,11 +40,28 @@ public class PrescriptionImpl implements PrescriptionService {
     private IPrescriptionExtraCostMapper iPrescriptionExtraCostMapper;
     @Resource
     private IPrescriptionInfoMapper iPrescriptionInfoMapper;
+    @Resource
+    private OrderService orderService;
+    @Resource
+    private IPatientMapper iPatientMapper;
+    @Resource
+    private IDoctorMapper iDoctorMapper;
 
     @Override
     public PrescriptionVo getPrescriptionByDoctorTicketId(Long doctorTicketId) {
         try {
-            return iPrescriptionMapper.getPrescriptionByDoctorTicketId(doctorTicketId);
+            PrescriptionVo prescriptionVo = iPrescriptionMapper.getPrescriptionByDoctorTicketId(doctorTicketId);
+            if (prescriptionVo != null) {
+                //查询设置日期格式
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String s = sdf.format(prescriptionVo.getCreateDatetime());
+                    prescriptionVo.setCreateDatetime(sdf.parse(s));
+                } catch (ParseException e) {
+                    log.warn("日期格式转换失败", e);
+                }
+            }
+            return prescriptionVo;
         } catch (Exception e) {
             log.error("根据票务信息ID处方单查询失败", e);
             throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_LIST_FAIL);
@@ -51,10 +71,20 @@ public class PrescriptionImpl implements PrescriptionService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public PrescriptionVo savePrescription(PrescriptionVo prescriptionVo) {
+        List<PrescriptionInfoVo> prescriptionInfoVos = new ArrayList<>(8);
+        List<OrderItemVo> orderItemVos = new ArrayList<>(8);
         //保存处方单详情
         List<DrugVo> drugVos = prescriptionVo.getDrugVos();
+        //处方单是否有药品
+        boolean flag = true;
         //计算总价
-        HashMap<String, BigDecimal> map = getSpends(drugVos);
+        HashMap<String, BigDecimal> map;
+        if (drugVos == null || drugVos.size() == 0) {
+            flag = false;
+            map = getSpends(drugVos, 2, prescriptionVo.getPrescriptionExtraCost().getAmount());
+        } else {
+            map = getSpends(drugVos, 1, prescriptionVo.getPrescriptionExtraCost().getAmount());
+        }
         //保存处方单
         Prescription prescription = new Prescription();
         prescription.setTotalSpend(map.get("totalSpend"));
@@ -64,42 +94,132 @@ public class PrescriptionImpl implements PrescriptionService {
         prescription.setDoctorId(prescriptionVo.getDoctorVo().getDoctorId());
         prescription.setCreateDatetime(new Date());
         iPrescriptionMapper.insertAndInjectId(prescription);
-        int i = 0;
-        List<PrescriptionInfoVo> prescriptionInfoVos = new ArrayList<>(8);
-        for (DrugVo drugVo : drugVos) {
-            PrescriptionInfoVo prescriptionInfoVo = new PrescriptionInfoVo();
-            prescriptionInfoVo.setDrugVo(drugVo);
-            prescriptionInfoVo.setPrescriptionId(prescription.getPrescriptionId());
-            prescriptionInfoVo.setDrugId(drugVo.getDrugId());
-            prescriptionInfoVo.setStatus(drugVo.getIsInBulk());
-            prescriptionInfoVo.setNum(drugVo.getNumber());
-            prescriptionInfoVo.setItemTotalPrice(map.get(i + ""));
-            //是否散装
-            if (drugVo.getIsInBulk() == 0) {
-                //不散卖
-                prescriptionInfoVo.setUnit(drugVo.getDrugStore().getInventoryUnit());
-            } else {
-                //散卖
-                prescriptionInfoVo.setUnit(drugVo.getDrugStore().getSmallestUnit());
+        if (flag) {
+            int i = 0;
+            for (DrugVo drugVo : drugVos) {
+                PrescriptionInfoVo prescriptionInfoVo = new PrescriptionInfoVo();
+                OrderItemVo orderItemVo = new OrderItemVo();
+                prescriptionInfoVo.setDrugVo(drugVo);
+                prescriptionInfoVo.setPrescriptionId(prescription.getPrescriptionId());
+                prescriptionInfoVo.setDrugId(drugVo.getDrugId());
+                prescriptionInfoVo.setStatus(drugVo.getIsInBulk());
+                prescriptionInfoVo.setNum(drugVo.getNumber());
+                prescriptionInfoVo.setItemTotalPrice(map.get(i + ""));
+                //是否散装
+                if (drugVo.getIsInBulk() == 0) {
+                    //不散卖
+                    prescriptionInfoVo.setUnit(drugVo.getDrugStore().getInventoryUnit());
+                } else {
+                    //散卖
+                    prescriptionInfoVo.setUnit(drugVo.getDrugStore().getSmallestUnit());
+                }
+                iPrescriptionInfoMapper.insertAndInjectId(prescriptionInfoVo);
+                orderItemVo.setPrescriptionInfo(prescriptionInfoVo);
+                i++;
+                prescriptionInfoVos.add(prescriptionInfoVo);
+                orderItemVos.add(orderItemVo);
             }
-            iPrescriptionInfoMapper.insert(prescriptionInfoVo);
-            i++;
-            prescriptionInfoVos.add(prescriptionInfoVo);
         }
+
         //保存额外收费
         PrescriptionExtraCost prescriptionExtraCost = new PrescriptionExtraCost();
         prescriptionExtraCost.setPrescriptionId(prescription.getPrescriptionId());
-        prescriptionExtraCost.setOperateId(prescriptionVo.getDoctorVo().getUserId());
+        prescriptionExtraCost.setOperateId(prescriptionVo.getDoctorVo().getUser().getUserId());
         prescriptionExtraCost.setAmount(prescriptionVo.getPrescriptionExtraCost().getAmount());
         prescriptionExtraCost.setRemark(prescriptionVo.getPrescriptionExtraCost().getRemark());
         prescriptionExtraCost.setCreateTime(new Date());
-        iPrescriptionExtraCostMapper.insert(prescriptionExtraCost);
+        iPrescriptionExtraCostMapper.insertAndInjectId(prescriptionExtraCost);
+        //添加额外收费到订单项中
+        OrderItemVo orderItemVo = new OrderItemVo();
+        orderItemVo.setPrescriptionExtraCost(prescriptionExtraCost);
+        orderItemVos.add(orderItemVo);
         prescriptionVo.setPrescriptionId(prescription.getPrescriptionId());
         prescriptionVo.setPrescriptionInfoVos(prescriptionInfoVos);
         prescriptionVo.setPrescriptionExtraCost(prescriptionExtraCost);
         prescriptionVo.setPrescription(prescription);
-        // TODO 生成对应的订单
+        //添加订单以及订单项
+        OrderVo orderVo = new OrderVo();
+        orderVo.setOrderVoItemList(orderItemVos);
+        orderVo.setDoctorVo(prescriptionVo.getDoctorVo());
+        orderVo.setOrderType(1);
+        orderVo.setDoctorId(prescriptionVo.getDoctorVo().getDoctorId());
+        orderVo.setPatientId(prescriptionVo.getPatientVo().getPatientId());
+        orderVo.setOrderStatus("0");
+        orderVo.setOrderTotal(map.get("totalSpend"));
+        orderVo.setOrderCreateTime(new Date());
+        //n分钟后过期
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(Const.PRESCRIPTION_ORDER_EXPIRED_TIME);
+        ZonedDateTime zdt = localDateTime.atZone(zoneId);
+        orderVo.setOrderExpireTime(Date.from(zdt.toInstant()));
+        orderVo.setPrescriptionId(prescription.getPrescriptionId());
+        orderService.addOrderPrescription(orderVo);
+        //查询设置日期格式
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String s = sdf.format(new Date());
+            prescriptionVo.setCreateDatetime(sdf.parse(s));
+        } catch (ParseException e) {
+            log.warn("日期格式转换失败", e);
+        }
         return prescriptionVo;
+    }
+
+    @Override
+    public PrescriptionVo getPrescriptionByPrescriptionId(Long prescriptionId) {
+        try {
+            return iPrescriptionMapper.getPrescriptionByPrescriptionId(prescriptionId);
+        } catch (Exception e) {
+            log.error("根据处方单ID查询处方单失败", e);
+            throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_LIST_FAIL);
+        }
+    }
+
+    @Override
+    public List<PrescriptionVo> selectPrescriptionVosByAttribute(Boolean isAccurate, String attribute, String value) {
+        List<PrescriptionVo> prescriptionVos = new ArrayList<>(16);
+        try {
+            //根据不同的属性类型 模糊查询名称对应的id 在查询id对应的处方单
+            String patientName = "patientName";
+            String doctorName = "doctorName";
+            if (!isAccurate) {
+                if (patientName.equals(attribute)) {
+                    //模糊查询姓名对应的患者ID列表
+                    PatientVo patientVo = new PatientVo();
+                    patientVo.setSearchAttribute(patientName);
+                    patientVo.setValue(value);
+                    List<PatientVo> patientVos = iPatientMapper.selectPatientByAttribute(patientVo);
+                    for (PatientVo vo : patientVos) {
+                        List<PrescriptionVo> prescriptionVoList = iPrescriptionMapper.selectPrescriptionVosByPatientId(vo.getPatientId());
+                        prescriptionVos.addAll(prescriptionVoList);
+                    }
+                } else if (doctorName.equals(attribute)) {
+                    DoctorVo doctorVo = new DoctorVo();
+                    doctorVo.setDoctorName(value);
+                    List<DoctorVo> doctorVos = iDoctorMapper.selectDoctorByAttribute(doctorVo);
+                    for (DoctorVo vo : doctorVos) {
+                        List<PrescriptionVo> vos = iPrescriptionMapper.selectPrescriptionVosByDoctorId(vo.getDoctorId());
+                        prescriptionVos.addAll(vos);
+                    }
+                }
+            } else {
+                log.warn("当前是精确查询");
+            }
+        } catch (Exception e) {
+            log.error("按属性查询处方单失败", e);
+            throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_LIST_FAIL);
+        }
+        return prescriptionVos;
+    }
+
+    @Override
+    public List<PrescriptionVo> getPrescriptionListByTimeArea(Date startDate, Date endDate) {
+        try {
+            return iPrescriptionMapper.selectPrescriptionsByRange(startDate, endDate);
+        }catch (Exception e){
+            log.error("根据时间范围查询处方单失败",e);
+            throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_LIST_FAIL);
+        }
     }
 
     /**
@@ -107,25 +227,37 @@ public class PrescriptionImpl implements PrescriptionService {
      *
      * @return 各类价格 包括 单项总价 总价 以及 额外收费
      */
-    private HashMap<String, BigDecimal> getSpends(List<DrugVo> drugVos) {
+    private HashMap<String, BigDecimal> getSpends(List<DrugVo> drugVos, int type, BigDecimal extraCost) {
         HashMap<String, BigDecimal> map = new HashMap<>(16);
-        //计算药品总价
         BigDecimal total = BigDecimal.ZERO;
-        for (int i = 0; i < drugVos.size(); i++) {
-            //散卖
-            BigDecimal itemTotal;
-            if (drugVos.get(i).getIsInBulk() == 1) {
-                itemTotal = drugVos.get(i).getDrugStore().getMinPrice().multiply(new BigDecimal(String.valueOf(drugVos.get(i).getNumber())));
-            } else {
-                //不散卖
-                itemTotal = drugVos.get(i).getDrugStore().getPrescriptionPrice().multiply(new BigDecimal(String.valueOf(drugVos.get(i).getNumber())));
+        if (type == 1) {
+            //计算药品总价
+            for (int i = 0; i < drugVos.size(); i++) {
+                //散卖
+                BigDecimal itemTotal;
+                if (drugVos.get(i).getIsInBulk() == 1) {
+                    itemTotal = drugVos.get(i).getDrugStore().getMinPrice().multiply(new BigDecimal(String.valueOf(drugVos.get(i).getNumber())));
+                } else {
+                    //不散卖
+                    itemTotal = drugVos.get(i).getDrugStore().getPrescriptionPrice().multiply(new BigDecimal(String.valueOf(drugVos.get(i).getNumber())));
+                }
+                map.put(i + "", itemTotal);
+                total = total.add(itemTotal);
             }
-            map.put(i + "", itemTotal);
-            total = total.add(itemTotal);
+            //计算额外附加收费总价
+            if (extraCost != null) {
+                total = total.add(extraCost);
+            }
+            map.put("totalSpend", total);
+        } else if (type == 2) {
+            //计算额外附加收费总价
+            if (extraCost != null) {
+                total = total.add(extraCost);
+            }
+            map.put("totalSpend", total);
+        } else {
+            log.warn("未知的价格计算类型");
         }
-        //计算额外附加收费总价
-
-        map.put("totalSpend", total);
         return map;
     }
 

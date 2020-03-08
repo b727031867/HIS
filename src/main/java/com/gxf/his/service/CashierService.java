@@ -19,6 +19,14 @@ public interface CashierService {
     int addCashier(Cashier cashier);
 
     /**
+     * 根据ID关联查询收银员信息
+     *
+     * @param uid 收银员业务对象的ID
+     * @return 收银员信息
+     */
+    CashierVo getCashierVoById(Long uid);
+
+    /**
      * 获取所有收银员列表
      *
      * @return 收银员列表

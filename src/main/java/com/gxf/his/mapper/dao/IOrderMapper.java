@@ -17,19 +17,20 @@ public interface IOrderMapper extends OrderMapper {
 
     /**
      * 查询未付款并且过期的商品列表及其商品项
-     *
+     * @param orderType 过期订单的类型 0挂号单 1处方单 2检查单
      * @return 过期的商品列表及其商品项
      */
     @Select({
             "select",
-            "order_id, order_type, doctor_id, patient_id, order_status, order_total, order_create_time,order_expire_time",
+            "*",
             "from entity_order",
-            "where order_status = 0 AND order_expire_time <= NOW()"
+            "where order_status = 0 AND order_expire_time <= NOW() AND order_type = #{orderType,jdbcType=INTEGER}"
     })
     @Results({
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT, id = true),
             @Result(column = "order_type", property = "orderType", jdbcType = JdbcType.INTEGER),
             @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT),
             @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_status", property = "orderStatus", jdbcType = JdbcType.VARCHAR),
             @Result(column = "order_total", property = "orderTotal", jdbcType = JdbcType.DECIMAL),
@@ -37,7 +38,7 @@ public interface IOrderMapper extends OrderMapper {
             @Result(column = "order_expire_time", property = "orderExpireTime", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM))
     })
-    List<OrderVo> selectExpireOrder();
+    List<OrderVo> selectExpireOrderByOrderType(int orderType);
 
     /**
      * 查询某位用户某种订单类型所有的订单历史信息
@@ -47,7 +48,7 @@ public interface IOrderMapper extends OrderMapper {
      */
     @Select({
             "select",
-            "order_id, order_type, doctor_id, patient_id, order_status, order_total, order_create_time,order_expire_time",
+            "*",
             "from entity_order",
             "where patient_id = #{patientId,jdbcType=BIGINT} AND order_type = #{orderType,jdbcType=INTEGER}"
     })
@@ -56,11 +57,12 @@ public interface IOrderMapper extends OrderMapper {
             @Result(column = "order_type", property = "orderType", jdbcType = JdbcType.INTEGER),
             @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT,one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
             @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_status", property = "orderStatus", jdbcType = JdbcType.VARCHAR),
             @Result(column = "order_total", property = "orderTotal", jdbcType = JdbcType.DECIMAL),
             @Result(column = "order_create_time", property = "orderCreateTime", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "order_expire_time", property = "orderExpireTime", jdbcType = JdbcType.TIMESTAMP),
-            @Result(column = "order_id", property = "orderVoItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_ALL)),
+            @Result(column = "order_id", property = "orderVoItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_UNRELATED)),
             @Result(column = "order_id", property = "doctorTicket", one = @One(select = MapperConst.ONE_ORDER_DOCTOR_TICKET))
     })
     List<OrderVo> selectOrdersByPatientIdAndOrderType(Long patientId,Integer orderType);
@@ -73,7 +75,7 @@ public interface IOrderMapper extends OrderMapper {
      */
     @Select({
             "select",
-            "order_id, order_type, doctor_id, patient_id, order_status, order_total, order_create_time,order_expire_time",
+            "*",
             "from entity_order",
             "where order_id = #{orderId,jdbcType=BIGINT}"
     })
@@ -82,14 +84,40 @@ public interface IOrderMapper extends OrderMapper {
             @Result(column = "order_type", property = "orderType", jdbcType = JdbcType.INTEGER),
             @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
             @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_status", property = "orderStatus", jdbcType = JdbcType.VARCHAR),
             @Result(column = "order_total", property = "orderTotal", jdbcType = JdbcType.DECIMAL),
             @Result(column = "order_create_time", property = "orderCreateTime", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "order_expire_time", property = "orderExpireTime", jdbcType = JdbcType.TIMESTAMP),
-            @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM)),
+            @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_UNRELATED)),
             @Result(column = "order_id", property = "doctorTicket", one = @One(select = MapperConst.ONE_ORDER_DOCTOR_TICKET))
     })
     OrderVo selectRegisterOrderByOrderId(Long orderId);
+
+    /**
+     * 根据处方单ID关联查询订单和订单项
+     * @param prescriptionId 处方单ID
+     * @return 订单及订单项
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_order",
+            "where prescription_id = #{prescriptionId,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "order_type", property = "orderType", jdbcType = JdbcType.INTEGER),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "order_status", property = "orderStatus", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "order_total", property = "orderTotal", jdbcType = JdbcType.DECIMAL),
+            @Result(column = "order_create_time", property = "orderCreateTime", jdbcType = JdbcType.TIMESTAMP),
+            @Result(column = "order_expire_time", property = "orderExpireTime", jdbcType = JdbcType.TIMESTAMP),
+            @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_UNRELATED)),
+    })
+    OrderVo selectOrderByPrescriptionId(Long prescriptionId);
 
     /**
      * 根据患者ID和医生ID
@@ -107,7 +135,7 @@ public interface IOrderMapper extends OrderMapper {
     })
     @Results({
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT, id = true),
-            @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM))
+            @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_UNRELATED))
     })
     List<OrderVo> selectRepeatRegisterOrder(Long patientId, Long doctorId);
 
@@ -119,11 +147,11 @@ public interface IOrderMapper extends OrderMapper {
      */
     @Insert({
             "insert into entity_order (order_id, order_type, ",
-            "doctor_id, patient_id, ",
+            "prescription_id,doctor_id, patient_id, ",
             "order_status, order_total, ",
             "order_create_time, order_expire_time)",
             "values (#{orderId,jdbcType=BIGINT}, #{orderType,jdbcType=INTEGER}, ",
-            "#{doctorId,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, ",
+            "#{prescriptionId,jdbcType=BIGINT},#{doctorId,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, ",
             "#{orderStatus,jdbcType=VARCHAR}, #{orderTotal,jdbcType=DECIMAL}, ",
             "#{orderCreateTime,jdbcType=TIMESTAMP}, #{orderExpireTime,jdbcType=TIMESTAMP})"
     })

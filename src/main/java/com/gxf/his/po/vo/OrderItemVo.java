@@ -1,9 +1,6 @@
 package com.gxf.his.po.vo;
 
-import com.gxf.his.po.generate.CheckItem;
-import com.gxf.his.po.generate.DoctorTicketResource;
-import com.gxf.his.po.generate.OrderItem;
-import com.gxf.his.po.generate.Prescription;
+import com.gxf.his.po.generate.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +12,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class OrderItemVo extends OrderItem {
-    private Prescription prescription;
+    private PrescriptionInfo prescriptionInfo;
+    private PrescriptionExtraCost prescriptionExtraCost;
     private DoctorTicketResource  doctorTicketResource;
     private CheckItem checkItem;
 }

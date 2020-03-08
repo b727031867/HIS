@@ -41,6 +41,8 @@ public interface IDrugMapper extends DrugMapper {
     })
     List<DrugVo> selectDrugByDrugName(String drugName);
 
+
+
     /**
      * 查询所有药品
      *
@@ -113,4 +115,92 @@ public interface IDrugMapper extends DrugMapper {
             @Result(column = "drug_id", property = "drugStore", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_DRUG_STORE))
     })
     DrugVo selectDrugByDrugId(Long drugId);
+
+    /**
+     * 根据药品ID关联查询药品信息
+     * @param drugId 药品ID
+     * @return 药品信息
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_drug",
+            "where drug_id = #{drugId,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="code", property="code", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_alias", property="drugAlias", jdbcType=JdbcType.VARCHAR),
+            @Result(column="type_name", property="typeName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_name", property="drugName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_form", property="drugForm", jdbcType=JdbcType.VARCHAR),
+            @Result(column="toxicology_type", property="drugToxicology", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_GENERATE_DRUG_TOXICOLOGY)),
+            @Result(column="is_in_bulk", property="isInBulk", jdbcType=JdbcType.INTEGER),
+            @Result(column="drug_id", property="drugStore", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_DRUG_STORE)),
+    })
+    List<DrugVo> selectByPrimaryKeyRelated(Long drugId);
+
+    /**
+     * 根据属性模糊查询药品
+     * @param attribute 字段名
+     * @param value 值
+     * @return 药品列表
+     */
+    @Select("<script>"
+            + "SELECT "
+            + " * "
+            + "FROM entity_drug "
+            + "<where> "
+            + "<if test='attribute == \"drugName\" '>"
+            + " drug_name like CONCAT('%',#{value},'%')  "
+            + "</if> "
+            + "<if test='attribute == \"drugAlias\" '> "
+            + " AND drug_alias like  CONCAT('%',#{value},'%') "
+            + "</if>"
+            + "</where> "
+            + "</script>")
+    @Results({
+            @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="code", property="code", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_alias", property="drugAlias", jdbcType=JdbcType.VARCHAR),
+            @Result(column="type_name", property="typeName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_name", property="drugName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_form", property="drugForm", jdbcType=JdbcType.VARCHAR),
+            @Result(column="toxicology_type", property="drugToxicology", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_GENERATE_DRUG_TOXICOLOGY)),
+            @Result(column="is_in_bulk", property="isInBulk", jdbcType=JdbcType.INTEGER),
+            @Result(column="drug_id", property="drugStore", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_DRUG_STORE)),
+    })
+    List<DrugVo> selectDrugByAttribute(String attribute, String value);
+
+    /**
+     * 根据属性精确查询药品
+     * @param attribute 字段名
+     * @param value 值
+     * @return 药品列表
+     */
+    @Select("<script>"
+            + "SELECT "
+            + " * "
+            + "FROM entity_drug "
+            + "<where> "
+            + "<if test='attribute == \"drugName\" '>"
+            + " drug_name = #{value} "
+            + "</if> "
+            + "<if test='attribute == \"drugAlias\" '> "
+            + " AND drug_alias #{value} "
+            + "</if>"
+            + "</where> "
+            + "</script>")
+    @Results({
+            @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT, id=true),
+            @Result(column="code", property="code", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_alias", property="drugAlias", jdbcType=JdbcType.VARCHAR),
+            @Result(column="type_name", property="typeName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_name", property="drugName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="drug_form", property="drugForm", jdbcType=JdbcType.VARCHAR),
+            @Result(column="toxicology_type", property="toxicologyType", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_GENERATE_DRUG_TOXICOLOGY)),
+            @Result(column="is_in_bulk", property="isInBulk", jdbcType=JdbcType.INTEGER),
+            @Result(column="drug_id", property="drugStore", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_DRUG_STORE)),
+    })
+    List<DrugVo> selectDrugsByAccurateAttribute(String attribute, String value);
 }

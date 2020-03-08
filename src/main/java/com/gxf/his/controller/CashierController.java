@@ -40,6 +40,15 @@ public class CashierController extends BaseController {
         return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
+    @GetMapping("/uid")
+    public <T> ServerResponseVO<T> getCashierByUid(Long uid) {
+        if(uid == null){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        CashierVo cashierVo = cashierService.getCashierVoById(uid);
+        return MyUtil.cast(ServerResponseVO.success(cashierVo));
+    }
+
     @GetMapping("/attribute")
     public <T> ServerResponseVO<T> getCashiersByAttribute(@RequestParam(value = "attribute", defaultValue = "patientName") String attribute
             , @RequestParam(value = "isAccurate") Boolean isAccurate, @RequestParam(value = "value") String value, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size",

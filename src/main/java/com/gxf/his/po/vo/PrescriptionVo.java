@@ -1,9 +1,6 @@
 package com.gxf.his.po.vo;
 
-import com.gxf.his.po.generate.DoctorTicket;
-import com.gxf.his.po.generate.Patient;
-import com.gxf.his.po.generate.Prescription;
-import com.gxf.his.po.generate.PrescriptionExtraCost;
+import com.gxf.his.po.generate.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -63,5 +60,25 @@ public class PrescriptionVo extends Prescription {
      * 关联处方单额外收费
      */
     private PrescriptionExtraCost prescriptionExtraCost;
+
+    /**
+     * 关联的订单
+     */
+    private Order order;
+
+    /**
+     * 是否精确查询
+     */
+    private Boolean isAccurate;
+
+    /**
+     * 查询的属性
+     */
+    private String searchAttribute;
+
+    /**
+     *
+     */
+    private String value;
 
 }

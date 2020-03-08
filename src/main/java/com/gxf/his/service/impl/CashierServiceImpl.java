@@ -40,6 +40,16 @@ public class CashierServiceImpl implements CashierService {
     }
 
     @Override
+    public CashierVo getCashierVoById(Long uid) {
+        try {
+            return iCashierMapper.selectByUid(uid);
+        } catch (Exception e) {
+            log.error("根据UID查询收银员失败", e);
+            throw new CashierException(ServerResponseEnum.CASHIER_LIST_FAIL);
+        }
+    }
+
+    @Override
     public List<CashierVo> getAllCashiers() {
         List<CashierVo> cashiers;
         try {

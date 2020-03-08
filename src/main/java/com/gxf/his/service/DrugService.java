@@ -23,4 +23,21 @@ public interface DrugService {
      * @return 药品列表，关联了药品库存
      */
     List<DrugVo> getAllDrug();
+
+    /**
+     * 根据属性查询关联药品信息
+     * @param isAccurate 是否精确查询
+     * @param attribute 属性名称
+     * @param value 值
+     * @return 药品关联信息列表
+     */
+    List<DrugVo> selectDrugVosByAttribute(boolean isAccurate, String attribute, String value);
+
+
+    /**
+     * 根据属性药品ID关联药品信息
+     * @param drugId 药品ID
+     * @return 药品关联信息
+     */
+    List<DrugVo> getDrugVoByDrugId(Long drugId);
 }

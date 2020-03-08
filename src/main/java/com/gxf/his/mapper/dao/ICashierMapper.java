@@ -34,9 +34,10 @@ public interface ICashierMapper extends CashierMapper {
             @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
             @Result(column="entry_date", property="entryDate", jdbcType=JdbcType.DATE),
             @Result(column="department_code", property="departmentCode", jdbcType=JdbcType.VARCHAR),
-            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT)
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.BIGINT),
+            @Result(column="user_id", property="user", jdbcType=JdbcType.BIGINT,one = @One(select = MapperConst.ONE_GENERATE_USER)),
     })
-    Cashier selectByUid(Long uid);
+    CashierVo selectByUid(Long uid);
 
     /**
      * 批量删除收银员

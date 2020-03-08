@@ -57,6 +57,11 @@ public class Const {
    public static final long ORDER_EXPIRED_TIME = 10;
 
    /**
+    * 处方订单未付款的过期时间 单位：分钟
+    */
+   public static final long PRESCRIPTION_ORDER_EXPIRED_TIME = 60*24;
+
+   /**
     * 订单类型：挂号单
     */
    public static final Integer GH = 0;

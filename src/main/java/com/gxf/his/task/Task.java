@@ -126,7 +126,17 @@ public class Task {
     @Async
     @Scheduled(cron = "0 0/1 * * * ?")
     public void checkExpireOrder() {
-        orderService.getAndRemoveExpireOrders();
+        orderService.getAndRemoveExpireDoctorTicketOrders();
+    }
+
+    /**
+     * 每小时查询超时未付款的处方单
+     * 将它们的状态修改为已经过期
+     */
+    @Async
+    @Scheduled(cron = "0 0 0/1 * * ?")
+    public void checkExpirePrescriptionOrder() {
+        orderService.getAndRemoveExpirePrescriptionOrders();
     }
 
     /**

@@ -43,6 +43,58 @@ public interface IPrescriptionMapper extends PrescriptionMapper {
     List<Prescription> selectPrescriptionByDoctorIdAndPatientIdAndRange(Long doctorId, Long patientId, Date start, Date end);
 
     /**
+     * 根据患者Id关联查询处方单信息
+     *
+     * @param patientId 患者ID
+     * @return 处方单列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_prescription ",
+            "where patient_id = #{patientId,jdbcType=BIGINT} "
+    })
+    @Results({
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "total_spend", property = "totalSpend", jdbcType = JdbcType.DECIMAL),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "doctor_advice", property = "doctorAdvice", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
+            @Result(column = "prescription_id", property = "prescriptionInfoVos", jdbcType = JdbcType.BIGINT, many = @Many(select = MapperConst.MANY_DRUG_ITEM_ALL)),
+            @Result(column = "prescription_id", property = "prescriptionExtraCost", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_PRESCRIPTION_EXTRA_COST)),
+            @Result(column = "create_datetime", property = "createDatetime", jdbcType = JdbcType.TIMESTAMP)
+    })
+    List<PrescriptionVo> selectPrescriptionVosByPatientId(Long patientId);
+
+    /**
+     * 根据医生Id关联查询处方单信息
+     *
+     * @param doctorId 医生ID
+     * @return 处方单列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_prescription ",
+            "where doctor_id = #{doctorId,jdbcType=BIGINT} "
+    })
+    @Results({
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "total_spend", property = "totalSpend", jdbcType = JdbcType.DECIMAL),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "doctor_advice", property = "doctorAdvice", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
+            @Result(column = "prescription_id", property = "prescriptionInfoVos", jdbcType = JdbcType.BIGINT, many = @Many(select = MapperConst.MANY_DRUG_ITEM_ALL)),
+            @Result(column = "prescription_id", property = "prescriptionExtraCost", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_PRESCRIPTION_EXTRA_COST)),
+            @Result(column = "create_datetime", property = "createDatetime", jdbcType = JdbcType.TIMESTAMP)
+    })
+    List<PrescriptionVo> selectPrescriptionVosByDoctorId(Long doctorId);
+
+    /**
      * 根据挂号信息的ID查询某次挂号开具的处方单信息
      *
      * @param ticketId 挂号信息的ID
@@ -111,4 +163,60 @@ public interface IPrescriptionMapper extends PrescriptionMapper {
             @Result(column = "create_datetime", property = "createDatetime", jdbcType = JdbcType.TIMESTAMP)
     })
     PrescriptionVo getPrescriptionByDoctorTicketId(Long doctorTicketId);
+
+    /**
+     * 根据处方单ID关联查询处方单信息
+     *
+     * @param prescriptionId 处方单ID
+     * @return 关联查询的处方单信息
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_prescription",
+            "where prescription_id = #{prescriptionId,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "total_spend", property = "totalSpend", jdbcType = JdbcType.DECIMAL),
+            @Result(column = "doctor_advice", property = "doctorAdvice", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "ticket_id", property = "ticketId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
+            @Result(column = "ticket_id", property = "doctorTicket", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_GENERATE_DOCTOR_TICKET)),
+            @Result(column = "prescription_id", property = "prescriptionInfoVos", jdbcType = JdbcType.BIGINT, many = @Many(select = MapperConst.MANY_DRUG_ITEM_ALL)),
+            @Result(column = "prescription_id", property = "prescriptionExtraCost", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_PRESCRIPTION_EXTRA_COST)),
+            @Result(column = "prescription_id", property = "order", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_ORDER_BY_PRESCRIPTION_ID_)),
+            @Result(column = "create_datetime", property = "createDatetime", jdbcType = JdbcType.TIMESTAMP)
+    })
+    PrescriptionVo getPrescriptionByPrescriptionId(Long prescriptionId);
+
+    /**
+     * 根据时间范围关联查询处方单信息
+     *
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @return 处方单列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_prescription ",
+            "where create_datetime BETWEEN #{startDate,jdbcType=TIMESTAMP} AND #{endDate,jdbcType=TIMESTAMP} "
+    })
+    @Results({
+            @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "total_spend", property = "totalSpend", jdbcType = JdbcType.DECIMAL),
+            @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "patient_id", property = "patient", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_PATIENT)),
+            @Result(column = "doctor_advice", property = "doctorAdvice", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "doctor_id", property = "doctorId", jdbcType = JdbcType.BIGINT),
+            @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
+            @Result(column = "prescription_id", property = "prescriptionInfoVos", jdbcType = JdbcType.BIGINT, many = @Many(select = MapperConst.MANY_DRUG_ITEM_ALL)),
+            @Result(column = "prescription_id", property = "prescriptionExtraCost", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_PRESCRIPTION_EXTRA_COST)),
+            @Result(column = "create_datetime", property = "createDatetime", jdbcType = JdbcType.TIMESTAMP)
+    })
+    List<PrescriptionVo> selectPrescriptionsByRange(Date startDate, Date endDate);
 }

@@ -19,39 +19,43 @@ public interface OrderItemMapper {
 
     @Insert({
         "insert into entity_order_item (order_item_id, order_id, ",
-        "prescription_id, ticket_resource_id, ",
-        "check_item_id)",
+        "prescription_info_id, ticket_resource_id, ",
+        "prescription_extra_cost_id, check_item_id)",
         "values (#{orderItemId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, ",
-        "#{prescriptionId,jdbcType=BIGINT}, #{ticketResourceId,jdbcType=BIGINT}, ",
-        "#{checkItemId,jdbcType=BIGINT})"
+        "#{prescriptionInfoId,jdbcType=BIGINT}, #{ticketResourceId,jdbcType=BIGINT}, ",
+        "#{prescriptionExtraCostId,jdbcType=BIGINT}, #{checkItemId,jdbcType=BIGINT})"
     })
     int insert(OrderItem record);
 
     @Select({
         "select",
-        "order_item_id, order_id, prescription_id, ticket_resource_id, check_item_id",
+        "order_item_id, order_id, prescription_info_id, ticket_resource_id, prescription_extra_cost_id, ",
+        "check_item_id",
         "from entity_order_item",
         "where order_item_id = #{orderItemId,jdbcType=BIGINT}"
     })
     @Results({
         @Result(column="order_item_id", property="orderItemId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="order_id", property="orderId", jdbcType=JdbcType.BIGINT),
-        @Result(column="prescription_id", property="prescriptionId", jdbcType=JdbcType.BIGINT),
+        @Result(column="prescription_info_id", property="prescriptionInfoId", jdbcType=JdbcType.BIGINT),
         @Result(column="ticket_resource_id", property="ticketResourceId", jdbcType=JdbcType.BIGINT),
+        @Result(column="prescription_extra_cost_id", property="prescriptionExtraCostId", jdbcType=JdbcType.BIGINT),
         @Result(column="check_item_id", property="checkItemId", jdbcType=JdbcType.BIGINT)
     })
     OrderItem selectByPrimaryKey(Long orderItemId);
 
     @Select({
         "select",
-        "order_item_id, order_id, prescription_id, ticket_resource_id, check_item_id",
+        "order_item_id, order_id, prescription_info_id, ticket_resource_id, prescription_extra_cost_id, ",
+        "check_item_id",
         "from entity_order_item"
     })
     @Results({
         @Result(column="order_item_id", property="orderItemId", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="order_id", property="orderId", jdbcType=JdbcType.BIGINT),
-        @Result(column="prescription_id", property="prescriptionId", jdbcType=JdbcType.BIGINT),
+        @Result(column="prescription_info_id", property="prescriptionInfoId", jdbcType=JdbcType.BIGINT),
         @Result(column="ticket_resource_id", property="ticketResourceId", jdbcType=JdbcType.BIGINT),
+        @Result(column="prescription_extra_cost_id", property="prescriptionExtraCostId", jdbcType=JdbcType.BIGINT),
         @Result(column="check_item_id", property="checkItemId", jdbcType=JdbcType.BIGINT)
     })
     List<OrderItem> selectAll();
@@ -59,8 +63,9 @@ public interface OrderItemMapper {
     @Update({
         "update entity_order_item",
         "set order_id = #{orderId,jdbcType=BIGINT},",
-          "prescription_id = #{prescriptionId,jdbcType=BIGINT},",
+          "prescription_info_id = #{prescriptionInfoId,jdbcType=BIGINT},",
           "ticket_resource_id = #{ticketResourceId,jdbcType=BIGINT},",
+          "prescription_extra_cost_id = #{prescriptionExtraCostId,jdbcType=BIGINT},",
           "check_item_id = #{checkItemId,jdbcType=BIGINT}",
         "where order_item_id = #{orderItemId,jdbcType=BIGINT}"
     })

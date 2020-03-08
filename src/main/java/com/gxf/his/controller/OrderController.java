@@ -103,4 +103,13 @@ public class OrderController {
     public <T> ServerResponseVO<T> savePrescriptionOrder() {
         return ServerResponseVO.success();
     }
+
+    @PostMapping("/refund")
+    public <T> ServerResponseVO<T> refundPrescriptionOrder(Long orderId) {
+        if(orderId == null){
+            return  ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        orderService.refundOrderById(orderId);
+        return ServerResponseVO.success();
+    }
 }

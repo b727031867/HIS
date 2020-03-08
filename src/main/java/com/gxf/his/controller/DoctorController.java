@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -48,6 +49,14 @@ public class DoctorController extends BaseController {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         Long doctorId = userService.getLoginEntityId(uid);
+        LocalDateTime now = LocalDateTime.now();
+        long timestamp = Timestamp.valueOf(now).getTime();
+        long endDateTimestamp = endDate.getTime();
+        //如果endDate是今天，则按照当前时间查询
+        long oneDateTime = 24*60*60*1000;
+        if(timestamp - endDateTimestamp < oneDateTime){
+            endDate = new Date();
+        }
         List<TicketVo> ticketVos = doctorService.getOutpatients(doctorId, startDate, endDate);
         return MyUtil.cast(ServerResponseVO.success(ticketVos));
     }

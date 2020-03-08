@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.HtmlUtils;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
@@ -48,7 +49,7 @@ public class HtmlToPdfUtil {
         try {
             outputStream = new ByteArrayOutputStream();
             ITextRenderer renderer = new ITextRenderer();
-            renderer.setDocumentFromString(htmlTmpStr);
+            renderer.setDocumentFromString(HtmlUtils.htmlUnescape(htmlTmpStr));
             ITextFontResolver fontResolver = renderer.getFontResolver();
             // 中文字体支持
             fontResolver.addFont("font/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);

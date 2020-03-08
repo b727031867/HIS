@@ -14,6 +14,8 @@ public class Order implements Serializable {
 
     private Integer orderType;
 
+    private Long prescriptionId;
+
     private Long doctorId;
 
     private Long patientId;
@@ -36,6 +38,7 @@ public class Order implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", orderId=").append(orderId);
         sb.append(", orderType=").append(orderType);
+        sb.append(", prescriptionId=").append(prescriptionId);
         sb.append(", doctorId=").append(doctorId);
         sb.append(", patientId=").append(patientId);
         sb.append(", orderStatus=").append(orderStatus);

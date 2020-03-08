@@ -67,6 +67,7 @@ public enum ServerResponseEnum {
     ORDER_UPDATE_FAIL(123,"订单信息更新失败"),
     ORDER_REPEAT_FAIL(123,"不能重复下单"),
     ORDER_PAY_FAIL(124,"订单付款失败"),
+    ORDER_STATUS_CHANGE_FAIL(125,"订单状态改变失败"),
     TICKET_SAVE_FAIL(130,"挂号信息保存失败"),
     TICKET_DELETE_FAIL(131,"挂号信息删除失败"),
     TICKET_LIST_FAIL(132,"挂号信息查询失败"),

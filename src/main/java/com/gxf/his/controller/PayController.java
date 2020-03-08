@@ -65,34 +65,28 @@ public class PayController extends BaseController {
     }
 
     /**
-     * 挂号付款接口
+     * 挂号与处方单的付款接口
      */
     @PostMapping("/register")
-    public <T> ServerResponseVO<T> payRegister(Long orderId) {
+    public <T> ServerResponseVO<T> payRegister(Long orderId,Integer orderType) {
         log.info("订单ID：" + orderId);
-        if (null == orderId) {
-            ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        if (null == orderId ||  null == orderType) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
-        if (orderService.payRegisterOrder(orderId)) {
-            return ServerResponseVO.success();
+        if(orderType == 0){
+            if (orderService.payRegisterOrder(orderId)) {
+                return ServerResponseVO.success();
+            }
+        }else if(orderType == 1){
+            if (orderService.payPrescription(orderId)) {
+                return ServerResponseVO.success();
+            }
+        }else {
+            log.warn("未知的订单类型");
         }
+
         return ServerResponseVO.error(ServerResponseEnum.ORDER_PAY_FAIL);
     }
 
-    /**
-     * 处方付款接口 TODO
-     */
-    @PostMapping("/prescription")
-    public <T> ServerResponseVO<T> payPrescription(Long orderId) {
-        return ServerResponseVO.success();
-    }
-
-    /**
-     * 检查付款接口 TODO
-     */
-    @PostMapping("/checkItem")
-    public <T> ServerResponseVO<T> payCheckItem(Long orderId) {
-        return ServerResponseVO.success();
-    }
 }
 

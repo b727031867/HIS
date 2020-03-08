@@ -4,10 +4,7 @@ import com.gxf.his.mapper.MapperConst;
 import com.gxf.his.mapper.generate.PrescriptionInfoMapper;
 import com.gxf.his.po.generate.PrescriptionInfo;
 import com.gxf.his.po.vo.PrescriptionInfoVo;
-import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
 import java.util.List;
@@ -42,5 +39,21 @@ public interface IPrescriptionInfoMapper extends PrescriptionInfoMapper {
             @Result(column="num", property="num", jdbcType=JdbcType.INTEGER)
     })
     List<PrescriptionInfoVo> selectPrescriptionInfosByPrescriptionId(Long prescriptionId);
+
+    /**
+     * 插入一个处方项，并且注入ID
+     * @param record 处方项
+     * @return 本次操作影响的行数
+     */
+    @Insert({
+            "insert into entity_prescription_info (prescription_info_id, prescription_id, ",
+            "drug_id, `status`, item_total_price, ",
+            "unit, num)",
+            "values (#{prescriptionInfoId,jdbcType=BIGINT}, #{prescriptionId,jdbcType=BIGINT}, ",
+            "#{drugId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{itemTotalPrice,jdbcType=DECIMAL}, ",
+            "#{unit,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER})"
+    })
+    @Options(useGeneratedKeys = true, keyProperty = "prescriptionInfoId", keyColumn = "prescription_info_id")
+    int insertAndInjectId(PrescriptionInfo record);
 
 }
