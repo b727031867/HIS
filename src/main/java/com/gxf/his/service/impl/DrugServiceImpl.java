@@ -2,11 +2,16 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.DrugException;
+import com.gxf.his.mapper.dao.IDrugDistributionMapper;
 import com.gxf.his.mapper.dao.IDrugMapper;
+import com.gxf.his.mapper.dao.IDrugstoreMapper;
+import com.gxf.his.po.generate.DrugDistribution;
+import com.gxf.his.po.generate.DrugStore;
 import com.gxf.his.po.vo.DrugVo;
 import com.gxf.his.service.DrugService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
@@ -22,6 +27,10 @@ import java.util.List;
 public class DrugServiceImpl implements DrugService {
     @Resource
     private IDrugMapper iDrugMapper;
+    @Resource
+    private IDrugDistributionMapper iDrugDistributionMapper;
+    @Resource
+    private IDrugstoreMapper iDrugstoreMapper;
 
     @Override
     public List<DrugVo> getDrugByDrugName(String drugName, Integer drugAlias) {
@@ -63,6 +72,34 @@ public class DrugServiceImpl implements DrugService {
         } catch (Exception e) {
             log.error("根据药品Id查询药品失败", e);
             throw new DrugException(ServerResponseEnum.DRUG_LIST_FAIL);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveDrugDistributionsAndDecreaseStock(List<DrugDistribution> drugDistributions) {
+        for (DrugDistribution drugDistribution : drugDistributions) {
+            if(drugDistribution.getDrugId() != null && drugDistribution.getPrescriptionId() != null && drugDistribution.getNumber() != null){
+                //如果是拆卖
+                if(drugDistribution.getIsInBulk() == 1){
+                    //并且是新拆，则库存减1
+                    if(drugDistribution.getIsNewOne() == 1){
+                        DrugStore drugStore = iDrugstoreMapper.selectDrugStoreByDrugId(drugDistribution.getDrugId());
+                        drugStore.setInventoryNum(drugStore.getInventoryNum()-1);
+                        iDrugstoreMapper.updateByPrimaryKey(drugStore);
+                    }
+                }else {
+                    //不是拆卖直接减少库存
+                    DrugStore drugStore = iDrugstoreMapper.selectDrugStoreByDrugId(drugDistribution.getDrugId());
+                    drugStore.setInventoryNum(drugStore.getInventoryNum()-drugDistribution.getNumber());
+                    iDrugstoreMapper.updateByPrimaryKey(drugStore);
+                }
+                //插入信息
+                iDrugDistributionMapper.insert(drugDistribution);
+            }else{
+                log.warn("不合法的DrugDistribution"+drugDistribution.toString());
+                throw new DrugException(ServerResponseEnum.DRUG_DISTRIBUTION_SAVE_FAIL);
+            }
         }
     }
 

@@ -2,10 +2,12 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.Const;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.exception.BaseBusinessException;
 import com.gxf.his.exception.PrescriptionException;
 import com.gxf.his.mapper.dao.*;
 import com.gxf.his.po.generate.Prescription;
 import com.gxf.his.po.generate.PrescriptionExtraCost;
+import com.gxf.his.po.generate.PrescriptionRefundInfo;
 import com.gxf.his.po.vo.*;
 import com.gxf.his.service.OrderService;
 import com.gxf.his.service.PrescriptionService;
@@ -40,6 +42,8 @@ public class PrescriptionImpl implements PrescriptionService {
     private IPrescriptionExtraCostMapper iPrescriptionExtraCostMapper;
     @Resource
     private IPrescriptionInfoMapper iPrescriptionInfoMapper;
+    @Resource
+    private IPrescriptionRefundInfoMapper iPrescriptionRefundInfoMapper;
     @Resource
     private OrderService orderService;
     @Resource
@@ -216,9 +220,32 @@ public class PrescriptionImpl implements PrescriptionService {
     public List<PrescriptionVo> getPrescriptionListByTimeArea(Date startDate, Date endDate) {
         try {
             return iPrescriptionMapper.selectPrescriptionsByRange(startDate, endDate);
-        }catch (Exception e){
-            log.error("根据时间范围查询处方单失败",e);
+        } catch (Exception e) {
+            log.error("根据时间范围查询处方单失败", e);
             throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_LIST_FAIL);
+        }
+    }
+
+    @Override
+    public void addRefundPrescription(PrescriptionRefundInfo prescriptionRefundInfo) {
+        try {
+            //检查是否存在此处方单
+            Prescription prescription = iPrescriptionMapper.selectByPrimaryKey(prescriptionRefundInfo.getPrescriptionId());
+            if (prescription == null) {
+                log.warn("当前处方单号没有对应的处方单");
+                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_SAVE_FAIL);
+            }
+            //检查此处方单是否已经存在申请退款
+            PrescriptionRefundInfo refundInfo = iPrescriptionRefundInfoMapper.selectByPrescriptionId(prescription.getPrescriptionId());
+            if (refundInfo != null) {
+                log.warn("当前处方单号已经有对应的退款信息了");
+                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_SAVE_FAIL);
+            }
+            //插入申请的退款信息
+            iPrescriptionRefundInfoMapper.insert(prescriptionRefundInfo);
+        } catch (Exception e) {
+            log.error("处方退款信息保存失败", e);
+            throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_SAVE_FAIL);
         }
     }
 

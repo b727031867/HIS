@@ -83,4 +83,17 @@ public class DepartmentController {
     }
 
 
+    @GetMapping("/farther")
+    public <T> ServerResponseVO<T> getFartherDepartment() {
+        return MyUtil.cast(ServerResponseVO.success(departmentService.getFartherDepartment()));
+    }
+
+    @GetMapping("/children")
+    public <T> ServerResponseVO<T> getChildrenDepartment(Long parentId) {
+        if (parentId == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        return MyUtil.cast(ServerResponseVO.success(departmentService.getChildrenDepartment(parentId)));
+    }
+
 }

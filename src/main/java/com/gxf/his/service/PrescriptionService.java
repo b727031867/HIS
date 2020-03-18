@@ -1,5 +1,6 @@
 package com.gxf.his.service;
 
+import com.gxf.his.po.generate.PrescriptionRefundInfo;
 import com.gxf.his.po.vo.PrescriptionVo;
 
 import java.util.Date;
@@ -50,4 +51,10 @@ public interface PrescriptionService {
      * @return 处方单关联信息列表
      */
     List<PrescriptionVo> getPrescriptionListByTimeArea(Date startDate, Date endDate);
+
+    /**
+     * 添加一个处方退款申请
+     * @param prescriptionRefundInfo 处方退款申请信息
+     */
+    void addRefundPrescription(PrescriptionRefundInfo prescriptionRefundInfo);
 }

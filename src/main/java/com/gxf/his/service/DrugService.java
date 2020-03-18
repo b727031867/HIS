@@ -1,5 +1,6 @@
 package com.gxf.his.service;
 
+import com.gxf.his.po.generate.DrugDistribution;
 import com.gxf.his.po.vo.DrugVo;
 
 import java.util.List;
@@ -40,4 +41,10 @@ public interface DrugService {
      * @return 药品关联信息
      */
     List<DrugVo> getDrugVoByDrugId(Long drugId);
+
+    /**
+     * 保存分发的药品信息，并且减少对应的库存
+     * @param drugDistributions 药品分发信息的列表
+     */
+    void saveDrugDistributionsAndDecreaseStock(List<DrugDistribution> drugDistributions);
 }

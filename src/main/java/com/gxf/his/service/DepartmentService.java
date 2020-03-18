@@ -46,4 +46,16 @@ public interface DepartmentService {
      */
     List<Department> getDepartmentsByVaguelyDepartmentName(String name);
 
+    /**
+     * 获取医疗顶级科室列表，不包括财务部等非医疗科室
+     * @return 医疗科室列表
+     */
+    List<Department> getFartherDepartment();
+
+    /**
+     * 根据父ID获取医疗子科室列表
+     * @param parentId 父级科室ID
+     * @return 医疗科室列表
+     */
+    List<Department> getChildrenDepartment(Long parentId);
 }

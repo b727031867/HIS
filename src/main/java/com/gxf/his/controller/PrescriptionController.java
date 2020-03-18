@@ -3,6 +3,7 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.po.generate.PrescriptionRefundInfo;
 import com.gxf.his.po.vo.CashierVo;
 import com.gxf.his.po.vo.PrescriptionVo;
 import com.gxf.his.po.vo.ServerResponseVO;
@@ -94,5 +95,20 @@ public class PrescriptionController extends BaseController {
         return MyUtil.cast(ServerResponseVO.success(prescriptionVoData));
     }
 
+    @PostMapping("/refundPrescription")
+    public <T> ServerResponseVO<T> addRefundPrescription(@RequestParam("prescriptionId") Long prescriptionId,
+                                                         @RequestParam("reason") String reason, @RequestParam("operateId") Long operateId) {
+        if (prescriptionId == null ||reason == null || operateId == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        PrescriptionRefundInfo prescriptionRefundInfo = new PrescriptionRefundInfo();
+        prescriptionRefundInfo.setOperateId(operateId);
+        prescriptionRefundInfo.setReason(reason);
+        prescriptionRefundInfo.setPrescriptionId(prescriptionId);
+        prescriptionRefundInfo.setCreateTime(new Date());
+        prescriptionRefundInfo.setStatus(0);
+        prescriptionService.addRefundPrescription(prescriptionRefundInfo);
+        return ServerResponseVO.success();
+    }
 
 }

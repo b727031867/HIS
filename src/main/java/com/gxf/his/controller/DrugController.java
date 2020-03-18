@@ -3,6 +3,7 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.po.generate.DrugDistribution;
 import com.gxf.his.po.vo.DoctorVo;
 import com.gxf.his.po.vo.DrugVo;
 import com.gxf.his.po.vo.PrescriptionVo;
@@ -10,10 +11,7 @@ import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.service.DrugService;
 import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -67,5 +65,14 @@ public class DrugController extends BaseController {
             PageInfo<DrugVo> pageInfo = PageInfo.of(drugVos);
             return MyUtil.cast(ServerResponseVO.success(pageInfo));
         }
+    }
+
+    @PostMapping("/drugDistribution")
+    public <T> ServerResponseVO<T> drugDistribution(@RequestBody List<DrugDistribution> drugDistributions) {
+        if(drugDistributions == null || drugDistributions.size() == 0){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        drugService.saveDrugDistributionsAndDecreaseStock(drugDistributions);
+        return ServerResponseVO.success();
     }
 }

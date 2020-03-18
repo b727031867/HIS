@@ -83,4 +83,24 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new DepartmentException(ServerResponseEnum.DEPARTMENT_LIST_FAIL);
         }
     }
+
+    @Override
+    public List<Department> getFartherDepartment() {
+        try {
+            return iDepartmentMapper.getFartherDepartment();
+        } catch (Exception e) {
+            log.error("查询顶级医疗科室失败", e);
+            throw new DepartmentException(ServerResponseEnum.DEPARTMENT_LIST_FAIL);
+        }
+    }
+
+    @Override
+    public List<Department> getChildrenDepartment(Long parentId) {
+        try {
+            return iDepartmentMapper.getChildrenDepartment(parentId);
+        } catch (Exception e) {
+            log.error("查询某个父级医疗科室的子医疗科室失败", e);
+            throw new DepartmentException(ServerResponseEnum.DEPARTMENT_LIST_FAIL);
+        }
+    }
 }

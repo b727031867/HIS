@@ -22,8 +22,7 @@ public interface IDrugstoreMapper extends DrugStoreMapper {
      */
     @Select({
             "select",
-            "inventory_id, drug_id, inventory_num, inventory_unit, packaging_specifications, ",
-            "smallest_unit, min_price, prescription_price, update_time",
+            "*",
             "from entity_drug_store",
             "where drug_id = #{drugId,jdbcType=BIGINT}"
     })
@@ -38,6 +37,6 @@ public interface IDrugstoreMapper extends DrugStoreMapper {
             @Result(column="prescription_price", property="prescriptionPrice", jdbcType=JdbcType.DECIMAL),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    List<DrugStore> selectDrugStoresByDrugId(Long drugId);
+    DrugStore selectDrugStoreByDrugId(Long drugId);
 
 }

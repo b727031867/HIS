@@ -89,7 +89,7 @@ public class MapperConst {
     /**
      * 一对一关联药品库存
      */
-    public final static String ONE_DRUG_STORE = "com.gxf.his.mapper.dao.IDrugstoreMapper.selectDrugStoresByDrugId";
+    public final static String ONE_DRUG_STORE = "com.gxf.his.mapper.dao.IDrugstoreMapper.selectDrugStoreByDrugId";
 
     /**
      * 一对一关联药品业务类

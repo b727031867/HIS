@@ -95,4 +95,41 @@ public interface IDepartmentMapper extends DepartmentMapper {
     })
     List<Department> selectAllChildrenDepartment();
 
+    /**
+     * 获取所有医疗科室列表
+     *
+     * @return 医疗科室列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_department where department_parent_id = -1"
+    })
+    @Results({
+            @Result(column = "department_id", property = "departmentId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "department_code", property = "departmentCode", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_name", property = "departmentName", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_introduction", property = "departmentIntroduction", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_parent_id", property = "departmentParentId", jdbcType = JdbcType.BIGINT)
+    })
+    List<Department> getFartherDepartment();
+
+    /**
+     * 获取某个父级科室的所有子科室列表
+     * @param parentId 父级科室ID
+     * @return 医疗科室列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_department where department_parent_id = #{parentId,jdbcType=BIGINT}"
+    })
+    @Results({
+            @Result(column = "department_id", property = "departmentId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "department_code", property = "departmentCode", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_name", property = "departmentName", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_introduction", property = "departmentIntroduction", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "department_parent_id", property = "departmentParentId", jdbcType = JdbcType.BIGINT)
+    })
+    List<Department> getChildrenDepartment(Long parentId);
 }
