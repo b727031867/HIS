@@ -4,21 +4,22 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.po.generate.*;
-import com.gxf.his.po.vo.*;
-import com.gxf.his.service.*;
+import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.vo.ServerResponseVO;
+import com.gxf.his.po.vo.TicketVo;
+import com.gxf.his.service.DepartmentService;
+import com.gxf.his.service.DoctorService;
+import com.gxf.his.service.TicketResourceService;
+import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.MyUtil;
-import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,8 +54,8 @@ public class DoctorController extends BaseController {
         long timestamp = Timestamp.valueOf(now).getTime();
         long endDateTimestamp = endDate.getTime();
         //如果endDate是今天，则按照当前时间查询
-        long oneDateTime = 24*60*60*1000;
-        if(timestamp - endDateTimestamp < oneDateTime){
+        long oneDateTime = 24 * 60 * 60 * 1000;
+        if (timestamp - endDateTimestamp < oneDateTime) {
             endDate = new Date();
         }
         List<TicketVo> ticketVos = doctorService.getOutpatients(doctorId, startDate, endDate);
@@ -169,18 +170,26 @@ public class DoctorController extends BaseController {
     @PutMapping
     public <T> ServerResponseVO<T> saveDoctorAndUser(@RequestBody DoctorVo doctorVo) {
         log.info("当前更新的医生信息为：" + doctorVo.toString());
+        //更新医生信息、排班信息
+        DoctorScheduling doctorScheduling = new DoctorScheduling();
+        doctorScheduling.setSchedulingId(doctorVo.getDoctorScheduling().getSchedulingId());
+        doctorScheduling.setSchedulingType(doctorVo.getDoctorScheduling().getSchedulingType());
+        doctorScheduling.setSchedulingTime(weekDayFormatMap(doctorVo.getDoctorScheduling().getSchedulingTime().split(",")));
+        doctorScheduling.setSchedulingRoom(doctorVo.getDoctorScheduling().getSchedulingRoom());
         Doctor doctor = new Doctor();
-        //更新医生信息
         doctor.setDoctorId(doctorVo.getDoctorId());
         doctor.setEmployeeId(doctorVo.getEmployeeId());
         doctor.setDoctorName(doctorVo.getDoctorName());
         doctor.setDoctorProfessionalTitle(doctorVo.getDoctorProfessionalTitle());
         doctor.setDoctorIntroduction(doctorVo.getDoctorIntroduction());
         doctor.setDepartmentCode(doctorVo.getDepartment().getDepartmentCode());
+        doctor.setTicketPrice(doctorVo.getTicketPrice());
+        DoctorVo doctorByDoctorId = doctorService.getDoctorByDoctorId(doctor.getDoctorId());
+        doctor.setTicketCurrentNum(doctorByDoctorId.getTicketCurrentNum());
         doctor.setSchedulingId(doctorVo.getDoctorScheduling().getSchedulingId());
         doctor.setUserId(doctorVo.getUser().getUserId());
         doctor.setTicketDayNum(doctorVo.getTicketDayNum());
-        doctorService.updateDoctor(doctor);
+        doctorService.updateDoctorAndDoctorScheduling(doctor,doctorScheduling);
         //更新用户信息
         User user = doctorVo.getUser();
         userService.updateUser(user);
@@ -189,9 +198,10 @@ public class DoctorController extends BaseController {
 
     @PostMapping
     public <T> ServerResponseVO<T> saveDoctor(@RequestBody DoctorVo doctorVo) {
-        if (StringUtils.isEmpty(doctorVo.getUser().getUserName().trim()) || StringUtils.isEmpty(doctorVo.getUser().getUserPassword().trim())
-                || StringUtils.isEmpty(doctorVo.getDepartment().getDepartmentCode().trim()) || StringUtils.isEmpty(doctorVo.getDoctorIntroduction().trim())
-                || StringUtils.isEmpty(doctorVo.getDoctorName().trim()) || StringUtils.isEmpty(doctorVo.getDoctorProfessionalTitle().trim())
+        if (StringUtils.isEmpty(doctorVo.getUser().getUserName().trim())
+                || StringUtils.isEmpty(doctorVo.getUser().getUserPassword().trim())
+                || StringUtils.isEmpty(doctorVo.getDepartmentCode().trim())
+                || StringUtils.isEmpty(doctorVo.getDoctorName().trim())
                 || StringUtils.isEmpty(doctorVo.getEmployeeId().trim())
         ) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
@@ -199,15 +209,29 @@ public class DoctorController extends BaseController {
         if (userService.findByUserName(doctorVo.getUser().getUserName()) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
+        //添加业务用户
         User user = UserController.doHashedCredentials(doctorVo.getUser().getUserName(), doctorVo.getUser().getUserPassword());
         userService.addUser(user);
+        //添加排班信息
+        DoctorScheduling doctorScheduling = new DoctorScheduling();
+        doctorScheduling.setSchedulingType(doctorVo.getDoctorScheduling().getSchedulingType());
+        //将星期几转换成数字字符串
+        String[] days = doctorVo.getDoctorScheduling().getSchedulingTime().split(",");
+        doctorScheduling.setSchedulingTime(weekDayFormatMap(days));
+        doctorScheduling.setSchedulingRoom(doctorVo.getDoctorScheduling().getSchedulingRoom());
+        doctorService.addDoctorScheduling(doctorScheduling);
+        //添加医生信息
         Doctor doctor = new Doctor();
-        doctor.setDepartmentCode(doctorVo.getDepartment().getDepartmentCode());
-        doctor.setDoctorIntroduction(doctorVo.getDoctorIntroduction());
+        doctor.setEmployeeId(doctorVo.getEmployeeId());
         doctor.setDoctorName(doctorVo.getDoctorName());
         doctor.setDoctorProfessionalTitle(doctorVo.getDoctorProfessionalTitle());
-        doctor.setEmployeeId(doctorVo.getEmployeeId());
+        doctor.setDoctorIntroduction(doctorVo.getDoctorIntroduction());
+        doctor.setDepartmentCode(doctorVo.getDepartmentCode());
+        doctor.setTicketDayNum(doctorVo.getTicketDayNum());
+        doctor.setTicketPrice(doctorVo.getTicketPrice());
+        doctor.setTicketCurrentNum(doctorVo.getTicketDayNum());
         doctor.setUserId(user.getUserId());
+        doctor.setSchedulingId(doctorScheduling.getSchedulingId());
         doctorService.addDoctor(doctor);
         return ServerResponseVO.success();
     }
@@ -226,7 +250,8 @@ public class DoctorController extends BaseController {
     public <T> ServerResponseVO<T> deleteDoctorAndUserByDoctorId(@RequestParam(name = "doctorId") Long doctorId,
                                                                  @RequestParam(name = "userId") Long userId) {
         try {
-            doctorService.deleteDoctorAndUser(doctorId, userId);
+            DoctorVo doctor = doctorService.getDoctorByDoctorId(doctorId);
+            doctorService.deleteDoctorAndUser(doctorId, userId,doctor.getSchedulingId());
             return ServerResponseVO.success();
         } catch (Exception e) {
             return ServerResponseVO.error(ServerResponseEnum.USER_DELETE_FAIL);
@@ -252,5 +277,43 @@ public class DoctorController extends BaseController {
         return ServerResponseVO.error(ServerResponseEnum.DOCTOR_DELETE_FAIL);
     }
 
+
+    /**
+     * 映射星期几至1-7中，用逗号连接
+     *
+     * @param days 工作日列表
+     * @return 映射后的工作日字符串 比如 周一，周二 则变为 1,2
+     */
+    private String weekDayFormatMap(String[] days) {
+        StringBuilder dayListStr = new StringBuilder();
+        for (String day : days) {
+            switch (day) {
+                case "周一":
+                    dayListStr.append("1 ");
+                    break;
+                case "周二":
+                    dayListStr.append("2 ");
+                    break;
+                case "周三":
+                    dayListStr.append("3 ");
+                    break;
+                case "周四":
+                    dayListStr.append("4 ");
+                    break;
+                case "周五":
+                    dayListStr.append("5 ");
+                    break;
+                case "周六":
+                    dayListStr.append("6 ");
+                    break;
+                case "周末":
+                    dayListStr.append("7 ");
+                    break;
+                default:
+                    log.warn("没有映射到星期几" + day);
+            }
+        }
+        return dayListStr.toString().trim().replaceAll(" ", ",");
+    }
 
 }

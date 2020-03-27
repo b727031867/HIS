@@ -22,19 +22,19 @@ public interface DrugStoreMapper {
         "inventory_num, inventory_unit, ",
         "packaging_specifications, smallest_unit, ",
         "min_price, prescription_price, ",
-        "update_time)",
+        "update_time, last_user_id)",
         "values (#{inventoryId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, ",
         "#{inventoryNum,jdbcType=INTEGER}, #{inventoryUnit,jdbcType=VARCHAR}, ",
         "#{packagingSpecifications,jdbcType=INTEGER}, #{smallestUnit,jdbcType=VARCHAR}, ",
         "#{minPrice,jdbcType=DECIMAL}, #{prescriptionPrice,jdbcType=DECIMAL}, ",
-        "#{updateTime,jdbcType=TIMESTAMP})"
+        "#{updateTime,jdbcType=TIMESTAMP}, #{lastUserId,jdbcType=BIGINT})"
     })
     int insert(DrugStore record);
 
     @Select({
         "select",
         "inventory_id, drug_id, inventory_num, inventory_unit, packaging_specifications, ",
-        "smallest_unit, min_price, prescription_price, update_time",
+        "smallest_unit, min_price, prescription_price, update_time, last_user_id",
         "from entity_drug_store",
         "where inventory_id = #{inventoryId,jdbcType=BIGINT}"
     })
@@ -47,14 +47,15 @@ public interface DrugStoreMapper {
         @Result(column="smallest_unit", property="smallestUnit", jdbcType=JdbcType.VARCHAR),
         @Result(column="min_price", property="minPrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="prescription_price", property="prescriptionPrice", jdbcType=JdbcType.DECIMAL),
-        @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="last_user_id", property="lastUserId", jdbcType=JdbcType.BIGINT)
     })
     DrugStore selectByPrimaryKey(Long inventoryId);
 
     @Select({
         "select",
         "inventory_id, drug_id, inventory_num, inventory_unit, packaging_specifications, ",
-        "smallest_unit, min_price, prescription_price, update_time",
+        "smallest_unit, min_price, prescription_price, update_time, last_user_id",
         "from entity_drug_store"
     })
     @Results({
@@ -66,7 +67,8 @@ public interface DrugStoreMapper {
         @Result(column="smallest_unit", property="smallestUnit", jdbcType=JdbcType.VARCHAR),
         @Result(column="min_price", property="minPrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="prescription_price", property="prescriptionPrice", jdbcType=JdbcType.DECIMAL),
-        @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="last_user_id", property="lastUserId", jdbcType=JdbcType.BIGINT)
     })
     List<DrugStore> selectAll();
 
@@ -79,7 +81,8 @@ public interface DrugStoreMapper {
           "smallest_unit = #{smallestUnit,jdbcType=VARCHAR},",
           "min_price = #{minPrice,jdbcType=DECIMAL},",
           "prescription_price = #{prescriptionPrice,jdbcType=DECIMAL},",
-          "update_time = #{updateTime,jdbcType=TIMESTAMP}",
+          "update_time = #{updateTime,jdbcType=TIMESTAMP},",
+          "last_user_id = #{lastUserId,jdbcType=BIGINT}",
         "where inventory_id = #{inventoryId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(DrugStore record);

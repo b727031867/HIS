@@ -17,6 +17,7 @@ public interface IOrderMapper extends OrderMapper {
 
     /**
      * 查询未付款并且过期的商品列表及其商品项
+     *
      * @param orderType 过期订单的类型 0挂号单 1处方单 2检查单
      * @return 过期的商品列表及其商品项
      */
@@ -36,12 +37,13 @@ public interface IOrderMapper extends OrderMapper {
             @Result(column = "order_total", property = "orderTotal", jdbcType = JdbcType.DECIMAL),
             @Result(column = "order_create_time", property = "orderCreateTime", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "order_expire_time", property = "orderExpireTime", jdbcType = JdbcType.TIMESTAMP),
-            @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM))
+            @Result(column = "order_id", property = "orderItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_UNRELATED))
     })
     List<OrderVo> selectExpireOrderByOrderType(int orderType);
 
     /**
      * 查询某位用户某种订单类型所有的订单历史信息
+     *
      * @param patientId 患者ID
      * @param orderType 订单类型
      * @return 订单历史信息列表
@@ -55,7 +57,7 @@ public interface IOrderMapper extends OrderMapper {
     @Results({
             @Result(column = "order_id", property = "orderId", jdbcType = JdbcType.BIGINT, id = true),
             @Result(column = "order_type", property = "orderType", jdbcType = JdbcType.INTEGER),
-            @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT,one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
+            @Result(column = "doctor_id", property = "doctorVo", jdbcType = JdbcType.BIGINT, one = @One(select = MapperConst.ONE_TICKET_DOCTOR_ALL)),
             @Result(column = "patient_id", property = "patientId", jdbcType = JdbcType.BIGINT),
             @Result(column = "prescription_id", property = "prescriptionId", jdbcType = JdbcType.BIGINT),
             @Result(column = "order_status", property = "orderStatus", jdbcType = JdbcType.VARCHAR),
@@ -65,11 +67,12 @@ public interface IOrderMapper extends OrderMapper {
             @Result(column = "order_id", property = "orderVoItemList", many = @Many(select = MapperConst.MANY_ORDER_ITEM_UNRELATED)),
             @Result(column = "order_id", property = "doctorTicket", one = @One(select = MapperConst.ONE_ORDER_DOCTOR_TICKET))
     })
-    List<OrderVo> selectOrdersByPatientIdAndOrderType(Long patientId,Integer orderType);
+    List<OrderVo> selectOrdersByPatientIdAndOrderType(Long patientId, Integer orderType);
 
 
     /**
      * 根据订单ID关联查询订单和订单项
+     *
      * @param orderId 订单ID
      * @return 订单及订单项
      */
@@ -96,6 +99,7 @@ public interface IOrderMapper extends OrderMapper {
 
     /**
      * 根据处方单ID关联查询订单和订单项
+     *
      * @param prescriptionId 处方单ID
      * @return 订单及订单项
      */

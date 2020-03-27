@@ -46,6 +46,8 @@ public class DoctorServiceImpl implements DoctorService {
     private ICheckItemInfoMapper iCheckItemInfoMapper;
     @Resource
     private IPatientMedicalRecordMapper iPatientMedicalRecordMapper;
+    @Resource
+    private IDoctorSchedulingMapper iDoctorSchedulingMapper;
 
     @Override
     public List<TicketVo> getOutpatients(Long doctorId, @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
@@ -155,7 +157,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteDoctorAndUser(Long doctorId, Long userId) throws Exception {
+    public int deleteDoctorAndUser(Long doctorId, Long userId, Long doctorSchedulingId) throws Exception {
         int a = 0;
         int b = 2;
         a = iDoctorMapper.deleteByPrimaryKey(doctorId) + a;
@@ -164,6 +166,8 @@ public class DoctorServiceImpl implements DoctorService {
             log.warn("删除时，没有找到ID为" + doctorId + "的用户或ID为" + userId + "的医生！");
             throw new Exception();
         }
+        //删除排班信息
+        iDoctorSchedulingMapper.deleteByPrimaryKey(doctorSchedulingId);
         return b;
     }
 
@@ -171,6 +175,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional(rollbackFor = DoctorException.class)
     public Integer deleteDoctorAndUserBatch(List<Doctor> doctors, List<User> users) {
         try {
+            //删除关联的排班信息
+            for (Doctor doctor : doctors) {
+                Doctor delDoctor = iDoctorMapper.selectByPrimaryKey(doctor.getDoctorId());
+                iDoctorSchedulingMapper.deleteByPrimaryKey(delDoctor.getSchedulingId());
+            }
             Integer a;
             a = iDoctorMapper.batchDoctorDelete(doctors);
             a = userService.deleteUserBatch(users) + a;
@@ -311,7 +320,6 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
 
-
     @Override
     public DoctorVo getDoctorByDoctorTicketId(Long doctorTicketId) {
         try {
@@ -320,6 +328,28 @@ public class DoctorServiceImpl implements DoctorService {
         } catch (Exception e) {
             log.error("根据挂号信息ID查询医生失败", e);
             throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);
+        }
+    }
+
+    @Override
+    public void addDoctorScheduling(DoctorScheduling doctorScheduling) {
+        try {
+            iDoctorSchedulingMapper.insertAndRejectId(doctorScheduling);
+        } catch (Exception e) {
+            log.error("插入排班信息失败", e);
+            throw new DoctorException(ServerResponseEnum.DOCTOR_SCHEDULING_SAVE_FAIL);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateDoctorAndDoctorScheduling(Doctor doctor, DoctorScheduling doctorScheduling) {
+        try {
+            iDoctorMapper.updateByPrimaryKey(doctor);
+            iDoctorSchedulingMapper.updateByPrimaryKey(doctorScheduling);
+        } catch (Exception e) {
+            log.error("医生信息更新失败", e);
+            throw new DoctorException(ServerResponseEnum.DOCTOR_UPDATE_FAIL);
         }
     }
 

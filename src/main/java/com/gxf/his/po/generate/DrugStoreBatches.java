@@ -12,7 +12,13 @@ import lombok.NoArgsConstructor;
 public class DrugStoreBatches implements Serializable {
     private Long inventoryBatchesId;
 
-    private Long supplierId;
+    private String supplierName;
+
+    private String phone;
+
+    private String supplierContactUser;
+
+    private String contactPersonName;
 
     private Long inventoryBatchesNumber;
 
@@ -28,6 +34,8 @@ public class DrugStoreBatches implements Serializable {
 
     private Date verifierDate;
 
+    private String remark;
+
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -37,7 +45,10 @@ public class DrugStoreBatches implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", inventoryBatchesId=").append(inventoryBatchesId);
-        sb.append(", supplierId=").append(supplierId);
+        sb.append(", supplierName=").append(supplierName);
+        sb.append(", phone=").append(phone);
+        sb.append(", supplierContactUser=").append(supplierContactUser);
+        sb.append(", contactPersonName=").append(contactPersonName);
         sb.append(", inventoryBatchesNumber=").append(inventoryBatchesNumber);
         sb.append(", purchasingAgentId=").append(purchasingAgentId);
         sb.append(", totalMoney=").append(totalMoney);
@@ -45,6 +56,7 @@ public class DrugStoreBatches implements Serializable {
         sb.append(", status=").append(status);
         sb.append(", verifierId=").append(verifierId);
         sb.append(", verifierDate=").append(verifierDate);
+        sb.append(", remark=").append(remark);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

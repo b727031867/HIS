@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class StoreBatches implements Serializable {
     private Long inventoryRefBatchesId;
 
+    private Long drugId;
+
     private Long inventoryId;
 
     private Long inventoryBatchesId;
@@ -26,6 +28,8 @@ public class StoreBatches implements Serializable {
 
     private Date expiredTime;
 
+    private Integer isnoticed;
+
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -35,6 +39,7 @@ public class StoreBatches implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", inventoryRefBatchesId=").append(inventoryRefBatchesId);
+        sb.append(", drugId=").append(drugId);
         sb.append(", inventoryId=").append(inventoryId);
         sb.append(", inventoryBatchesId=").append(inventoryBatchesId);
         sb.append(", tradePrice=").append(tradePrice);
@@ -42,6 +47,7 @@ public class StoreBatches implements Serializable {
         sb.append(", totalNumber=").append(totalNumber);
         sb.append(", productionDate=").append(productionDate);
         sb.append(", expiredTime=").append(expiredTime);
+        sb.append(", isnoticed=").append(isnoticed);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

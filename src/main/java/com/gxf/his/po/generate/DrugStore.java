@@ -28,6 +28,8 @@ public class DrugStore implements Serializable {
 
     private Date updateTime;
 
+    private Long lastUserId;
+
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -45,6 +47,7 @@ public class DrugStore implements Serializable {
         sb.append(", minPrice=").append(minPrice);
         sb.append(", prescriptionPrice=").append(prescriptionPrice);
         sb.append(", updateTime=").append(updateTime);
+        sb.append(", lastUserId=").append(lastUserId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

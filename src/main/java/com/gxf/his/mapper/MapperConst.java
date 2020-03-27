@@ -20,6 +20,11 @@ public class MapperConst {
     public final static String ONE_GENERATE_DRUG_TOXICOLOGY = "com.gxf.his.mapper.generate.DrugToxicologyMapper.selectByPrimaryKey";
 
     /**
+     * 一对一关联药品信息
+     */
+    public final static String ONE_GENERATE_DRUG = "com.gxf.his.mapper.generate.DrugMapper.selectByPrimaryKey";
+
+    /**
      * 一对一关联病人档案信息
      */
     public final static String ONE_GENERATE_PATIENT_FILE = "com.gxf.his.mapper.generate.PatientFileMapper.selectByPrimaryKey";
@@ -86,15 +91,15 @@ public class MapperConst {
      */
     public final static String ONE_TICKET_PATIENT = "com.gxf.his.mapper.dao.IPatientMapper.selectByPrimaryKey";
 
-    /**
-     * 一对一关联药品库存
-     */
-    public final static String ONE_DRUG_STORE = "com.gxf.his.mapper.dao.IDrugstoreMapper.selectDrugStoreByDrugId";
 
     /**
      * 一对一关联药品业务类
      */
     public final static String ONE_DRUG_VO = "com.gxf.his.mapper.dao.IDrugMapper.selectDrugByDrugId";
+    /**
+     * 一对一关联药品库存
+     */
+    public final static String ONE_DRUG_STORE = "com.gxf.his.mapper.dao.IDrugStoreMapper.selectDrugStoreByDrugId";
 
     /**
      * 通过处方单ID
@@ -109,11 +114,6 @@ public class MapperConst {
     public final static String ONE_ORDER_BY_PRESCRIPTION_ID_ = "com.gxf.his.mapper.dao.IOrderMapper.selectOrderByPrescriptionId";
 
     //**************************************一对多关联方法**************************************
-
-    /**
-     * 一对多关联订单的订单项
-     */
-    public final static String MANY_ORDER_ITEM = "com.gxf.his.mapper.dao.IOrderItemMapper.findOrderItemsByOrderId";
 
     /**
      * 一对多关联订单的订单项

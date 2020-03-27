@@ -98,7 +98,7 @@ public class CashierController extends BaseController {
         User user = UserController.doHashedCredentials(cashierVo.getUser().getUserName(), cashierVo.getUser().getUserPassword());
         userService.addUser(user);
         Cashier cashier = new Cashier();
-        cashier.setDepartmentCode(cashierVo.getDepartment().getDepartmentCode());
+        cashier.setDepartmentCode(cashierVo.getDepartmentCode());
         cashier.setEntryDate(cashierVo.getEntryDate());
         cashier.setName(cashierVo.getName());
         cashier.setPhone(cashierVo.getPhone());

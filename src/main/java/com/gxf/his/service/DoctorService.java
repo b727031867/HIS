@@ -1,9 +1,6 @@
 package com.gxf.his.service;
 
-import com.gxf.his.po.generate.Doctor;
-import com.gxf.his.po.generate.DoctorTicket;
-import com.gxf.his.po.generate.PatientMedicalRecord;
-import com.gxf.his.po.generate.User;
+import com.gxf.his.po.generate.*;
 import com.gxf.his.po.vo.DoctorVo;
 import com.gxf.his.po.vo.TicketVo;
 
@@ -67,10 +64,11 @@ public interface DoctorService {
      *
      * @param doctorId 医生的Id
      * @param userId   医生对应的用户Id
-     * @return @return 返回本次操作影响的行数
+     * @param doctorSchedulingId 医生对应的排班信息
+     * @return 返回本次操作影响的行数
      * @throws Exception 当删除一位医生时,没找到对应的用户,则会抛出异常
      */
-    int deleteDoctorAndUser(Long doctorId, Long userId) throws Exception;
+    int deleteDoctorAndUser(Long doctorId, Long userId,Long doctorSchedulingId) throws Exception;
 
     /**
      * 批量删除医生和其对应的用户
@@ -151,4 +149,17 @@ public interface DoctorService {
      * @return 医生的业务类
      */
     DoctorVo getDoctorByDoctorTicketId(Long doctorTicketId);
+
+    /**
+     * 添加一个排班信息
+     * @param doctorScheduling 排队信息实体
+     */
+    void addDoctorScheduling(DoctorScheduling doctorScheduling);
+
+    /**
+     * 修改医生的信息
+     * @param doctor 医生对象
+     * @param doctorScheduling 对应的排班信息
+     */
+    void updateDoctorAndDoctorScheduling(Doctor doctor, DoctorScheduling doctorScheduling);
 }

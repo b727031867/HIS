@@ -18,63 +18,71 @@ public interface StoreBatchesMapper {
     int deleteByPrimaryKey(Long inventoryRefBatchesId);
 
     @Insert({
-        "insert into ref_store_batches (inventory_ref_batches_id, inventory_id, ",
-        "inventory_batches_id, trade_price, ",
-        "total_amount, total_number, ",
-        "production_date, expired_time)",
-        "values (#{inventoryRefBatchesId,jdbcType=BIGINT}, #{inventoryId,jdbcType=BIGINT}, ",
-        "#{inventoryBatchesId,jdbcType=BIGINT}, #{tradePrice,jdbcType=DECIMAL}, ",
-        "#{totalAmount,jdbcType=DECIMAL}, #{totalNumber,jdbcType=INTEGER}, ",
-        "#{productionDate,jdbcType=TIMESTAMP}, #{expiredTime,jdbcType=TIMESTAMP})"
+        "insert into ref_store_batches (inventory_ref_batches_id, drug_id, ",
+        "inventory_id, inventory_batches_id, ",
+        "trade_price, total_amount, ",
+        "total_number, production_date, ",
+        "expired_time, isNoticed)",
+        "values (#{inventoryRefBatchesId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, ",
+        "#{inventoryId,jdbcType=BIGINT}, #{inventoryBatchesId,jdbcType=BIGINT}, ",
+        "#{tradePrice,jdbcType=DECIMAL}, #{totalAmount,jdbcType=DECIMAL}, ",
+        "#{totalNumber,jdbcType=INTEGER}, #{productionDate,jdbcType=TIMESTAMP}, ",
+        "#{expiredTime,jdbcType=TIMESTAMP}, #{isnoticed,jdbcType=INTEGER})"
     })
     int insert(StoreBatches record);
 
     @Select({
         "select",
-        "inventory_ref_batches_id, inventory_id, inventory_batches_id, trade_price, total_amount, ",
-        "total_number, production_date, expired_time",
+        "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, trade_price, ",
+        "total_amount, total_number, production_date, expired_time, isNoticed",
         "from ref_store_batches",
         "where inventory_ref_batches_id = #{inventoryRefBatchesId,jdbcType=BIGINT}"
     })
     @Results({
         @Result(column="inventory_ref_batches_id", property="inventoryRefBatchesId", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_id", property="inventoryId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_batches_id", property="inventoryBatchesId", jdbcType=JdbcType.BIGINT),
         @Result(column="trade_price", property="tradePrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_amount", property="totalAmount", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_number", property="totalNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="production_date", property="productionDate", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="expired_time", property="expiredTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="expired_time", property="expiredTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="isNoticed", property="isnoticed", jdbcType=JdbcType.INTEGER)
     })
     StoreBatches selectByPrimaryKey(Long inventoryRefBatchesId);
 
     @Select({
         "select",
-        "inventory_ref_batches_id, inventory_id, inventory_batches_id, trade_price, total_amount, ",
-        "total_number, production_date, expired_time",
+        "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, trade_price, ",
+        "total_amount, total_number, production_date, expired_time, isNoticed",
         "from ref_store_batches"
     })
     @Results({
         @Result(column="inventory_ref_batches_id", property="inventoryRefBatchesId", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_id", property="inventoryId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_batches_id", property="inventoryBatchesId", jdbcType=JdbcType.BIGINT),
         @Result(column="trade_price", property="tradePrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_amount", property="totalAmount", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_number", property="totalNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="production_date", property="productionDate", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="expired_time", property="expiredTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="expired_time", property="expiredTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="isNoticed", property="isnoticed", jdbcType=JdbcType.INTEGER)
     })
     List<StoreBatches> selectAll();
 
     @Update({
         "update ref_store_batches",
-        "set inventory_id = #{inventoryId,jdbcType=BIGINT},",
+        "set drug_id = #{drugId,jdbcType=BIGINT},",
+          "inventory_id = #{inventoryId,jdbcType=BIGINT},",
           "inventory_batches_id = #{inventoryBatchesId,jdbcType=BIGINT},",
           "trade_price = #{tradePrice,jdbcType=DECIMAL},",
           "total_amount = #{totalAmount,jdbcType=DECIMAL},",
           "total_number = #{totalNumber,jdbcType=INTEGER},",
           "production_date = #{productionDate,jdbcType=TIMESTAMP},",
-          "expired_time = #{expiredTime,jdbcType=TIMESTAMP}",
+          "expired_time = #{expiredTime,jdbcType=TIMESTAMP},",
+          "isNoticed = #{isnoticed,jdbcType=INTEGER}",
         "where inventory_ref_batches_id = #{inventoryRefBatchesId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(StoreBatches record);

@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.po.generate.DrugDistribution;
+import com.gxf.his.po.generate.DrugToxicology;
 import com.gxf.his.po.vo.DrugVo;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface DrugService {
 
     /**
      * 分页查询所有药品
-     * @return 药品列表，关联了药品库存
+     * @return 药品列表，关联了药品库存、毒理信息
      */
     List<DrugVo> getAllDrug();
 
@@ -47,4 +48,41 @@ public interface DrugService {
      * @param drugDistributions 药品分发信息的列表
      */
     void saveDrugDistributionsAndDecreaseStock(List<DrugDistribution> drugDistributions);
+
+    /**
+     * 查询所有的毒理信息
+     * @return 毒理信息列表
+     */
+    List<DrugToxicology> loadDrugToxicologyList();
+
+    /**
+     * 批量删除药品信息
+     * @param drugVos 药品信息列表
+     */
+    void batchDeleteDrug(List<DrugVo> drugVos);
+
+    /**
+     * 根据药品ID删除某个药品
+     * @param drugId 药品ID
+     */
+    void deleteDrugByDrugId(Long drugId);
+
+    /**
+     * 更新某药品的信息
+     * @param drugVo 药品的业务逻辑类
+     */
+    void drugUpdate(DrugVo drugVo);
+
+    /**
+     * 添加药品信息
+     * @param drugVo 药品的业务逻辑类
+     */
+    void addDrug(DrugVo drugVo);
+
+    /**
+     * 根据国家药品编号查询药品
+     * @param code 国家药品编号
+     * @return 药品信息
+     */
+    List<DrugVo> getDrugByCode(String code);
 }

@@ -120,9 +120,10 @@ public class UserController {
 
     @PostMapping("/registerPatient")
     public <T> ServerResponseVO<T> registerPatient(@RequestParam(value = "userName") String userName,
-                                                   @RequestParam(value = "userPassword") String password,
+                                                   @RequestParam(value = "password") String password,
+                                                   @RequestParam(value = "patientAge") Integer patientAge,
                                                    @RequestParam(value = "patientName") String patientName) {
-        if (StringUtils.isEmpty(userName.trim()) || StringUtils.isEmpty(password.trim())) {
+        if (StringUtils.isEmpty(userName.trim()) || StringUtils.isEmpty(password.trim())|| patientAge == null || StringUtils.isEmpty(patientName.trim())) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         if (userService.findByUserName(password) != null) {
@@ -133,6 +134,11 @@ public class UserController {
         //病人关联用户
         Patient patient = new Patient();
         patient.setUserId(user.getUserId());
+        byte isMarriage = 0;
+        byte sex = 0;
+        patient.setPatientIsMarriage(isMarriage);
+        patient.setPatientSex(sex);
+        patient.setPatientAge(patientAge);
         patient.setPatientName(patientName);
         patientService.addPatient(patient);
         return MyUtil.cast(ServerResponseVO.success(ServerResponseEnum.SUCCESS));
