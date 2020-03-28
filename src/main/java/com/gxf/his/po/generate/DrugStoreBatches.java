@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class DrugStoreBatches implements Serializable {
@@ -26,12 +27,14 @@ public class DrugStoreBatches implements Serializable {
 
     private BigDecimal totalMoney;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createDate;
 
     private String status;
 
     private Long verifierId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date verifierDate;
 
     private String remark;

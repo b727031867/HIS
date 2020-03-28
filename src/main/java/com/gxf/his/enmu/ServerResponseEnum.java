@@ -117,6 +117,15 @@ public enum ServerResponseEnum {
     DRUG_STORE_UPDATE_FAIL(223,"药品库存信息更新失败"),
     DRUG_STORE_REPEAT_ERROR(224,"该药品库存信息已存在"),
     DRUG_STORE_RELATE_ERROR(225,"该药品库存信息关联的药品不存在"),
+    DRUG_STORE_BATCHES_SAVE_FAIL(230,"药品库存批次信息保存失败"),
+    DRUG_STORE_BATCHES_DELETE_FAIL(231,"药品库存批次信息删除失败"),
+    DRUG_STORE_BATCHES_LIST_FAIL(232,"药品库存批次信息查询失败"),
+    DRUG_STORE_BATCHES_UPDATE_FAIL(233,"药品库存批次项更新失败"),
+    DRUG_STORE_BATCHES_ITEM_SAVE_FAIL(240,"药品库存批次项保存失败"),
+    DRUG_STORE_BATCHES_ITEM_DELETE_FAIL(241,"药品库存批次项删除失败"),
+    DRUG_STORE_BATCHES_ITEM_LIST_FAIL(242,"药品库存批次项查询失败"),
+    DRUG_STORE_BATCHES_ITEM_UPDATE_FAIL(243,"药品库存批次项更新失败"),
+    DRUG_STORE_BATCHES_ITEM_NONE_ERROR(244,"药品库存批次项为空"),
     WORD_CONVERSION_EXCEPTION(300,"文档转换异常"),
     WORD_CONVERSION_IO_EXCEPTION(301,"解析【docx】文档为html时，出现IO异常");
     Integer code;

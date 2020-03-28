@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class StoreBatches implements Serializable {
@@ -24,8 +25,10 @@ public class StoreBatches implements Serializable {
 
     private Integer totalNumber;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date productionDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date expiredTime;
 
     private Integer isnoticed;
