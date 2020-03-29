@@ -32,38 +32,27 @@ import java.util.List;
  * @date 2019-10-13
  */
 public class UserRealm extends AuthorizingRealm {
-
     @Resource
     private UserService userService;
-
     @Resource
     private RoleService roleService;
-
     @Resource
     private PermissionService permissionService;
-
-
-
-
     @Override
     public String getName() {
         return "userRealm";
     }
-
     /**
      * 自定义日志 用于记录登录的用户和验证情况
      */
     private final static Logger log = LoggerFactory.getLogger("loginLog");
-
     @Autowired
     private RedisClient redis;
-
     @Override
     public boolean supports(AuthenticationToken authenticationToken) {
         // 只支持JwtToken令牌类型
         return authenticationToken instanceof JwtToken;
     }
-
     /**
      * 定义如何获取用户的角色和权限的逻辑，给shiro做权限判断【授权处理】
      *
@@ -72,7 +61,6 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        //null username are invalid
         if (principals == null) {
             throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
         }
@@ -123,12 +111,10 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         //获取自定义的token
-        String token =
-                (String) authenticationToken.getCredentials();
+        String token = (String) authenticationToken.getCredentials();
         //Token不能为空
         if (token == null) {
-            throw new AuthenticationException(
-                    "token不能为空");
+            throw new AuthenticationException("token不能为空");
         }
         // 解密Token，获取用户名
         String username = JwtUtil.getUsername(token);

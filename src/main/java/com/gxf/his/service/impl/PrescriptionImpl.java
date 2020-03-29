@@ -228,25 +228,20 @@ public class PrescriptionImpl implements PrescriptionService {
 
     @Override
     public void addRefundPrescription(PrescriptionRefundInfo prescriptionRefundInfo) {
-        try {
-            //检查是否存在此处方单
-            Prescription prescription = iPrescriptionMapper.selectByPrimaryKey(prescriptionRefundInfo.getPrescriptionId());
-            if (prescription == null) {
-                log.warn("当前处方单号没有对应的处方单");
-                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_SAVE_FAIL);
-            }
-            //检查此处方单是否已经存在申请退款
-            PrescriptionRefundInfo refundInfo = iPrescriptionRefundInfoMapper.selectByPrescriptionId(prescription.getPrescriptionId());
-            if (refundInfo != null) {
-                log.warn("当前处方单号已经有对应的退款信息了");
-                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_SAVE_FAIL);
-            }
-            //插入申请的退款信息
-            iPrescriptionRefundInfoMapper.insert(prescriptionRefundInfo);
-        } catch (Exception e) {
-            log.error("处方退款信息保存失败", e);
-            throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_SAVE_FAIL);
+        //检查是否存在此处方单
+        Prescription prescription = iPrescriptionMapper.selectByPrimaryKey(prescriptionRefundInfo.getPrescriptionId());
+        if (prescription == null) {
+            log.warn("当前处方单号没有对应的处方单");
+            throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_NO_EXITS);
         }
+        //检查此处方单是否已经存在申请退款
+        PrescriptionRefundInfo refundInfo = iPrescriptionRefundInfoMapper.selectByPrescriptionId(prescription.getPrescriptionId());
+        if (refundInfo != null) {
+            log.warn("当前处方单号已经有对应的退款信息了");
+            throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_EXITS);
+        }
+        //插入申请的退款信息
+        iPrescriptionRefundInfoMapper.insert(prescriptionRefundInfo);
     }
 
     /**

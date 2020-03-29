@@ -35,8 +35,6 @@ public class ShiroConfig {
     public UserRealm userRealm() {
         return new UserRealm();
     }
-
-
     /**
      * 会话管理类 禁用session
      * @return 默认的Session管理器
@@ -48,7 +46,6 @@ public class ShiroConfig {
         manager.setSessionValidationSchedulerEnabled(false);
         return manager;
     }
-
     /**
      * 配置核心安全事务管理器
      *
@@ -60,23 +57,14 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //设置自定义realm.
         securityManager.setRealm(shiroRealm);
-        //配置记住我
-        //securityManager.setRememberMeManager(rememberMeManager());
-        //配置 redis缓存管理器
-        //securityManager.setCacheManager(getEhCacheManager());
-        //配置自定义session管理，使用redis
-        //securityManager.setSessionManager(sessionManager());
         // 关闭Shiro自带的session
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
         defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         securityManager.setSubjectDAO(subjectDAO);
-//        // 设置自定义的Shiro Cache
-//        shiroRealm.setCacheManager(new CustomCacheManager(template));
         return securityManager;
     }
-
     /**
      * 不需要在此处配置权限页面,因为的ShiroFilterFactoryBean已经配置过,
      * 但是此处必须存在,因为shiro-spring-boot-web-starter会查找此Bean,没有会报错
@@ -87,9 +75,7 @@ public class ShiroConfig {
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         return new DefaultShiroFilterChainDefinition();
     }
-
 //------------------------------------------注解支持开始------------------------------------------------
-
     /**
      * 扫描上下文，寻找所有的Advisor(通知器）
      * 将这些Advisor应用到所有符合切入点的Bean中。
@@ -101,7 +87,6 @@ public class ShiroConfig {
         proxyCreator.setProxyTargetClass(true);
         return proxyCreator;
     }
-
     /**
      * Shiro生命周期处理器,管理Shiro中一些bean的生命周期
      */
@@ -109,7 +94,6 @@ public class ShiroConfig {
     public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
-
     /**
      * 匹配所有加了 Shiro 认证注解的方法
      */
@@ -120,7 +104,6 @@ public class ShiroConfig {
         return advisor;
     }
     //------------------------------------------注解支持结束------------------------------------------------
-
     /**
      * ShiroFilterFactoryBean 处理拦截资源文件问题。
      * 注意：初始化ShiroFilterFactoryBean的时候需要注入：SecurityManager
@@ -164,7 +147,6 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return shiroFilterFactoryBean;
     }
-
     /**
      * 此bean的注入必须在shiroFilterFactoryBean之后，否则会导致：
      * invalid application configuration

@@ -192,6 +192,9 @@ public interface IDrugMapper extends DrugMapper {
             + "<if test='attribute == \"code\" '> "
             + " AND code = #{value,jdbcType=VARCHAR} "
             + "</if>"
+            + "<if test='attribute == \"drugId\" '> "
+            + " AND drug_id = #{value,jdbcType=BIGINT} "
+            + "</if>"
             + "</where> "
             + "</script>")
     @Results({

@@ -30,7 +30,6 @@ import java.io.PrintWriter;
  */
 @Slf4j
 public class JwtFilter extends BasicHttpAuthenticationFilter {
-
     /**
      * 判断Token头是否为空
      */
@@ -39,15 +38,12 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         HttpServletRequest req = (HttpServletRequest) request;
         return req.getHeader("Authorization") != null;
     }
-
     /**
      * 在过滤器中无法直接注入bean，此时bean还未实例化，因此在ShiroFilterBeanFactory中进行构造注入
      */
     private RedisClient redis;
-
     public JwtFilter() {
     }
-
     /**
      * 构造注入工具类
      *
@@ -56,7 +52,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     public JwtFilter(RedisClient redisClient) {
         this.redis = redisClient;
     }
-
     /**
      * 首先调用的一个方法，在该方法内进行主要的认证逻辑处理，如判断Token头是否为空，解密Token等
      */
@@ -92,7 +87,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         this.response401(response, msg);
         return false;
     }
-
     /**
      * 调用Realm执行登录，并返回登录认证的结果
      */
@@ -107,8 +101,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
     }
-
-
     /**
      * 将executeLogin方法调用去除
      * 防止循环调用doGetAuthenticationInfo方法
@@ -118,8 +110,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         this.sendChallenge(request, response);
         return false;
     }
-
-
     /**
      * 无需重定向，直接返回响应信息
      */
@@ -137,7 +127,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             log.error("返回响应信息出现IOException异常" + e.getMessage());
         }
     }
-
     /**
      * 无需重定向，直接返回响应信息，token过期或者封锁此ip的时候调用
      */
@@ -152,7 +141,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             log.error("返回响应信息出现IOException异常" + e.getMessage());
         }
     }
-
     /**
      * 刷新AccessToken，进行判断RefreshToken是否过期，未过期就返回新的AccessToken且继续正常访问
      */

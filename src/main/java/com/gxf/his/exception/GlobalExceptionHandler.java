@@ -58,4 +58,17 @@ public class GlobalExceptionHandler {
         return ServerResponseVO.error(ServerResponseEnum.BUSINESS_EXCEPTION);
     }
 
+    /**
+     * 处理处方单业务异常
+     *
+     * @param e 异常
+     * @return 业务异常响应信息
+     */
+    @ExceptionHandler({PrescriptionException.class})
+    public ServerResponseVO businessExceptionHandler(PrescriptionException e) {
+        this.logger.error("处方单业务异常：", e);
+        return ServerResponseVO.error(e.getServerResponseEnum());
+    }
+
+
 }
