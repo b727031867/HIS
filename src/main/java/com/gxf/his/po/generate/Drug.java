@@ -24,6 +24,8 @@ public class Drug implements Serializable {
 
     private Integer isInBulk;
 
+    private Long inventoryId;
+
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -40,6 +42,7 @@ public class Drug implements Serializable {
         sb.append(", drugForm=").append(drugForm);
         sb.append(", toxicologyType=").append(toxicologyType);
         sb.append(", isInBulk=").append(isInBulk);
+        sb.append(", inventoryId=").append(inventoryId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

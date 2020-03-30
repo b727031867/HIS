@@ -3,6 +3,7 @@ package com.gxf.his.mapper.dao;
 import com.gxf.his.mapper.Batch;
 import com.gxf.his.mapper.MapperConst;
 import com.gxf.his.mapper.generate.DrugStoreMapper;
+import com.gxf.his.po.generate.DrugStore;
 import com.gxf.his.po.vo.DrugStoreVo;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
@@ -102,6 +103,21 @@ public interface IDrugStoreMapper extends DrugStoreMapper {
             @Result(column="last_user_id", property="lastUserId", jdbcType=JdbcType.BIGINT)
     })
     List<DrugStoreVo> selectDrugStoresByAttribute(DrugStoreVo drugStoreVo);
+
+    @Insert({
+            "insert into entity_drug_store (inventory_id, drug_id, ",
+            "inventory_num, inventory_unit, ",
+            "packaging_specifications, smallest_unit, ",
+            "min_price, prescription_price, ",
+            "update_time, last_user_id)",
+            "values (#{inventoryId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, ",
+            "#{inventoryNum,jdbcType=INTEGER}, #{inventoryUnit,jdbcType=VARCHAR}, ",
+            "#{packagingSpecifications,jdbcType=INTEGER}, #{smallestUnit,jdbcType=VARCHAR}, ",
+            "#{minPrice,jdbcType=DECIMAL}, #{prescriptionPrice,jdbcType=DECIMAL}, ",
+            "#{updateTime,jdbcType=TIMESTAMP}, #{lastUserId,jdbcType=BIGINT})"
+    })
+    @Options(useGeneratedKeys = true,keyColumn = "inventory_id",keyProperty = "inventoryId")
+    int insertAndInjectID(DrugStore record);
 
     /**
      * 批量删除药品库存信息

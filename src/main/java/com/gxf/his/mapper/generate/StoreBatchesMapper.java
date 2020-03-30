@@ -22,19 +22,19 @@ public interface StoreBatchesMapper {
         "inventory_id, inventory_batches_id, ",
         "trade_price, total_amount, ",
         "total_number, production_date, ",
-        "expired_time, isNoticed)",
+        "expired_time, is_noticed)",
         "values (#{inventoryRefBatchesId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, ",
         "#{inventoryId,jdbcType=BIGINT}, #{inventoryBatchesId,jdbcType=BIGINT}, ",
         "#{tradePrice,jdbcType=DECIMAL}, #{totalAmount,jdbcType=DECIMAL}, ",
         "#{totalNumber,jdbcType=INTEGER}, #{productionDate,jdbcType=TIMESTAMP}, ",
-        "#{expiredTime,jdbcType=TIMESTAMP}, #{isnoticed,jdbcType=INTEGER})"
+        "#{expiredTime,jdbcType=TIMESTAMP}, #{isNoticed,jdbcType=INTEGER})"
     })
     int insert(StoreBatches record);
 
     @Select({
         "select",
         "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, trade_price, ",
-        "total_amount, total_number, production_date, expired_time, isNoticed",
+        "total_amount, total_number, production_date, expired_time, is_noticed",
         "from ref_store_batches",
         "where inventory_ref_batches_id = #{inventoryRefBatchesId,jdbcType=BIGINT}"
     })
@@ -48,14 +48,14 @@ public interface StoreBatchesMapper {
         @Result(column="total_number", property="totalNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="production_date", property="productionDate", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="expired_time", property="expiredTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="isNoticed", property="isnoticed", jdbcType=JdbcType.INTEGER)
+        @Result(column="is_noticed", property="isNoticed", jdbcType=JdbcType.INTEGER)
     })
     StoreBatches selectByPrimaryKey(Long inventoryRefBatchesId);
 
     @Select({
         "select",
         "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, trade_price, ",
-        "total_amount, total_number, production_date, expired_time, isNoticed",
+        "total_amount, total_number, production_date, expired_time, is_noticed",
         "from ref_store_batches"
     })
     @Results({
@@ -68,7 +68,7 @@ public interface StoreBatchesMapper {
         @Result(column="total_number", property="totalNumber", jdbcType=JdbcType.INTEGER),
         @Result(column="production_date", property="productionDate", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="expired_time", property="expiredTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="isNoticed", property="isnoticed", jdbcType=JdbcType.INTEGER)
+        @Result(column="is_noticed", property="isNoticed", jdbcType=JdbcType.INTEGER)
     })
     List<StoreBatches> selectAll();
 
@@ -82,7 +82,7 @@ public interface StoreBatchesMapper {
           "total_number = #{totalNumber,jdbcType=INTEGER},",
           "production_date = #{productionDate,jdbcType=TIMESTAMP},",
           "expired_time = #{expiredTime,jdbcType=TIMESTAMP},",
-          "isNoticed = #{isnoticed,jdbcType=INTEGER}",
+          "is_noticed = #{isNoticed,jdbcType=INTEGER}",
         "where inventory_ref_batches_id = #{inventoryRefBatchesId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(StoreBatches record);

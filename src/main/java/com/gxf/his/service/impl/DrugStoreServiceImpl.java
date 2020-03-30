@@ -105,7 +105,7 @@ public class DrugStoreServiceImpl implements DrugStoreService {
     @Override
     public void addDrugStore(DrugStoreVo drugStoreVo) {
         try {
-            iDrugStoreMapper.insert(drugStoreVo);
+            iDrugStoreMapper.insertAndInjectID(drugStoreVo);
         } catch (Exception e) {
             log.error("药品库存信息添加失败", e);
             throw new DrugStoreException(ServerResponseEnum.DRUG_STORE_SAVE_FAIL);

@@ -20,4 +20,17 @@ public class DrugStoreBatchesVo extends DrugStoreBatches {
      */
     private List<StoreBatchesVo> storeBatchesList;
 
+    /**
+     * 查询的属性
+     */
+    private String attribute;
+    /**
+     * 查询的值
+     */
+    private String value;
+    /**
+     * 是否精确查询
+     */
+    private String isAccurate;
+
 }

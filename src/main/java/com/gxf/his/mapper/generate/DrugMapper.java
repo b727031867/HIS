@@ -21,18 +21,20 @@ public interface DrugMapper {
         "insert into entity_drug (drug_id, code, ",
         "drug_alias, type_name, ",
         "drug_name, drug_form, ",
-        "toxicology_type, is_in_bulk)",
+        "toxicology_type, is_in_bulk, ",
+        "inventory_id)",
         "values (#{drugId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, ",
         "#{drugAlias,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, ",
         "#{drugName,jdbcType=VARCHAR}, #{drugForm,jdbcType=VARCHAR}, ",
-        "#{toxicologyType,jdbcType=BIGINT}, #{isInBulk,jdbcType=INTEGER})"
+        "#{toxicologyType,jdbcType=BIGINT}, #{isInBulk,jdbcType=INTEGER}, ",
+        "#{inventoryId,jdbcType=BIGINT})"
     })
     int insert(Drug record);
 
     @Select({
         "select",
         "drug_id, code, drug_alias, type_name, drug_name, drug_form, toxicology_type, ",
-        "is_in_bulk",
+        "is_in_bulk, inventory_id",
         "from entity_drug",
         "where drug_id = #{drugId,jdbcType=BIGINT}"
     })
@@ -44,14 +46,15 @@ public interface DrugMapper {
         @Result(column="drug_name", property="drugName", jdbcType=JdbcType.VARCHAR),
         @Result(column="drug_form", property="drugForm", jdbcType=JdbcType.VARCHAR),
         @Result(column="toxicology_type", property="toxicologyType", jdbcType=JdbcType.BIGINT),
-        @Result(column="is_in_bulk", property="isInBulk", jdbcType=JdbcType.INTEGER)
+        @Result(column="is_in_bulk", property="isInBulk", jdbcType=JdbcType.INTEGER),
+        @Result(column="inventory_id", property="inventoryId", jdbcType=JdbcType.BIGINT)
     })
     Drug selectByPrimaryKey(Long drugId);
 
     @Select({
         "select",
         "drug_id, code, drug_alias, type_name, drug_name, drug_form, toxicology_type, ",
-        "is_in_bulk",
+        "is_in_bulk, inventory_id",
         "from entity_drug"
     })
     @Results({
@@ -62,7 +65,8 @@ public interface DrugMapper {
         @Result(column="drug_name", property="drugName", jdbcType=JdbcType.VARCHAR),
         @Result(column="drug_form", property="drugForm", jdbcType=JdbcType.VARCHAR),
         @Result(column="toxicology_type", property="toxicologyType", jdbcType=JdbcType.BIGINT),
-        @Result(column="is_in_bulk", property="isInBulk", jdbcType=JdbcType.INTEGER)
+        @Result(column="is_in_bulk", property="isInBulk", jdbcType=JdbcType.INTEGER),
+        @Result(column="inventory_id", property="inventoryId", jdbcType=JdbcType.BIGINT)
     })
     List<Drug> selectAll();
 
@@ -74,7 +78,8 @@ public interface DrugMapper {
           "drug_name = #{drugName,jdbcType=VARCHAR},",
           "drug_form = #{drugForm,jdbcType=VARCHAR},",
           "toxicology_type = #{toxicologyType,jdbcType=BIGINT},",
-          "is_in_bulk = #{isInBulk,jdbcType=INTEGER}",
+          "is_in_bulk = #{isInBulk,jdbcType=INTEGER},",
+          "inventory_id = #{inventoryId,jdbcType=BIGINT}",
         "where drug_id = #{drugId,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(Drug record);

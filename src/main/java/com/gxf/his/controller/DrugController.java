@@ -52,6 +52,15 @@ public class DrugController extends BaseController {
         return MyUtil.cast(ServerResponseVO.success(drugToxicologyList));
     }
 
+    @GetMapping("/unLinkDrugList")
+    public <T> ServerResponseVO<T> loadUnLinkDrugList(@RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+                                                          @RequestParam(value = "size", defaultValue = "5", required = false) Integer size) {
+        PageHelper.startPage(page, size);
+        List<DrugVo> drugVos = drugService.loadUnLinkDrugList();
+        PageInfo<DrugVo> pageInfo = PageInfo.of(drugVos);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
+    }
+
     @GetMapping("/attribute")
     public <T> ServerResponseVO<T> getDrugsByAttribute(@RequestParam(value = "attribute", defaultValue = "drugName", required = false) String attribute,
                                                        @RequestParam(value = "isAccurate") Boolean isAccurate,

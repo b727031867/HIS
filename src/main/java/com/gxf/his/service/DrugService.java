@@ -85,4 +85,10 @@ public interface DrugService {
      * @return 药品信息
      */
     List<DrugVo> getDrugByCode(String code);
+
+    /**
+     * 查询所有没有关联库存信息的药品列表
+     * @return 药品列表
+     */
+    List<DrugVo> loadUnLinkDrugList();
 }

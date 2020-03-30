@@ -67,6 +67,30 @@ public interface IDrugMapper extends DrugMapper {
     List<DrugVo> selectAllDrug();
 
     /**
+     * 查询所有没有关联库存信息的药品列表
+     *
+     * @return 药品列表
+     */
+    @Select({
+            "select",
+            "*",
+            "from entity_drug ",
+            "where inventory_id is null"
+    })
+    @Results({
+            @Result(column = "drug_id", property = "drugId", jdbcType = JdbcType.BIGINT, id = true),
+            @Result(column = "code", property = "code", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "drug_alias", property = "drugAlias", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "type_name", property = "typeName", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "drug_name", property = "drugName", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "drug_form", property = "drugForm", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "toxicology_type", property = "toxicologyType", jdbcType = JdbcType.BIGINT),
+            @Result(column = "toxicology_type", property = "drugToxicology", jdbcType = JdbcType.BIGINT,one = @One(select = MapperConst.ONE_GENERATE_DRUG_TOXICOLOGY)),
+            @Result(column = "is_in_bulk", property = "isInBulk", jdbcType = JdbcType.INTEGER),
+    })
+    List<DrugVo> selectAllUnLinkDrug();
+
+    /**
      * 根据药品别名模糊查询药品列表
      *
      * @param drugAlias 药品别名

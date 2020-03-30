@@ -18,4 +18,5 @@ public class StoreBatchesVo extends StoreBatches {
      * 关联的药品信息
      */
     private DrugVo drugVo;
+
 }

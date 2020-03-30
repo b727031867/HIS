@@ -76,9 +76,13 @@ public class DrugStoreController extends BaseController {
                drugStoreVo.setDrugId(drugVos.get(0).getDrugId());
                drugStoreVo.setUpdateTime(new Date());
             }
+            drugStoreService.addDrugStore(drugStoreVo);
+            //关联插入后的药品库存ID到药品上
+            drugVos.get(0).setInventoryId(drugStoreVo.getInventoryId());
+            drugService.drugUpdate(drugVos.get(0));
+            return ServerResponseVO.success();
         }
-        drugStoreService.addDrugStore(drugStoreVo);
-        return ServerResponseVO.success();
+
     }
 
     @DeleteMapping

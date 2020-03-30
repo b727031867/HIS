@@ -169,6 +169,11 @@ public class DrugServiceImpl implements DrugService {
     }
 
     @Override
+    public List<DrugVo> loadUnLinkDrugList() {
+        return iDrugMapper.selectAllUnLinkDrug();
+    }
+
+    @Override
     public List<DrugVo> getAllDrug() {
         try {
             return iDrugMapper.selectAllDrug();

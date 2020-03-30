@@ -1,7 +1,6 @@
 package com.gxf.his.service;
 
 import com.gxf.his.po.vo.DrugStoreBatchesVo;
-import com.gxf.his.po.vo.DrugVo;
 
 import java.util.List;
 
@@ -22,5 +21,13 @@ public interface DrugStoreBatchesService {
 
     List<DrugStoreBatchesVo> getAllDrugStoreBatches();
 
-    List<DrugVo> selectDrugStoreBatchesVosByAttribute(Boolean isAccurate, String attribute, String value);
+    List<DrugStoreBatchesVo> selectDrugStoreBatchesVosByAttribute(Boolean isAccurate, String attribute, String value);
+
+    void reviewDrugStoreBatches(Long inventoryBatchesId,Long verifierId);
+
+    void antiReviewDrugStoreBatches(Long inventoryBatchesId, Long verifierId);
+
+    void batchReviewDrugStoreBatches(List<DrugStoreBatchesVo> drugStoreBathesVos);
+
+    void batchAntiReviewDrugStoreBatches(List<DrugStoreBatchesVo> drugStoreBathesVos);
 }

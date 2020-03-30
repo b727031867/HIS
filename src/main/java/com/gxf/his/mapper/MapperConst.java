@@ -127,4 +127,11 @@ public class MapperConst {
      */
     public final static String MANY_DRUG_ITEM_ALL = "com.gxf.his.mapper.dao.IPrescriptionInfoMapper.selectPrescriptionInfosByPrescriptionId";
 
+    /**
+     * 采购计划一对多关联采购项，及该项的采购药品、库存信息
+     */
+    public final static String MANY_STORE_BATCHES = "com.gxf.his.mapper.dao.IStoreBatchesMapper.selectStoreBatchesVosRelatedByInventoryBatchesId";
+
+
+
 }
