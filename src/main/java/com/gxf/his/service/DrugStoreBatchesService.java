@@ -30,4 +30,8 @@ public interface DrugStoreBatchesService {
     void batchReviewDrugStoreBatches(List<DrugStoreBatchesVo> drugStoreBathesVos);
 
     void batchAntiReviewDrugStoreBatches(List<DrugStoreBatchesVo> drugStoreBathesVos);
+
+    List<DrugStoreBatchesVo> getReviewedBatchesList();
+
+    void submitOrder(Long inventoryBatchesId,String inventoryBatchesNumber);
 }

@@ -126,4 +126,21 @@ public class DrugStoreBatchesServiceImpl implements DrugStoreBatchesService {
             iDrugStoreBatchesMapper.updateByPrimaryKey(drugStoreBatches);
         }
     }
+
+    @Override
+    public List<DrugStoreBatchesVo> getReviewedBatchesList() {
+        DrugStoreBatchesVo drugStoreBatchesVo = new DrugStoreBatchesVo();
+        drugStoreBatchesVo.setIsAccurate("true");
+        drugStoreBatchesVo.setValue("1");
+        drugStoreBatchesVo.setAttribute("status");
+        return iDrugStoreBatchesMapper.selectDrugStoresByAttribute(drugStoreBatchesVo);
+    }
+
+    @Override
+    public void submitOrder(Long inventoryBatchesId,String  inventoryBatchesNumber) {
+        DrugStoreBatches drugStoreBatches = iDrugStoreBatchesMapper.selectByPrimaryKey(inventoryBatchesId);
+        drugStoreBatches.setInventoryBatchesNumber(inventoryBatchesNumber);
+        drugStoreBatches.setStatus("4");
+        iDrugStoreBatchesMapper.updateByPrimaryKey(drugStoreBatches);
+    }
 }

@@ -48,26 +48,36 @@ public class DrugStoreBatchesController extends BaseController {
         return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
+    @GetMapping("/reviewedBatchesList")
+    public <T> ServerResponseVO<T> getReviewedBatchesList(
+            @RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+            @RequestParam(value = "size", defaultValue = "5", required = false) Integer size) {
+        PageHelper.startPage(page, size);
+        List<DrugStoreBatchesVo> drugStoreBathesVos = drugStoreBatchesService.getReviewedBatchesList();
+        PageInfo<DrugStoreBatchesVo> pageInfo = PageInfo.of(drugStoreBathesVos);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
+    }
+
     @GetMapping("/review")
-    public <T> ServerResponseVO<T> reviewDrugStoreBatches( @RequestParam(value = "inventoryBatchesId") Long inventoryBatchesId,@RequestParam(value = "verifierId") Long verifierId){
-        drugStoreBatchesService.reviewDrugStoreBatches(inventoryBatchesId,verifierId);
+    public <T> ServerResponseVO<T> reviewDrugStoreBatches(@RequestParam(value = "inventoryBatchesId") Long inventoryBatchesId, @RequestParam(value = "verifierId") Long verifierId) {
+        drugStoreBatchesService.reviewDrugStoreBatches(inventoryBatchesId, verifierId);
         return ServerResponseVO.success();
     }
 
     @GetMapping("/antiReview")
-    public <T> ServerResponseVO<T> antiReviewDrugStoreBatches( @RequestParam(value = "inventoryBatchesId") Long inventoryBatchesId,@RequestParam(value = "verifierId") Long verifierId){
-        drugStoreBatchesService.antiReviewDrugStoreBatches(inventoryBatchesId,verifierId);
+    public <T> ServerResponseVO<T> antiReviewDrugStoreBatches(@RequestParam(value = "inventoryBatchesId") Long inventoryBatchesId, @RequestParam(value = "verifierId") Long verifierId) {
+        drugStoreBatchesService.antiReviewDrugStoreBatches(inventoryBatchesId, verifierId);
         return ServerResponseVO.success();
     }
 
     @PostMapping("/batchReview")
-    public <T> ServerResponseVO<T> reviewDrugStoreBatches(@RequestBody List<DrugStoreBatchesVo> drugStoreBathesVos){
+    public <T> ServerResponseVO<T> reviewDrugStoreBatches(@RequestBody List<DrugStoreBatchesVo> drugStoreBathesVos) {
         drugStoreBatchesService.batchReviewDrugStoreBatches(drugStoreBathesVos);
         return ServerResponseVO.success();
     }
 
     @PostMapping("/batchAntiReview")
-    public <T> ServerResponseVO<T> antiReviewDrugStoreBatches(@RequestBody List<DrugStoreBatchesVo> drugStoreBathesVos){
+    public <T> ServerResponseVO<T> antiReviewDrugStoreBatches(@RequestBody List<DrugStoreBatchesVo> drugStoreBathesVos) {
         drugStoreBatchesService.batchAntiReviewDrugStoreBatches(drugStoreBathesVos);
         return ServerResponseVO.success();
     }
@@ -81,6 +91,15 @@ public class DrugStoreBatchesController extends BaseController {
     @PostMapping
     public <T> ServerResponseVO<T> drugStoreBathesAdd(@RequestBody DrugStoreBatchesVo drugStoreBathesVo) {
         drugStoreBatchesService.addDrugStoreBatches(drugStoreBathesVo);
+        return ServerResponseVO.success();
+    }
+
+    @PostMapping("/submitOrder")
+    public <T> ServerResponseVO<T> submitOrder(Long inventoryBatchesId,String inventoryBatchesNumber) {
+        if(inventoryBatchesId == null || inventoryBatchesNumber == null){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        drugStoreBatchesService.submitOrder(inventoryBatchesId,inventoryBatchesNumber);
         return ServerResponseVO.success();
     }
 

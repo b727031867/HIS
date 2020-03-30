@@ -20,7 +20,7 @@ public class DrugStoreBatches implements Serializable {
 
     private String contactPersonName;
 
-    private Long inventoryBatchesNumber;
+    private String inventoryBatchesNumber;
 
     private Long purchasingAgentId;
 

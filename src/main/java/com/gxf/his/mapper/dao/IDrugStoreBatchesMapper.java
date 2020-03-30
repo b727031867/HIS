@@ -96,6 +96,12 @@ public interface IDrugStoreBatchesMapper extends DrugStoreBatchesMapper {
             + "<if test='attribute == \"contactPersonName\" and isAccurate == \"false\"'>"
             + "AND contact_person_name like CONCAT('%',#{value,jdbcType=BIGINT},'%')"
             + "</if>"
+            + "<if test='attribute == \"status\" and isAccurate == \"true\"'>"
+            + "AND status = #{value,jdbcType=BIGINT}"
+            + "</if>"
+            + "<if test='attribute == \"status\" and isAccurate == \"false\"'>"
+            + "AND status like CONCAT('%',#{value,jdbcType=BIGINT},'%')"
+            + "</if>"
             +"</where>"
             + "</script>")
     @Results({
