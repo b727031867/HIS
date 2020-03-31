@@ -1,5 +1,6 @@
 package com.gxf.his.service;
 
+import com.gxf.his.po.vo.DrugCheckInfoVo;
 import com.gxf.his.po.vo.DrugStoreBatchesVo;
 
 import java.util.List;
@@ -34,4 +35,10 @@ public interface DrugStoreBatchesService {
     List<DrugStoreBatchesVo> getReviewedBatchesList();
 
     void submitOrder(Long inventoryBatchesId,String inventoryBatchesNumber);
+
+    List<DrugStoreBatchesVo> getBoughtAndFinishedBatchesList();
+
+    void saveDrugCheckInfo(DrugCheckInfoVo drugCheckInfoVo);
+
+    void finishOrder(Long inventoryBatchesId);
 }

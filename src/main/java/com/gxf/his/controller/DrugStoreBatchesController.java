@@ -3,6 +3,7 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.po.vo.DrugCheckInfoVo;
 import com.gxf.his.po.vo.DrugStoreBatchesVo;
 import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.service.DrugStoreBatchesService;
@@ -44,6 +45,16 @@ public class DrugStoreBatchesController extends BaseController {
         }
         PageHelper.startPage(page, size);
         List<DrugStoreBatchesVo> drugStoreBathesVos = drugStoreBatchesService.selectDrugStoreBatchesVosByAttribute(isAccurate, attribute, value);
+        PageInfo<DrugStoreBatchesVo> pageInfo = PageInfo.of(drugStoreBathesVos);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
+    }
+
+    @GetMapping("/boughtBatchesList")
+    public <T> ServerResponseVO<T> getBoughtBatchesList(
+            @RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+            @RequestParam(value = "size", defaultValue = "5", required = false) Integer size) {
+        PageHelper.startPage(page, size);
+        List<DrugStoreBatchesVo> drugStoreBathesVos = drugStoreBatchesService.getBoughtAndFinishedBatchesList();
         PageInfo<DrugStoreBatchesVo> pageInfo = PageInfo.of(drugStoreBathesVos);
         return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
@@ -94,12 +105,27 @@ public class DrugStoreBatchesController extends BaseController {
         return ServerResponseVO.success();
     }
 
+    @PostMapping("/drugCheckInfo")
+    public <T> ServerResponseVO<T> saveDrugCheckInfo(@RequestBody DrugCheckInfoVo drugCheckInfoVo) {
+        drugStoreBatchesService.saveDrugCheckInfo(drugCheckInfoVo);
+        return ServerResponseVO.success();
+    }
+
     @PostMapping("/submitOrder")
     public <T> ServerResponseVO<T> submitOrder(Long inventoryBatchesId,String inventoryBatchesNumber) {
         if(inventoryBatchesId == null || inventoryBatchesNumber == null){
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         drugStoreBatchesService.submitOrder(inventoryBatchesId,inventoryBatchesNumber);
+        return ServerResponseVO.success();
+    }
+
+    @PostMapping("/finishOrder")
+    public <T> ServerResponseVO<T> finishOrder(Long inventoryBatchesId) {
+        if(inventoryBatchesId == null){
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        drugStoreBatchesService.finishOrder(inventoryBatchesId);
         return ServerResponseVO.success();
     }
 

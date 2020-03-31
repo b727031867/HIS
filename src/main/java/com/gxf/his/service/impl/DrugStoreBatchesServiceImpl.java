@@ -3,9 +3,13 @@ package com.gxf.his.service.impl;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.DrugStoreBatchesException;
 import com.gxf.his.exception.DrugStoreException;
+import com.gxf.his.mapper.dao.IDrugCheckInfoMapper;
 import com.gxf.his.mapper.dao.IDrugStoreBatchesMapper;
 import com.gxf.his.mapper.generate.StoreBatchesMapper;
+import com.gxf.his.po.generate.DrugCheckInfo;
 import com.gxf.his.po.generate.DrugStoreBatches;
+import com.gxf.his.po.generate.StoreBatches;
+import com.gxf.his.po.vo.DrugCheckInfoVo;
 import com.gxf.his.po.vo.DrugStoreBatchesVo;
 import com.gxf.his.po.vo.StoreBatchesVo;
 import com.gxf.his.service.DrugStoreBatchesService;
@@ -30,6 +34,8 @@ public class DrugStoreBatchesServiceImpl implements DrugStoreBatchesService {
     private StoreBatchesMapper storeBatchesMapper;
     @Resource
     private IDrugStoreBatchesMapper iDrugStoreBatchesMapper;
+    @Resource
+    private IDrugCheckInfoMapper iDrugCheckInfoMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -137,10 +143,49 @@ public class DrugStoreBatchesServiceImpl implements DrugStoreBatchesService {
     }
 
     @Override
-    public void submitOrder(Long inventoryBatchesId,String  inventoryBatchesNumber) {
+    public void submitOrder(Long inventoryBatchesId, String inventoryBatchesNumber) {
         DrugStoreBatches drugStoreBatches = iDrugStoreBatchesMapper.selectByPrimaryKey(inventoryBatchesId);
         drugStoreBatches.setInventoryBatchesNumber(inventoryBatchesNumber);
         drugStoreBatches.setStatus("4");
+        iDrugStoreBatchesMapper.updateByPrimaryKey(drugStoreBatches);
+    }
+
+    @Override
+    public List<DrugStoreBatchesVo> getBoughtAndFinishedBatchesList() {
+        List<DrugStoreBatchesVo> drugStoreBatchesVos = iDrugStoreBatchesMapper.getBoughtAndFinishedBatchesList();
+        setDrugCheckInfo(drugStoreBatchesVos);
+        return drugStoreBatchesVos;
+    }
+
+    /**
+     * 对于已经填写清点信息的采购项，关联查询清点信息
+     * @param drugStoreBatchesFinishedList 采购项列表
+     */
+    private void setDrugCheckInfo(List<DrugStoreBatchesVo> drugStoreBatchesFinishedList) {
+        for (DrugStoreBatchesVo drugStoreBatches : drugStoreBatchesFinishedList) {
+            List<StoreBatchesVo> storeBatchesList = drugStoreBatches.getStoreBatchesList();
+            for (StoreBatchesVo storeBatchesVo : storeBatchesList) {
+                if(storeBatchesVo.getCheckInfoId() != null){
+                    DrugCheckInfo drugCheckInfo = iDrugCheckInfoMapper.selectByPrimaryKey(storeBatchesVo.getCheckInfoId());
+                    storeBatchesVo.setDrugCheckInfo(drugCheckInfo);
+                }
+            }
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveDrugCheckInfo(DrugCheckInfoVo drugCheckInfoVo) {
+        iDrugCheckInfoMapper.insertAndInjectId(drugCheckInfoVo);
+        StoreBatches storeBatches = storeBatchesMapper.selectByPrimaryKey(drugCheckInfoVo.getInventoryRefBatchesId());
+        storeBatches.setCheckInfoId(drugCheckInfoVo.getCheckInfoId());
+        storeBatchesMapper.updateByPrimaryKey(storeBatches);
+    }
+
+    @Override
+    public void finishOrder(Long inventoryBatchesId) {
+        DrugStoreBatches drugStoreBatches = iDrugStoreBatchesMapper.selectByPrimaryKey(inventoryBatchesId);
+        drugStoreBatches.setStatus("3");
         iDrugStoreBatchesMapper.updateByPrimaryKey(drugStoreBatches);
     }
 }

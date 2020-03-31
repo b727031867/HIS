@@ -18,6 +18,8 @@ public class StoreBatches implements Serializable {
 
     private Long inventoryBatchesId;
 
+    private Long checkInfoId;
+
     private BigDecimal tradePrice;
 
     private BigDecimal totalAmount;
@@ -42,6 +44,7 @@ public class StoreBatches implements Serializable {
         sb.append(", drugId=").append(drugId);
         sb.append(", inventoryId=").append(inventoryId);
         sb.append(", inventoryBatchesId=").append(inventoryBatchesId);
+        sb.append(", checkInfoId=").append(checkInfoId);
         sb.append(", tradePrice=").append(tradePrice);
         sb.append(", totalAmount=").append(totalAmount);
         sb.append(", totalNumber=").append(totalNumber);

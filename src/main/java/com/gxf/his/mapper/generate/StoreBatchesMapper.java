@@ -20,21 +20,23 @@ public interface StoreBatchesMapper {
     @Insert({
         "insert into ref_store_batches (inventory_ref_batches_id, drug_id, ",
         "inventory_id, inventory_batches_id, ",
-        "trade_price, total_amount, ",
-        "total_number, production_date, ",
-        "expired_time, is_noticed)",
+        "check_info_id, trade_price, ",
+        "total_amount, total_number, ",
+        "production_date, expired_time, ",
+        "is_noticed)",
         "values (#{inventoryRefBatchesId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, ",
         "#{inventoryId,jdbcType=BIGINT}, #{inventoryBatchesId,jdbcType=BIGINT}, ",
-        "#{tradePrice,jdbcType=DECIMAL}, #{totalAmount,jdbcType=DECIMAL}, ",
-        "#{totalNumber,jdbcType=INTEGER}, #{productionDate,jdbcType=TIMESTAMP}, ",
-        "#{expiredTime,jdbcType=TIMESTAMP}, #{isNoticed,jdbcType=INTEGER})"
+        "#{checkInfoId,jdbcType=BIGINT}, #{tradePrice,jdbcType=DECIMAL}, ",
+        "#{totalAmount,jdbcType=DECIMAL}, #{totalNumber,jdbcType=INTEGER}, ",
+        "#{productionDate,jdbcType=TIMESTAMP}, #{expiredTime,jdbcType=TIMESTAMP}, ",
+        "#{isNoticed,jdbcType=INTEGER})"
     })
     int insert(StoreBatches record);
 
     @Select({
         "select",
-        "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, trade_price, ",
-        "total_amount, total_number, production_date, expired_time, is_noticed",
+        "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, check_info_id, ",
+        "trade_price, total_amount, total_number, production_date, expired_time, is_noticed",
         "from ref_store_batches",
         "where inventory_ref_batches_id = #{inventoryRefBatchesId,jdbcType=BIGINT}"
     })
@@ -43,6 +45,7 @@ public interface StoreBatchesMapper {
         @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_id", property="inventoryId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_batches_id", property="inventoryBatchesId", jdbcType=JdbcType.BIGINT),
+        @Result(column="check_info_id", property="checkInfoId", jdbcType=JdbcType.BIGINT),
         @Result(column="trade_price", property="tradePrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_amount", property="totalAmount", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_number", property="totalNumber", jdbcType=JdbcType.INTEGER),
@@ -54,8 +57,8 @@ public interface StoreBatchesMapper {
 
     @Select({
         "select",
-        "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, trade_price, ",
-        "total_amount, total_number, production_date, expired_time, is_noticed",
+        "inventory_ref_batches_id, drug_id, inventory_id, inventory_batches_id, check_info_id, ",
+        "trade_price, total_amount, total_number, production_date, expired_time, is_noticed",
         "from ref_store_batches"
     })
     @Results({
@@ -63,6 +66,7 @@ public interface StoreBatchesMapper {
         @Result(column="drug_id", property="drugId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_id", property="inventoryId", jdbcType=JdbcType.BIGINT),
         @Result(column="inventory_batches_id", property="inventoryBatchesId", jdbcType=JdbcType.BIGINT),
+        @Result(column="check_info_id", property="checkInfoId", jdbcType=JdbcType.BIGINT),
         @Result(column="trade_price", property="tradePrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_amount", property="totalAmount", jdbcType=JdbcType.DECIMAL),
         @Result(column="total_number", property="totalNumber", jdbcType=JdbcType.INTEGER),
@@ -77,6 +81,7 @@ public interface StoreBatchesMapper {
         "set drug_id = #{drugId,jdbcType=BIGINT},",
           "inventory_id = #{inventoryId,jdbcType=BIGINT},",
           "inventory_batches_id = #{inventoryBatchesId,jdbcType=BIGINT},",
+          "check_info_id = #{checkInfoId,jdbcType=BIGINT},",
           "trade_price = #{tradePrice,jdbcType=DECIMAL},",
           "total_amount = #{totalAmount,jdbcType=DECIMAL},",
           "total_number = #{totalNumber,jdbcType=INTEGER},",

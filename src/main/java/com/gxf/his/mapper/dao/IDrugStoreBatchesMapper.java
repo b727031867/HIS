@@ -121,4 +121,35 @@ public interface IDrugStoreBatchesMapper extends DrugStoreBatchesMapper {
             @Result(column="inventory_batches_id", property="storeBatchesList", jdbcType=JdbcType.BIGINT,many = @Many(select = MapperConst.MANY_STORE_BATCHES)),
     })
     List<DrugStoreBatchesVo> selectDrugStoresByAttribute(DrugStoreBatchesVo drugStoreBatchesVo);
+
+    /**
+     * 获取采购中与已完成的采购单
+     * 关联获取其中的采购项
+     * @return 药品库存信息列表
+     */
+    @Select("<script>"
+            + "SELECT "
+            + " * "
+            + "FROM entity_drug_store_batches "
+            + "<where>"
+            +" status = 3 OR status = 4"
+            +"</where>"
+            + "</script>")
+    @Results({
+            @Result(column="inventory_batches_id", property="inventoryBatchesId", jdbcType= JdbcType.BIGINT, id=true),
+            @Result(column="supplier_name", property="supplierName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="phone", property="phone", jdbcType=JdbcType.VARCHAR),
+            @Result(column="supplier_contact_user", property="supplierContactUser", jdbcType=JdbcType.VARCHAR),
+            @Result(column="contact_person_name", property="contactPersonName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="inventory_batches_number", property="inventoryBatchesNumber", jdbcType=JdbcType.BIGINT),
+            @Result(column="purchasing_agent_id", property="purchasingAgentId", jdbcType=JdbcType.BIGINT),
+            @Result(column="total_money", property="totalMoney", jdbcType=JdbcType.DECIMAL),
+            @Result(column="create_date", property="createDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="status", property="status", jdbcType=JdbcType.VARCHAR),
+            @Result(column="verifier_id", property="verifierId", jdbcType=JdbcType.BIGINT),
+            @Result(column="verifier_date", property="verifierDate", jdbcType=JdbcType.TIMESTAMP),
+            @Result(column="remark", property="remark", jdbcType=JdbcType.VARCHAR),
+            @Result(column="inventory_batches_id", property="storeBatchesList", jdbcType=JdbcType.BIGINT,many = @Many(select = MapperConst.MANY_STORE_BATCHES)),
+    })
+    List<DrugStoreBatchesVo> getBoughtAndFinishedBatchesList();
 }

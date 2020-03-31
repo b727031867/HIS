@@ -1,5 +1,6 @@
 package com.gxf.his.po.vo;
 
+import com.gxf.his.po.generate.DrugCheckInfo;
 import com.gxf.his.po.generate.StoreBatches;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,5 +19,10 @@ public class StoreBatchesVo extends StoreBatches {
      * 关联的药品信息
      */
     private DrugVo drugVo;
+
+    /**
+     * 采购项关联的药品清点信息
+     */
+    private DrugCheckInfo drugCheckInfo;
 
 }
