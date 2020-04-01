@@ -5,12 +5,14 @@ import com.gxf.his.exception.DrugStoreBatchesException;
 import com.gxf.his.exception.DrugStoreException;
 import com.gxf.his.mapper.dao.IDrugCheckInfoMapper;
 import com.gxf.his.mapper.dao.IDrugStoreBatchesMapper;
+import com.gxf.his.mapper.dao.IDrugStoreMapper;
 import com.gxf.his.mapper.generate.StoreBatchesMapper;
 import com.gxf.his.po.generate.DrugCheckInfo;
 import com.gxf.his.po.generate.DrugStoreBatches;
 import com.gxf.his.po.generate.StoreBatches;
 import com.gxf.his.po.vo.DrugCheckInfoVo;
 import com.gxf.his.po.vo.DrugStoreBatchesVo;
+import com.gxf.his.po.vo.DrugStoreVo;
 import com.gxf.his.po.vo.StoreBatchesVo;
 import com.gxf.his.service.DrugStoreBatchesService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,8 @@ public class DrugStoreBatchesServiceImpl implements DrugStoreBatchesService {
     private IDrugStoreBatchesMapper iDrugStoreBatchesMapper;
     @Resource
     private IDrugCheckInfoMapper iDrugCheckInfoMapper;
+    @Resource
+    private IDrugStoreMapper iDrugStoreMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -176,10 +180,21 @@ public class DrugStoreBatchesServiceImpl implements DrugStoreBatchesService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveDrugCheckInfo(DrugCheckInfoVo drugCheckInfoVo) {
+        drugCheckInfoVo.setCreateTime(new Date());
         iDrugCheckInfoMapper.insertAndInjectId(drugCheckInfoVo);
         StoreBatches storeBatches = storeBatchesMapper.selectByPrimaryKey(drugCheckInfoVo.getInventoryRefBatchesId());
         storeBatches.setCheckInfoId(drugCheckInfoVo.getCheckInfoId());
         storeBatchesMapper.updateByPrimaryKey(storeBatches);
+        //对清点完毕的药品，增加库存量
+        Integer stockQuantity = drugCheckInfoVo.getStockQuantity();
+        if(stockQuantity <=0){
+            log.warn("当前药品清点的入库数量为0");
+            return;
+        }
+        DrugStoreVo drugStoreVo = iDrugStoreMapper.selectDrugStoreByDrugId(drugCheckInfoVo.getDrugId());
+        drugStoreVo.setInventoryNum(drugStoreVo.getInventoryNum() + stockQuantity);
+        drugStoreVo.setUpdateTime(new Date());
+        iDrugStoreMapper.updateByPrimaryKey(drugStoreVo);
     }
 
     @Override
