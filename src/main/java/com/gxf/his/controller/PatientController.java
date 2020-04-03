@@ -3,6 +3,7 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.PatientFile;
 import com.gxf.his.po.generate.User;
@@ -177,7 +178,7 @@ public class PatientController {
         if (userService.findByUserName(patientVo.getUser().getUserName()) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
-        User user = UserController.doHashedCredentials(patientVo.getUser().getUserName(), patientVo.getUser().getUserPassword());
+        User user = UserController.doHashedCredentials(patientVo.getUser().getUserName(), patientVo.getUser().getUserPassword(), UserTypeEnum.PATIENT);
         userService.addUser(user);
         Patient patient = new Patient();
         patient.setPatientCard(patientVo.getPatientCard());

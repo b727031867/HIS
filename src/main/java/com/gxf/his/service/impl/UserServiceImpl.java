@@ -2,6 +2,7 @@ package com.gxf.his.service.impl;
 
 import com.gxf.his.controller.UserController;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.exception.UserException;
 import com.gxf.his.mapper.dao.ICashierMapper;
 import com.gxf.his.mapper.dao.IDoctorMapper;
@@ -18,6 +19,7 @@ import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -128,7 +130,7 @@ public class UserServiceImpl implements UserService {
         String password = user.getUserPassword();
         //密码不为空才进行加密更新用户信息
         if (!"".equals(password.trim())) {
-            User tempUser = UserController.doHashedCredentials(user.getUserName(), password);
+            User tempUser = UserController.doHashedCredentials(user.getUserName(), password, null);
             user.setUserPassword(tempUser.getUserPassword());
             user.setUserSalt(tempUser.getUserSalt());
             log.info("当前更新的用户信息为：" + user.toString());
@@ -142,6 +144,15 @@ public class UserServiceImpl implements UserService {
             log.info("当前用户密码为空！");
         }
         return user.getUserId();
+    }
+
+    @Override
+    public HashMap<String, Integer> getDashboardData() {
+        HashMap<String, Integer> map = new HashMap<>(4);
+        map.put("totalUser",iUserMapper.countTotalUser().getTotalUser());
+        map.put("addUserNumber",iUserMapper.countAddUser().getAddUserNumber());
+        map.put("totalVisits",iUserMapper.countTotalVisits().getTotalVisits());
+        return map;
     }
 
 }

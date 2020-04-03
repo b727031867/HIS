@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.generate.Department;
 import com.gxf.his.po.generate.Doctor;
 import com.gxf.his.po.generate.DoctorScheduling;
@@ -118,7 +119,7 @@ public class DoctorServiceTest {
             Doctor doctor = new Doctor();
             String userName = "test" + i;
             String password = "test";
-            User user = UserController.doHashedCredentials(userName, password);
+            User user = UserController.doHashedCredentials(userName, password, UserTypeEnum.DOCTOR);
             userService.addUser(user);
             doctor.setDepartmentCode(department.getDepartmentCode());
             doctor.setDoctorIntroduction(department.getDepartmentIntroduction());

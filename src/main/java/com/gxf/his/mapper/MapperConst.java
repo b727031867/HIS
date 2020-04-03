@@ -65,6 +65,21 @@ public class MapperConst {
     public final static String ONE_GENERATE_PRESCRIPTION_INFO = "com.gxf.his.mapper.dao.PrescriptionInfoMapper.selectByPrimaryKey";
 
     /**
+     * 一对一关联药品库存信息
+     */
+    public final static String ONE_GENERATE_DRUG_STORE = "com.gxf.his.mapper.generate.DrugStoreMapper.selectByPrimaryKey";
+
+    /**
+     * 一对一关联药品入库清点信息
+     */
+    public final static String ONE_GENERATE_DRUG_CHECK_INFO = "com.gxf.his.mapper.generate.DrugCheckInfoMapper.selectByPrimaryKey";
+
+    /**
+     * 一对一关联药品采购信息
+     */
+    public final static String ONE_GENERATE_STORE_BATCHES = "com.gxf.his.mapper.generate.DrugStoreBatchesMapper.selectByPrimaryKey";
+
+    /**
      * 通过挂号信息ID
      * 一对一关联病历信息
      */

@@ -3,6 +3,7 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.vo.CashierVo;
 import com.gxf.his.po.vo.ServerResponseVO;
 import com.gxf.his.po.generate.Cashier;
@@ -95,7 +96,7 @@ public class CashierController extends BaseController {
         }
         //如果此用户名对应多个用户，则会抛出异常
         userService.findByUserName(cashierVo.getUser().getUserName());
-        User user = UserController.doHashedCredentials(cashierVo.getUser().getUserName(), cashierVo.getUser().getUserPassword());
+        User user = UserController.doHashedCredentials(cashierVo.getUser().getUserName(), cashierVo.getUser().getUserPassword(), UserTypeEnum.CASHIER);
         userService.addUser(user);
         Cashier cashier = new Cashier();
         cashier.setDepartmentCode(cashierVo.getDepartmentCode());

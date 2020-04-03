@@ -2,6 +2,7 @@ package com.gxf.his.service;
 
 import com.gxf.his.po.generate.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,6 +62,7 @@ public interface UserService {
     /**
      * 客户端更新密码
      * @param user 用户
+     * @return 用户ID
      */
     Long updateUserPassword(User user);
 
@@ -72,4 +74,9 @@ public interface UserService {
      */
     Long updateUser(User user);
 
+    /**
+     * 获取首页需要得信息
+     * @return 信息
+     */
+    HashMap<String, Integer> getDashboardData();
 }

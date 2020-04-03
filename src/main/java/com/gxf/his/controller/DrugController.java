@@ -3,19 +3,19 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.po.generate.*;
-import com.gxf.his.po.vo.DoctorVo;
+import com.gxf.his.po.generate.DrugDistribution;
+import com.gxf.his.po.generate.DrugToxicology;
+import com.gxf.his.po.vo.DrugExpiredInfoVo;
 import com.gxf.his.po.vo.DrugVo;
-import com.gxf.his.po.vo.PrescriptionVo;
 import com.gxf.his.po.vo.ServerResponseVO;
+import com.gxf.his.po.vo.StoreBatchesVo;
 import com.gxf.his.service.DrugService;
 import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,10 +54,19 @@ public class DrugController extends BaseController {
 
     @GetMapping("/unLinkDrugList")
     public <T> ServerResponseVO<T> loadUnLinkDrugList(@RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
-                                                          @RequestParam(value = "size", defaultValue = "5", required = false) Integer size) {
+                                                      @RequestParam(value = "size", defaultValue = "5", required = false) Integer size) {
         PageHelper.startPage(page, size);
         List<DrugVo> drugVos = drugService.loadUnLinkDrugList();
         PageInfo<DrugVo> pageInfo = PageInfo.of(drugVos);
+        return MyUtil.cast(ServerResponseVO.success(pageInfo));
+    }
+
+    @GetMapping("/expiringMedicines")
+    public <T> ServerResponseVO<T> getStoreBatchesList(@RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "5", required = false) Integer size) {
+        PageHelper.startPage(page, size);
+        List<StoreBatchesVo> storeBatchesVos = drugService.getExpiringMedicines();
+        PageInfo<StoreBatchesVo> pageInfo = PageInfo.of(storeBatchesVos);
         return MyUtil.cast(ServerResponseVO.success(pageInfo));
     }
 
@@ -93,6 +102,13 @@ public class DrugController extends BaseController {
         return ServerResponseVO.success();
     }
 
+    @PostMapping("/drugExpiredInfo")
+    public <T> ServerResponseVO<T> addDrugExpiredInfo(@RequestBody DrugExpiredInfoVo drugExpiredInfoVo) {
+        drugExpiredInfoVo.setCreateDate(new Date());
+        drugService.addDrugExpiredInfo(drugExpiredInfoVo);
+        return ServerResponseVO.success();
+    }
+
     @PutMapping
     public <T> ServerResponseVO<T> drugUpdate(@RequestBody DrugVo drugVo) {
         drugService.drugUpdate(drugVo);
@@ -107,6 +123,12 @@ public class DrugController extends BaseController {
             return ServerResponseVO.error(ServerResponseEnum.DRUG_REPEAT_ERROR);
         }
         drugService.addDrug(drugVo);
+        return ServerResponseVO.success();
+    }
+
+    @PostMapping("/drugExpired")
+    public <T> ServerResponseVO<T> addDrugExpired(@RequestBody DrugExpiredInfoVo drugExpiredInfoVo) {
+        drugService.addDrugExpiredInfo(drugExpiredInfoVo);
         return ServerResponseVO.success();
     }
 

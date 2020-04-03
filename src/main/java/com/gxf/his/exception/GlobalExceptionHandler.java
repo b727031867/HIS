@@ -70,5 +70,17 @@ public class GlobalExceptionHandler {
         return ServerResponseVO.error(e.getServerResponseEnum());
     }
 
+    /**
+     * 处理药品业务异常
+     *
+     * @param e 异常
+     * @return 业务异常响应信息
+     */
+    @ExceptionHandler({DrugException.class})
+    public ServerResponseVO businessExceptionHandler(DrugException e) {
+        this.logger.error("药品业务异常：", e);
+        return ServerResponseVO.error(e.getServerResponseEnum());
+    }
+
 
 }

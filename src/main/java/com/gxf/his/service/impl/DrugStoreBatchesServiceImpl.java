@@ -181,16 +181,19 @@ public class DrugStoreBatchesServiceImpl implements DrugStoreBatchesService {
     @Transactional(rollbackFor = Exception.class)
     public void saveDrugCheckInfo(DrugCheckInfoVo drugCheckInfoVo) {
         drugCheckInfoVo.setCreateTime(new Date());
-        iDrugCheckInfoMapper.insertAndInjectId(drugCheckInfoVo);
-        StoreBatches storeBatches = storeBatchesMapper.selectByPrimaryKey(drugCheckInfoVo.getInventoryRefBatchesId());
-        storeBatches.setCheckInfoId(drugCheckInfoVo.getCheckInfoId());
-        storeBatchesMapper.updateByPrimaryKey(storeBatches);
-        //对清点完毕的药品，增加库存量
         Integer stockQuantity = drugCheckInfoVo.getStockQuantity();
         if(stockQuantity <=0){
             log.warn("当前药品清点的入库数量为0");
             return;
         }
+        //插入该药品的清点信息
+        iDrugCheckInfoMapper.insertAndInjectId(drugCheckInfoVo);
+        StoreBatches storeBatches = storeBatchesMapper.selectByPrimaryKey(drugCheckInfoVo.getInventoryRefBatchesId());
+        storeBatches.setCheckInfoId(drugCheckInfoVo.getCheckInfoId());
+        //设置此清点项对应的采购批次项的药品数量为实际入库数量
+        storeBatches.setBatchesTotal(drugCheckInfoVo.getStockQuantity());
+        storeBatchesMapper.updateByPrimaryKey(storeBatches);
+        //对清点完毕的药品，增加总库存量
         DrugStoreVo drugStoreVo = iDrugStoreMapper.selectDrugStoreByDrugId(drugCheckInfoVo.getDrugId());
         drugStoreVo.setInventoryNum(drugStoreVo.getInventoryNum() + stockQuantity);
         drugStoreVo.setUpdateTime(new Date());

@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.generate.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,7 @@ public class UserServiceTest {
     public void addUser() {
         String userName = "admin";
         String password = "admin";
-        User user = UserController.doHashedCredentials(userName, password);
+        User user = UserController.doHashedCredentials(userName, password, UserTypeEnum.ADMINISTRATOR);
         userService.addUser(user);
     }
 }

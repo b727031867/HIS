@@ -17,4 +17,19 @@ public class UserVo extends User {
     private String oldPassword;
     private String newPassword;
     private String renewPassword;
+
+    /**
+     * 昨日门诊挂号数
+     */
+    private Integer totalVisits;
+    /**
+     * 昨天注册患者数
+     */
+    private Integer addUserNumber;
+
+    /**
+     * 总患者数
+     */
+    private Integer totalUser;
+
 }

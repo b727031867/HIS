@@ -1,8 +1,11 @@
 package com.gxf.his.service;
 
 import com.gxf.his.po.generate.DrugDistribution;
+import com.gxf.his.po.generate.DrugExpiredInfo;
 import com.gxf.his.po.generate.DrugToxicology;
+import com.gxf.his.po.vo.DrugExpiredInfoVo;
 import com.gxf.his.po.vo.DrugVo;
+import com.gxf.his.po.vo.StoreBatchesVo;
 
 import java.util.List;
 
@@ -91,4 +94,21 @@ public interface DrugService {
      * @return 药品列表
      */
     List<DrugVo> loadUnLinkDrugList();
+
+    /**
+     * 每天检查一次将要过期的药品
+     */
+    void markExpiredDrugs();
+
+    /**
+     * 获取将要过期的药品
+     * @return 将要过期的药品采购项信息
+     */
+    List<StoreBatchesVo> getExpiringMedicines();
+
+    /**
+     * 添加一个药品过期处理信息
+     * @param drugExpiredInfoVo 药品过期处理信息
+     */
+    void addDrugExpiredInfo(DrugExpiredInfoVo drugExpiredInfoVo);
 }

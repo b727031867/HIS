@@ -1,6 +1,8 @@
 package com.gxf.his.exception;
 
 import com.gxf.his.enmu.ServerResponseEnum;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author 龚秀峰
@@ -10,6 +12,10 @@ import com.gxf.his.enmu.ServerResponseEnum;
  */
 public class DrugException extends BaseBusinessException {
 
+    @Getter
+    @Setter
+    private ServerResponseEnum serverResponseEnum;
+
     /**
      * 给子类用的方法
      *
@@ -17,5 +23,6 @@ public class DrugException extends BaseBusinessException {
      */
     public DrugException(ServerResponseEnum responseCodeEnum) {
         super(responseCodeEnum);
+        this.serverResponseEnum = responseCodeEnum;
     }
 }

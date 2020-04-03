@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
 import com.gxf.his.uitls.DataGeneratorUtil;
@@ -37,7 +38,7 @@ public class PatientServiceTest {
             Patient patient = new Patient();
             String userName = "testPatient" + i;
             String password = "test";
-            User user = UserController.doHashedCredentials(userName, password);
+            User user = UserController.doHashedCredentials(userName, password, UserTypeEnum.PATIENT);
             userService.addUser(user);
             patient.setPatientAge(getRandomInteger(100));
             patient.setPatientName(getName());

@@ -1,6 +1,7 @@
 package com.gxf.his.service;
 
 import com.gxf.his.controller.UserController;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.generate.Cashier;
 import com.gxf.his.po.generate.User;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class CashierServiceTest {
             Cashier cashier = new Cashier();
             String userName = "testCashier" + i;
             String password = "123456";
-            User user = UserController.doHashedCredentials(userName, password);
+            User user = UserController.doHashedCredentials(userName, password, UserTypeEnum.CASHIER);
             userService.addUser(user);
             cashier.setPhone(PatientServiceTest.getPhoneNumber());
             cashier.setName(PatientServiceTest.getName());

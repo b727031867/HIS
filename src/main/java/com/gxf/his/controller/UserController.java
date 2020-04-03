@@ -3,6 +3,7 @@ package com.gxf.his.controller;
 import com.gxf.his.Const;
 import com.gxf.his.config.RedisClient;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.generate.Patient;
 import com.gxf.his.po.generate.User;
 import com.gxf.his.po.vo.ServerResponseVO;
@@ -56,6 +57,14 @@ public class UserController {
         return MyUtil.cast(ServerResponseVO.success(id));
     }
 
+    @GetMapping
+    public <T> ServerResponseVO<T> getUserByUid(@RequestParam(value = "uid") Long uid) {
+        if (uid == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        return MyUtil.cast(ServerResponseVO.success(userService.getUserByPrimaryKey(uid)));
+    }
+
     @GetMapping("/checkUsername")
     public <T> ServerResponseVO<T> checkUsernameIsExists(@RequestParam(value = "userName") String userName) {
         if (StringUtils.isEmpty(userName.trim())) {
@@ -65,6 +74,55 @@ public class UserController {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         return MyUtil.cast(ServerResponseVO.success(ServerResponseEnum.SUCCESS));
+    }
+
+    @GetMapping("/dashboard")
+    public <T> ServerResponseVO<T> getDashboardData() {
+        HashMap<String,Integer> data = userService.getDashboardData();
+        return MyUtil.cast(ServerResponseVO.success(data));
+    }
+
+    @GetMapping("/logout")
+    public <T> ServerResponseVO<T> logout(HttpServletRequest request) {
+        ServerResponseVO<T> msg = new ServerResponseVO<>();
+        try {
+            String token = "";
+            // 获取头部信息
+            Enumeration<String> headerNames = request.getHeaderNames();
+            while (headerNames.hasMoreElements()) {
+                String key = headerNames.nextElement();
+                String value = request.getHeader(key);
+                if ("Authorization".equalsIgnoreCase(key)) {
+                    token = value;
+                }
+            }
+            log.debug("调用注销接口，进行注销的token是：" + token);
+            // 校验token是否为空
+            if (StringUtils.isBlank(token)) {
+                log.info("注销时，token为空");
+                msg.setData(MyUtil.cast("注销：Token为空"));
+            } else {
+                String userName = JwtUtil.getUsername(token);
+                log.debug("注销时，token中获取的用户名为：" + userName);
+                if (StringUtils.isBlank(userName)) {
+                    msg.setData(MyUtil.cast("token失效或不正确."));
+                } else {
+                    // 清除shiro权限信息缓存
+                    if (redis.hasKey(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName)) {
+                        redis.del(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName);
+                    }
+                    // 清除RefreshToken
+                    redis.del(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + userName);
+                }
+            }
+            msg.setCode(200);
+            msg.setMessage("注销成功");
+        } catch (Exception e) {
+            msg.setCode(500);
+            e.printStackTrace();
+            log.error("注销异常： 原因为：" + e.getCause() + "信息为：" + e.getMessage());
+        }
+        return msg;
     }
 
     @PutMapping("/updatePassword")
@@ -108,7 +166,7 @@ public class UserController {
         if (userService.findByUserName(user.getUserName()) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
-        user = doHashedCredentials(user.getUserName(), user.getUserPassword());
+        user = doHashedCredentials(user.getUserName(), user.getUserPassword(),UserTypeEnum.ADMINISTRATOR);
         int i = userService.addUser(user);
         if (i < 1) {
             log.error("注册时，数据插入异常" + i);
@@ -129,7 +187,7 @@ public class UserController {
         if (userService.findByUserName(password) != null) {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
-        User user = doHashedCredentials(userName, password);
+        User user = doHashedCredentials(userName, password,UserTypeEnum.PATIENT);
         userService.addUser(user);
         //病人关联用户
         Patient patient = new Patient();
@@ -219,49 +277,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/logout")
-    public <T> ServerResponseVO<T> logout(HttpServletRequest request) {
-        ServerResponseVO<T> msg = new ServerResponseVO<>();
-        try {
-            String token = "";
-            // 获取头部信息
-            Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String key = headerNames.nextElement();
-                String value = request.getHeader(key);
-                if ("Authorization".equalsIgnoreCase(key)) {
-                    token = value;
-                }
-            }
-            log.debug("调用注销接口，进行注销的token是：" + token);
-            // 校验token是否为空
-            if (StringUtils.isBlank(token)) {
-                log.info("注销时，token为空");
-                msg.setData(MyUtil.cast("注销：Token为空"));
-            } else {
-                String userName = JwtUtil.getUsername(token);
-                log.debug("注销时，token中获取的用户名为：" + userName);
-                if (StringUtils.isBlank(userName)) {
-                    msg.setData(MyUtil.cast("token失效或不正确."));
-                } else {
-                    // 清除shiro权限信息缓存
-                    if (redis.hasKey(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName)) {
-                        redis.del(Const.REDIS_CONSTANT_SHIRO_CACHE_PREFIX + userName);
-                    }
-                    // 清除RefreshToken
-                    redis.del(Const.REDIS_CONSTANT_REFRESH_TOKEN_PREFIX + userName);
-                }
-            }
-            msg.setCode(200);
-            msg.setMessage("注销成功");
-        } catch (Exception e) {
-            msg.setCode(500);
-            e.printStackTrace();
-            log.error("注销异常： 原因为：" + e.getCause() + "信息为：" + e.getMessage());
-        }
-        return msg;
-    }
-
 
     /**
      * 实体注册时生成关联用户的方法
@@ -270,7 +285,7 @@ public class UserController {
      * @param password 密码
      * @return 生成的用户对象
      */
-    public static User doHashedCredentials(String userName, String password) {
+    public static User doHashedCredentials(String userName, String password, UserTypeEnum userType) {
         User user = new User();
         user.setUserName(userName);
         //默认注册的用户状态是正常状态
@@ -278,6 +293,9 @@ public class UserController {
         HashMap<String, String> results = calculateKey(userName, password);
         user.setUserSalt(results.get("saltDeCode"));
         user.setUserPassword(results.get("hashDeCode"));
+        if(userType != null){
+            user.setUserType(userType.toString());
+        }
         //设置当前注册时间
         Date now = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

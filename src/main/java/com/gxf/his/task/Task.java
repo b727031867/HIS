@@ -4,6 +4,7 @@ import com.gxf.his.mapper.dao.ITicketResourceMapper;
 import com.gxf.his.po.generate.DoctorTicketResource;
 import com.gxf.his.po.vo.DoctorVo;
 import com.gxf.his.service.DoctorService;
+import com.gxf.his.service.DrugService;
 import com.gxf.his.service.OrderService;
 import com.gxf.his.service.TicketService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class Task {
 
     @Resource
     private TicketService ticketService;
+
+    @Resource
+    private DrugService drugService;
 
     private static List<Date> dateList = new ArrayList<>(8);
 
@@ -147,6 +151,16 @@ public class Task {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void checkExpiredTicket() {
         ticketService.checkExpiredTicket();
+    }
+
+    /**
+     * 每天查询三个月后过期的药品
+     * 切换药品入库项状态为将要过期
+     */
+    @Async
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void markExpiredDrugs() {
+        drugService.markExpiredDrugs();
     }
 
     /**

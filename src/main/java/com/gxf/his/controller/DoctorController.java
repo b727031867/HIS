@@ -3,6 +3,7 @@ package com.gxf.his.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
+import com.gxf.his.enmu.UserTypeEnum;
 import com.gxf.his.po.generate.*;
 import com.gxf.his.po.vo.DoctorVo;
 import com.gxf.his.po.vo.ServerResponseVO;
@@ -210,7 +211,7 @@ public class DoctorController extends BaseController {
             return ServerResponseVO.error(ServerResponseEnum.USER_REPEAT_ERROR);
         }
         //添加业务用户
-        User user = UserController.doHashedCredentials(doctorVo.getUser().getUserName(), doctorVo.getUser().getUserPassword());
+        User user = UserController.doHashedCredentials(doctorVo.getUser().getUserName(), doctorVo.getUser().getUserPassword(), UserTypeEnum.DOCTOR);
         userService.addUser(user);
         //添加排班信息
         DoctorScheduling doctorScheduling = new DoctorScheduling();
