@@ -254,6 +254,8 @@ public class DrugServiceImpl implements DrugService {
             throw new DrugExpiredInfoException(ServerResponseEnum.DRUG_EXPIRED_INFO_SAVE_FAIL);
         }
         drugStore.setInventoryNum(drugStore.getInventoryNum() - storeBatches.getBatchesTotal());
+        //更新总库存
+        iDrugstoreMapper.updateByPrimaryKey(drugStore);
         //设置关联的药品采购项
         storeBatches.setDrugExpiredId(drugExpiredInfoVo.getDrugExpiredId());
         //那一批次剩余的药品应该全部过期
