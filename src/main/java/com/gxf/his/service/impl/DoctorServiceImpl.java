@@ -353,5 +353,15 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
 
+    @Override
+    public DoctorVo getDoctorDetailById(Long doctorId) {
+        try {
+            return iDoctorMapper.selectByPrimaryKeyRelated(doctorId);
+        }catch (Exception e){
+            log.error("根据ID关联查询医生失败", e);
+            throw new DoctorException(ServerResponseEnum.DOCTOR_LIST_FAIL);
+        }
+    }
+
 
 }

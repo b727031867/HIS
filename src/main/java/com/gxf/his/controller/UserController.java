@@ -251,6 +251,7 @@ public class UserController {
                 }
                 hashMap.put("token", token);
                 hashMap.put("id", user.getUserId().toString());
+                hashMap.put("userType", user.getUserType());
                 msg.setData(MyUtil.cast(hashMap));
                 msg.setMessage("登录成功");
                 msg.setCode(200);

@@ -162,4 +162,11 @@ public interface DoctorService {
      * @param doctorScheduling 对应的排班信息
      */
     void updateDoctorAndDoctorScheduling(Doctor doctor, DoctorScheduling doctorScheduling);
+
+    /**
+     * 根据ID获取医生的信息
+     * @param doctorId 医生ID
+     * @return 医生业务实体类
+     */
+    DoctorVo getDoctorDetailById(Long doctorId);
 }

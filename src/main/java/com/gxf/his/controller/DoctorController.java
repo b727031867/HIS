@@ -63,6 +63,16 @@ public class DoctorController extends BaseController {
         return MyUtil.cast(ServerResponseVO.success(ticketVos));
     }
 
+    @GetMapping("/uid")
+    public <T> ServerResponseVO<T> getDoctorDetail(@RequestParam("uid") Long uid) {
+        if (uid == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        Long doctorId = userService.getLoginEntityId(uid);
+         DoctorVo doctorVo = doctorService.getDoctorDetailById(doctorId);
+        return MyUtil.cast(ServerResponseVO.success(doctorVo));
+    }
+
     @GetMapping("/currentRankInfo")
     public <T> ServerResponseVO<T> getCurrentPatientInfo(@RequestParam("uid") Long uid) {
         if (uid == null) {

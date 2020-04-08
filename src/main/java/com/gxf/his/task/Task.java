@@ -97,31 +97,37 @@ public class Task {
     }
 
     /**
-     * 自动放号功能，定时器设置周日零点自动执行 ，插入下一周的票务资源
+     * 自动放号功能，定时器设置每天零点自动执行 ，插入未来第七天的票务资源
      */
     @Async
-    @Scheduled(cron = "0 0 0 * * 0")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void generateTicketResource() {
-        //获取未来六天的日期，包括当天,加入到列表中
-        // 投放未来nextDay天的票务资源
+        //获取未来七天的日期
+        dateList = new ArrayList<>(8);
         int nextDay = 7;
-        for (int i = 0; i < nextDay; i++) {
+        for (int i = 1; i <= nextDay; i++) {
             dateList.add(getPastDate(i));
         }
         List<DoctorVo> doctorVos = doctorService.getAllDoctors();
         for (DoctorVo doctorVo : doctorVos) {
             String[] workdays = doctorVo.getDoctorScheduling().getSchedulingTime().split(",");
-            // 为某位医生每个出诊日都插入票务资源
+            //第七天后的日期，这里为6是因为当前已经过了凌晨，所以减少一天
+            Date theNextSevenDay = getPastDate(6);
+            //七天后是周几
+            String theNextSevenDayOfTheWeek = getWeekOfDate(theNextSevenDay);
             for (String day : workdays) {
-                DoctorTicketResource ticketResource = new DoctorTicketResource();
-                ticketResource.setDoctorId(doctorVo.getDoctorId());
-                ticketResource.setDay(day);
-                ticketResource.setAvailableDate(getDateByDay(day));
-                ticketResource.setTicketLastNumber(doctorVo.getTicketDayNum());
-                iTicketResourceMapper.insert(ticketResource);
+                // 只插入未来第七天的票务资源，比如未来七天后是周三，则周三上班的医生才插入票务资源
+                if(theNextSevenDayOfTheWeek.equals(day)){
+                    DoctorTicketResource ticketResource = new DoctorTicketResource();
+                    ticketResource.setDoctorId(doctorVo.getDoctorId());
+                    ticketResource.setDay(day);
+                    ticketResource.setAvailableDate(getDateByDay(day));
+                    ticketResource.setTicketLastNumber(doctorVo.getTicketDayNum());
+                    iTicketResourceMapper.insert(ticketResource);
+                }
             }
         }
-        log.info("执行了放号也业务，当前时间为:" + LocalDateTime.now());
+        log.info("执行了放号业务，当前时间为:" + LocalDateTime.now());
     }
 
     /**

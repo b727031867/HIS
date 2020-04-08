@@ -87,7 +87,7 @@ public class TicketResourceServiceTest {
     }
 
     /**
-     * 一键放号功能，定时器设置周日十一点自动执行 ，插入下一周的票务资源
+     * 一键放号功能，预售下周的票 ，插入下一周的票务资源，在系统首次运行时执行一次
      */
     @Test
     public void generateTicketResource() {
