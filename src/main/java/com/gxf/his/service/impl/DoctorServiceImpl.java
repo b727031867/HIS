@@ -75,9 +75,6 @@ public class DoctorServiceImpl implements DoctorService {
             //获取处方单信息
             Prescription prescription = iPrescriptionMapper.selectPrescriptionByTicketId(ticket.getTicketId());
             ticketVo.setPrescription(prescription);
-            //获取检查单信息
-            List<CheckItemInfo> checkItemInfos = iCheckItemInfoMapper.selectCheckItemInfosByTicketId(ticket.getTicketId());
-            ticketVo.setCheckItemInfos(checkItemInfos);
             //电子病历信息
             PatientMedicalRecord patientMedicalRecord = iPatientMedicalRecordMapper.selectPatientMedicalRecordByTicketId(ticket.getTicketId());
             ticketVo.setPatientMedicalRecord(patientMedicalRecord);

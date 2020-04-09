@@ -57,4 +57,11 @@ public interface PrescriptionService {
      * @param prescriptionRefundInfo 处方退款申请信息
      */
     void addRefundPrescription(PrescriptionRefundInfo prescriptionRefundInfo);
+
+    /**
+     * 根据处方单id查询已付款的处方单
+     * @param prescriptionId 处方单id
+     * @return 处方单信息
+     */
+    PrescriptionVo getPayedPrescriptionByPrescriptionId(Long prescriptionId);
 }

@@ -207,6 +207,19 @@ public class DoctorController extends BaseController {
         return ServerResponseVO.success();
     }
 
+    @PutMapping("/info")
+    public <T> ServerResponseVO<T> updateDoctorInfo(@RequestBody DoctorVo doctorVo) {
+        log.info("当前更新的医生信息为：" + doctorVo.toString());
+        //更新医生信息
+        Doctor doctor = doctorService.getDoctorByDoctorId(doctorVo.getDoctorId());
+        doctor.setDoctorIntroduction(doctorVo.getDoctorIntroduction());
+        doctorService.updateDoctor(doctor);
+        //更新用户信息
+        User user = doctorVo.getUser();
+        userService.updateUser(user);
+        return ServerResponseVO.success();
+    }
+
     @PostMapping
     public <T> ServerResponseVO<T> saveDoctor(@RequestBody DoctorVo doctorVo) {
         if (StringUtils.isEmpty(doctorVo.getUser().getUserName().trim())

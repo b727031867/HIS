@@ -5,6 +5,7 @@ import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.BaseBusinessException;
 import com.gxf.his.exception.PrescriptionException;
 import com.gxf.his.mapper.dao.*;
+import com.gxf.his.po.generate.DrugDistribution;
 import com.gxf.his.po.generate.Prescription;
 import com.gxf.his.po.generate.PrescriptionExtraCost;
 import com.gxf.his.po.generate.PrescriptionRefundInfo;
@@ -47,9 +48,13 @@ public class PrescriptionImpl implements PrescriptionService {
     @Resource
     private OrderService orderService;
     @Resource
+    private IOrderMapper iOrderMapper;
+    @Resource
     private IPatientMapper iPatientMapper;
     @Resource
     private IDoctorMapper iDoctorMapper;
+    @Resource
+    private IDrugDistributionMapper iDrugDistributionMapper;
 
     @Override
     public PrescriptionVo getPrescriptionByDoctorTicketId(Long doctorTicketId) {
@@ -180,6 +185,32 @@ public class PrescriptionImpl implements PrescriptionService {
     }
 
     @Override
+    public PrescriptionVo getPayedPrescriptionByPrescriptionId(Long prescriptionId) {
+            OrderVo orderVo = iOrderMapper.selectOrderByPrescriptionId(prescriptionId);
+            if(orderVo == null){
+                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_NO_EXITS);
+            }
+            if(null == orderVo.getOrderStatus() || "".equals(orderVo.getOrderStatus().trim())){
+                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_STATUS_EMPTY);
+            }
+        switch (orderVo.getOrderStatus()) {
+            case "1":
+                //检查是否已经分发过此处方单
+                List<DrugDistribution> drugDistributions = iDrugDistributionMapper.getDistributionsByPrescriptionId(prescriptionId);
+                if (drugDistributions.size() > 0) {
+                    throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_DISTRIBUTED);
+                }
+                return iPrescriptionMapper.getPrescriptionByPrescriptionId(prescriptionId);
+            case "2":
+                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_REFUNDED);
+            case "3":
+                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_EXPIRED);
+            default:
+                throw new PrescriptionException(ServerResponseEnum.PRESCRIPTION_UNPAID);
+        }
+    }
+
+    @Override
     public List<PrescriptionVo> selectPrescriptionVosByAttribute(Boolean isAccurate, String attribute, String value) {
         List<PrescriptionVo> prescriptionVos = new ArrayList<>(16);
         try {
@@ -227,6 +258,7 @@ public class PrescriptionImpl implements PrescriptionService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addRefundPrescription(PrescriptionRefundInfo prescriptionRefundInfo) {
         //检查是否存在此处方单
         Prescription prescription = iPrescriptionMapper.selectByPrimaryKey(prescriptionRefundInfo.getPrescriptionId());
@@ -242,6 +274,10 @@ public class PrescriptionImpl implements PrescriptionService {
         }
         //插入申请的退款信息
         iPrescriptionRefundInfoMapper.insert(prescriptionRefundInfo);
+        //修改处方单的订单状态
+        OrderVo orderVo = iOrderMapper.selectOrderByPrescriptionId(prescriptionRefundInfo.getPrescriptionId());
+        orderVo.setOrderStatus("2");
+        iOrderMapper.updateByPrimaryKey(orderVo);
     }
 
     /**

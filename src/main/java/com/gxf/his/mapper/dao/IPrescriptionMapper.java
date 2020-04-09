@@ -219,4 +219,5 @@ public interface IPrescriptionMapper extends PrescriptionMapper {
             @Result(column = "create_datetime", property = "createDatetime", jdbcType = JdbcType.TIMESTAMP)
     })
     List<PrescriptionVo> selectPrescriptionsByRange(Date startDate, Date endDate);
+
 }

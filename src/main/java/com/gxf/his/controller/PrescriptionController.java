@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gxf.his.enmu.ServerResponseEnum;
 import com.gxf.his.exception.PrescriptionException;
+import com.gxf.his.po.generate.DrugDistribution;
 import com.gxf.his.po.generate.PrescriptionRefundInfo;
 import com.gxf.his.po.vo.CashierVo;
 import com.gxf.his.po.vo.PrescriptionVo;
@@ -47,6 +48,15 @@ public class PrescriptionController extends BaseController {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
         PrescriptionVo prescriptionVo = prescriptionService.getPrescriptionByPrescriptionId(prescriptionId);
+        return MyUtil.cast(ServerResponseVO.success(prescriptionVo));
+    }
+
+    @GetMapping("/payedPrescription")
+    public <T> ServerResponseVO<T> getPayedPrescriptionByPrescriptionId(Long prescriptionId) {
+        if (prescriptionId == null) {
+            return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
+        }
+        PrescriptionVo prescriptionVo = prescriptionService.getPayedPrescriptionByPrescriptionId(prescriptionId);
         return MyUtil.cast(ServerResponseVO.success(prescriptionVo));
     }
 
@@ -102,6 +112,9 @@ public class PrescriptionController extends BaseController {
         if (prescriptionId == null || reason == null || operateId == null) {
             return ServerResponseVO.error(ServerResponseEnum.PARAMETER_ERROR);
         }
+        //检查处方单是否已经付款并且未分发药品
+        prescriptionService.getPayedPrescriptionByPrescriptionId(prescriptionId);
+        //插入退款信息
         PrescriptionRefundInfo prescriptionRefundInfo = new PrescriptionRefundInfo();
         prescriptionRefundInfo.setOperateId(operateId);
         prescriptionRefundInfo.setReason(reason);

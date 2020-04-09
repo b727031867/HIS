@@ -199,7 +199,7 @@ public class UserController {
         patient.setPatientAge(patientAge);
         patient.setPatientName(patientName);
         patientService.addPatient(patient);
-        return MyUtil.cast(ServerResponseVO.success(ServerResponseEnum.SUCCESS));
+        return MyUtil.cast(ServerResponseVO.success());
     }
 
     @PostMapping("/login")
