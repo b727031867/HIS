@@ -12,6 +12,9 @@ mybatis:
 
 server:
   port: 8081
+  #设置统一api前缀
+  servlet:
+    context-path: /api
 spring:
   #开启freemarker
   freemarker:
@@ -26,7 +29,10 @@ spring:
   ## 数据库配置 - start
   datasource:
     ## useAffectedRows=true 表示返回数据库操作影响的行数
-    url: jdbc:mysql://localhost:3307/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
+    #本地开发的url链接
+    url: jdbc:mysql://localhost:3306/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
+    #打包发布后的url链接
+#    url: jdbc:mysql://host.docker.internal:3307/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
     password: 123GONG123
     username: root
     type: com.alibaba.druid.pool.DruidDataSource
@@ -62,7 +68,7 @@ spring:
       stat-view-servlet:
         url-pattern: /druid/*
         login-username: gxf
-        login-password: 123gong123
+        login-password: 123GONG123
         reset-enable: false
         # 添加IP白名单
         #allow:
@@ -79,11 +85,14 @@ spring:
     # Redis数据库索引（默认为0）
     database: 0
     # Redis服务器地址
+    #本地开发的地址
     host: 127.0.0.1
+    #发布后的地址
+#    host: host.docker.internal
     # Redis服务器连接端口
-    port: 6555
+    port: 6379
     # Redis服务器连接密码（默认为空）
-#    password: "gxffyq520"
+    password: "123GONG123"
     # 连接超时时间（毫秒）
     timeout: 5000
     jedis:

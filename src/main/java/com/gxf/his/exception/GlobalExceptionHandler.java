@@ -82,5 +82,17 @@ public class GlobalExceptionHandler {
         return ServerResponseVO.error(e.getServerResponseEnum());
     }
 
+    /**
+     * 处理订单业务异常
+     *
+     * @param e 异常
+     * @return 业务异常响应信息
+     */
+    @ExceptionHandler({OrderException.class})
+    public ServerResponseVO businessExceptionHandler(OrderException e) {
+        this.logger.error("订单业务异常：", e);
+        return ServerResponseVO.error(e.getServerResponseEnum());
+    }
+
 
 }

@@ -274,10 +274,6 @@ public class PrescriptionImpl implements PrescriptionService {
         }
         //插入申请的退款信息
         iPrescriptionRefundInfoMapper.insert(prescriptionRefundInfo);
-        //修改处方单的订单状态
-        OrderVo orderVo = iOrderMapper.selectOrderByPrescriptionId(prescriptionRefundInfo.getPrescriptionId());
-        orderVo.setOrderStatus("2");
-        iOrderMapper.updateByPrimaryKey(orderVo);
     }
 
     /**

@@ -89,7 +89,7 @@ public class TicketResourceServiceTest {
     /**
      * 一键放号功能，预售下周的票 ，插入下一周的票务资源，在系统首次运行时执行一次
      */
-    @Test
+//    @Test
     public void generateTicketResource() {
         //获取未来六天的日期，包括当天,加入到列表中
         for (int i = 0; i < 7; i++) {

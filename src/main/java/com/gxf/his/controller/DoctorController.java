@@ -14,7 +14,7 @@ import com.gxf.his.service.TicketResourceService;
 import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 

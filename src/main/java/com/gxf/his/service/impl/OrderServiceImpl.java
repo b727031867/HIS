@@ -44,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private IPrescriptionExtraCostMapper iPrescriptionExtraCostMapper;
     @Resource
+    private IPrescriptionRefundInfoMapper iPrescriptionRefundInfoMapper;
+    @Resource
     private IDoctorMapper iDoctorMapper;
     @Resource
     private IPatientMapper iPatientMapper;
@@ -256,8 +258,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void refundOrderById(Long orderId) {
-        try {
             Order order = iOrderMapper.selectByPrimaryKey(orderId);
+            //检查处方订单是否存在退款申请
+            if(order.getPrescriptionId() != null){
+                PrescriptionRefundInfo prescriptionRefundInfo = iPrescriptionRefundInfoMapper.selectByPrescriptionId(order.getPrescriptionId());
+                if(prescriptionRefundInfo == null){
+                    throw new OrderException(ServerResponseEnum.PRESCRIPTION_REFUND_INFO_NO_EXITS);
+                }
+            }
             String payStatus = "1";
             if(payStatus.equals(order.getOrderStatus())){
                 order.setOrderStatus("2");
@@ -266,9 +274,6 @@ public class OrderServiceImpl implements OrderService {
                 log.warn("只有已付款得订单才能退款");
                 throw new OrderException(ServerResponseEnum.ORDER_STATUS_CHANGE_FAIL);
             }
-        }catch (Exception e){
-            throw new OrderException(ServerResponseEnum.ORDER_STATUS_CHANGE_FAIL);
-        }
     }
 
     private void releaseResources(OrderItem orderItem) {

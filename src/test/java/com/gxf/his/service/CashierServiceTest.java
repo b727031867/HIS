@@ -24,7 +24,10 @@ public class CashierServiceTest {
     @Autowired
     UserService userService;
 
-    @Test
+    /**
+     * 用于添加模拟测试的收银员
+     */
+//    @Test
     public void testAddCashier() {
         for (int i = 0; i < 300; i++) {
             Cashier cashier = new Cashier();

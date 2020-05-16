@@ -28,7 +28,7 @@ public interface IStoreBatchesMapper extends StoreBatchesMapper {
             "select",
             "*",
             "from ref_store_batches",
-            "where is_noticed = 0 AND batches_total > 0 AND expired_time >= (DATE_SUB(CURDATE(), INTERVAL 3 MONTH))"
+            "where is_noticed = 0 AND batches_total > 0 AND (DATE_ADD(CURDATE(), INTERVAL 3 MONTH)) >= expired_time"
     })
     @Results({
             @Result(column = "inventory_ref_batches_id", property = "inventoryRefBatchesId", jdbcType = JdbcType.BIGINT, id = true),

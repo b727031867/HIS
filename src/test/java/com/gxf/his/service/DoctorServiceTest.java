@@ -109,7 +109,10 @@ public class DoctorServiceTest {
     }
 
 
-    @Test
+    /**
+     * 医生数据初始化
+     */
+//    @Test
     public void testAddDoctor() {
         init();
         Random random = new Random();

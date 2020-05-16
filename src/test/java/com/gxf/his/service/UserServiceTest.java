@@ -20,7 +20,10 @@ public class UserServiceTest {
     @Resource
     private UserService userService;
 
-    @Test
+    /**
+     * 添加用户
+     */
+//    @Test
     public void addUser() {
         String userName = "admin";
         String password = "admin";

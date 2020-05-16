@@ -31,7 +31,10 @@ public class PatientServiceTest {
 
     private static Byte currentPatientSex = new Byte("0");
 
-    @Test
+    /**
+     * 模拟生成患者
+     */
+//    @Test
     public void testAddPatient() {
         String[] patientIsMarriages = {"0", "1", "2"};
         for (int i = 0; i < 300; i++) {

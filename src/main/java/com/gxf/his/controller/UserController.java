@@ -13,7 +13,7 @@ import com.gxf.his.service.UserService;
 import com.gxf.his.uitls.JwtUtil;
 import com.gxf.his.uitls.MyUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
