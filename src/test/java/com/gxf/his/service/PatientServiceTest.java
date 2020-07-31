@@ -17,8 +17,8 @@ import java.util.Random;
  * @author 龚秀峰
  * @date 2020-1-15
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class PatientServiceTest {
     @Autowired
     PatientService patientService;

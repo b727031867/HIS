@@ -14,8 +14,8 @@ import javax.annotation.Resource;
  * @author 龚秀峰
  * @date 2020-1-5
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class UserServiceTest {
     @Resource
     private UserService userService;

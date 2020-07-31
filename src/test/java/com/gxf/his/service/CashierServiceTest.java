@@ -16,8 +16,8 @@ import java.util.Date;
  * @author 龚秀峰
  * @date 2020-01-19
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class CashierServiceTest {
     @Autowired
     CashierService cashierService;

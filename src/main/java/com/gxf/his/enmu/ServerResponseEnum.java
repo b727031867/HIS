@@ -142,7 +142,8 @@ public enum ServerResponseEnum {
     DRUG_EXPIRED_INFO_UPDATE_FAIL(253,"药品过期处理信息更新失败"),
     DRUG_EXPIRED_INFO_NO_EXITS(254,"药品过期处理信息不存在"),
     WORD_CONVERSION_EXCEPTION(300,"文档转换异常"),
-    WORD_CONVERSION_IO_EXCEPTION(301,"解析【docx】文档为html时，出现IO异常");
+    WORD_CONVERSION_IO_EXCEPTION(301,"解析【docx】文档为html时，出现IO异常"),
+    ACTIVITY_EXCEPTION(302,"ProcessEngine获取失败");
     Integer code;
     String message;
 }

@@ -11,11 +11,17 @@ mybatis:
 
 
 server:
+  ssl:
+    key-password: gongxiufeng
+    key-store: classpath:my.jks
   port: 8081
   #设置统一api前缀
   servlet:
     context-path: /api
 spring:
+  #设置activiti的配置
+  activiti:
+    check-process-definitions: false
   #开启freemarker
   freemarker:
     enabled: true
@@ -33,7 +39,7 @@ spring:
     url: jdbc:mysql://localhost:3306/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
     #打包发布后的url链接
 #    url: jdbc:mysql://host.docker.internal:3307/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
-    password: 123GONG123
+    password: root
     username: root
     type: com.alibaba.druid.pool.DruidDataSource
     # 连接池配置
@@ -67,8 +73,8 @@ spring:
       # 配置监控服务器
       stat-view-servlet:
         url-pattern: /druid/*
-        login-username: gxf
-        login-password: 123GONG123
+        login-username: root
+        login-password: root
         reset-enable: false
         # 添加IP白名单
         #allow:
@@ -92,7 +98,7 @@ spring:
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    password: "123GONG123"
+    password: "root"
     # 连接超时时间（毫秒）
     timeout: 5000
     jedis:
@@ -112,7 +118,7 @@ spring:
 ## 其它配置 - start
 config:
   # JWT认证加密私钥(Base64加密)
-  encrypt-jwtKey: U0JBUElOENhspJSEWRs4NA
+  encrypt-jwtKey: U0JBUElOENhspJSEWRs4AA
   # AccessToken过期时间(秒)
   accessToken-expireTime: 7200
   # RefreshToken过期时间(秒)
@@ -125,3 +131,10 @@ pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
+# Activiti 配置
+activiti:
+  datasource:
+    url: jdbc:mysql://localhost:3306/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver

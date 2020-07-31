@@ -23,8 +23,8 @@ import java.util.Random;
  * @author 龚秀峰
  * @date 2019-10-13
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class DoctorServiceTest {
     @Autowired
     DoctorService doctorService;

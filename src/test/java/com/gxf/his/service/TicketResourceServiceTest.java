@@ -22,8 +22,8 @@ import java.util.List;
  *
  * @author GXF
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class TicketResourceServiceTest {
 
     private static Logger logger = LoggerFactory.getLogger(TicketResourceServiceTest.class);
