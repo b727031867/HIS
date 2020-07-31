@@ -1,9 +1,6 @@
 package com.gxf.his.config;
 
-import com.gxf.his.enmu.ServerResponseEnum;
-import com.gxf.his.exception.BaseBusinessException;
 import lombok.extern.slf4j.Slf4j;
-import org.activiti.engine.*;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringAsyncExecutor;
