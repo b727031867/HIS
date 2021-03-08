@@ -1,0 +1,431 @@
+2020-01-20 20:46:46.880  INFO 7816 --- [main] com.gxf.his.HisApplication               : Starting HisApplication on GXF with PID 7816 (E:\Project\HIS\target\classes started by GXF in E:\Project\HIS)
+2020-01-20 20:46:46.886  INFO 7816 --- [main] com.gxf.his.HisApplication               : No active profile set, falling back to default profiles: default
+2020-01-20 20:46:47.055  INFO 7816 --- [main] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-01-20 20:46:47.055  INFO 7816 --- [main] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-01-20 20:46:49.273  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-01-20 20:46:49.276  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Elasticsearch repositories in DEFAULT mode.
+2020-01-20 20:46:49.322  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 39ms. Found 0 Elasticsearch repository interfaces.
+2020-01-20 20:46:49.328  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-01-20 20:46:49.328  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive Elasticsearch repositories in DEFAULT mode.
+2020-01-20 20:46:49.349  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 20ms. Found 0 Reactive Elasticsearch repository interfaces.
+2020-01-20 20:46:49.372  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-01-20 20:46:49.374  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-01-20 20:46:49.407  INFO 7816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16ms. Found 0 Redis repository interfaces.
+2020-01-20 20:46:49.848  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'shiroConfig' of type [com.gxf.his.config.ShiroConfig$$EnhancerBySpringCGLIB$$17d50141] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.101  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'mybatis-org.mybatis.spring.boot.autoconfigure.MybatisProperties' of type [org.mybatis.spring.boot.autoconfigure.MybatisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.107  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration' of type [org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$c4b82643] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.109  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure$$EnhancerBySpringCGLIB$$ab8fca85] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.115  INFO 7816 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-01-20 20:46:50.191  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.663  INFO 7816 --- [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1,com.mysql.cj.jdbc.Driver} inited
+2020-01-20 20:46:50.663  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'dataSource' of type [com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.731  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionFactory' of type [org.apache.ibatis.session.defaults.DefaultSqlSessionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.740  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionTemplate' of type [org.mybatis.spring.SqlSessionTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.799  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'userMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.803  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'userMapper' of type [com.sun.proxy.$Proxy86] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.804  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'userServiceImpl' of type [com.gxf.his.service.impl.UserServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.809  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'roleMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.812  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'roleMapper' of type [com.sun.proxy.$Proxy87] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.813  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'roleServiceImpl' of type [com.gxf.his.service.impl.RoleServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.818  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.821  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [com.sun.proxy.$Proxy88] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.821  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'permissionServiceImpl' of type [com.gxf.his.service.impl.PermissionServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.825  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'redisConfig' of type [com.gxf.his.config.RedisConfig$$EnhancerBySpringCGLIB$$62a3888b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.835  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.redis-org.springframework.boot.autoconfigure.data.redis.RedisProperties' of type [org.springframework.boot.autoconfigure.data.redis.RedisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.837  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration' of type [org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:50.991  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'lettuceClientResources' of type [io.lettuce.core.resource.DefaultClientResources] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.093  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'redisConnectionFactory' of type [org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.205  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'redisTemplate' of type [org.springframework.data.redis.core.RedisTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.207  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'RedisClient' of type [com.gxf.his.config.RedisClient] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.207  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'userRealm' of type [com.gxf.his.config.UserRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.237  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'MySecurityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.280  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.293  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'authorizationAttributeSourceAdvisor' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.375  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.apache.shiro.spring.boot.autoconfigure.ShiroBeanAutoConfiguration' of type [org.apache.shiro.spring.boot.autoconfigure.ShiroBeanAutoConfiguration$$EnhancerBySpringCGLIB$$a4fcb2c3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.385  INFO 7816 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'eventBus' of type [org.apache.shiro.event.support.DefaultEventBus] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-20 20:46:51.987  INFO 7816 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2020-01-20 20:46:52.006  INFO 7816 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-01-20 20:46:52.006  INFO 7816 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.29]
+2020-01-20 20:46:52.130  INFO 7816 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-01-20 20:46:52.130  INFO 7816 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 5075 ms
+2020-01-20 20:46:52.848  INFO 7816 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-01-20 20:46:54.102  INFO 7816 --- [main] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-01-20 20:46:54.181  INFO 7816 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2020-01-20 20:46:54.265  INFO 7816 --- [main] com.gxf.his.HisApplication               : Started HisApplication in 9.167 seconds (JVM running for 14.116)
+2020-01-20 21:00:50.963  INFO 7816 --- [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-01-20 21:00:50.963  INFO 7816 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-01-20 21:00:50.981  INFO 7816 --- [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 17 ms
+2020-01-20 21:00:53.124  INFO 7816 --- [http-nio-8081-exec-2] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2020-01-20 21:00:53.126  INFO 7816 --- [http-nio-8081-exec-2] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2020-01-20 21:00:56.915  INFO 7816 --- [http-nio-8081-exec-5] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1MjUyNTQwMDciLCJleHAiOjE1Nzk1MzI0NTQsInVzZXJuYW1lIjoiYWRtaW4ifQ.L1yPSQJ__Xievb22tYa_xL9ZXnUM7jrITtNADjo7BHY   当前登录的用户名是：admin
+2020-01-20 21:01:46.412  INFO 7816 --- [http-nio-8081-exec-4] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1MjUyNTQwMDciLCJleHAiOjE1Nzk1MzI0NTQsInVzZXJuYW1lIjoiYWRtaW4ifQ.L1yPSQJ__Xievb22tYa_xL9ZXnUM7jrITtNADjo7BHY   当前登录的用户名是：admin
+2020-01-20 21:01:46.546 ERROR 7816 --- [http-nio-8081-exec-4] c.g.h.exception.GlobalExceptionHandler   : 未知异常：
+
+org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.Date` from String "2020-01-20T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-20T16:00:00.000Z': Unparseable date: "2020-01-20T16:00:00.000Z"); nested exception is com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2020-01-20T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-20T16:00:00.000Z': Unparseable date: "2020-01-20T16:00:00.000Z")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:245) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.read(AbstractJackson2HttpMessageConverter.java:227) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:205) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:158) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:131) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:121) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:167) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:134) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:888) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPut(FrameworkServlet.java:920) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:663) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:387) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardContextValve.__invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:41002) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1591) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_191]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_191]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_191]
+Caused by: com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2020-01-20T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-20T16:00:00.000Z': Unparseable date: "2020-01-20T16:00:00.000Z")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])
+	at com.fasterxml.jackson.databind.exc.InvalidFormatException.from(InvalidFormatException.java:67) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.DeserializationContext.weirdStringException(DeserializationContext.java:1676) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.DeserializationContext.handleWeirdStringValue(DeserializationContext.java:932) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer._parseDate(StdDeserializer.java:550) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer._parseDate(StdDeserializer.java:491) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateBasedDeserializer._parseDate(DateDeserializers.java:195) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateDeserializer.deserialize(DateDeserializers.java:285) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateDeserializer.deserialize(DateDeserializers.java:268) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:129) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:369) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:159) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4202) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3258) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:239) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	... 75 common frames omitted
+
+2020-01-20 21:01:46.550  WARN 7816 --- [http-nio-8081-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.Date` from String "2020-01-20T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-20T16:00:00.000Z': Unparseable date: "2020-01-20T16:00:00.000Z"); nested exception is com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2020-01-20T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-20T16:00:00.000Z': Unparseable date: "2020-01-20T16:00:00.000Z")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])]
+2020-01-20 21:40:16.323  INFO 7816 --- [http-nio-8081-exec-2] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:40:20.351  INFO 7816 --- [http-nio-8081-exec-5] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:43:07.789  INFO 7816 --- [http-nio-8081-exec-7] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:43:30.990  INFO 7816 --- [http-nio-8081-exec-10] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:43:52.234  INFO 7816 --- [http-nio-8081-exec-1] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:43:52.272 ERROR 7816 --- [http-nio-8081-exec-1] c.g.h.exception.GlobalExceptionHandler   : 未知异常：
+
+org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.Date` from String "2020-01-17T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-17T16:00:00.000Z': Unparseable date: "2020-01-17T16:00:00.000Z"); nested exception is com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2020-01-17T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-17T16:00:00.000Z': Unparseable date: "2020-01-17T16:00:00.000Z")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:245) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.read(AbstractJackson2HttpMessageConverter.java:227) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:205) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:158) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:131) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:121) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:167) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:134) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:888) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPut(FrameworkServlet.java:920) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:663) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:387) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardContextValve.__invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:41002) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1591) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_191]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_191]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_191]
+Caused by: com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2020-01-17T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-17T16:00:00.000Z': Unparseable date: "2020-01-17T16:00:00.000Z")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])
+	at com.fasterxml.jackson.databind.exc.InvalidFormatException.from(InvalidFormatException.java:67) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.DeserializationContext.weirdStringException(DeserializationContext.java:1676) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.DeserializationContext.handleWeirdStringValue(DeserializationContext.java:932) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer._parseDate(StdDeserializer.java:550) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer._parseDate(StdDeserializer.java:491) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateBasedDeserializer._parseDate(DateDeserializers.java:195) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateDeserializer.deserialize(DateDeserializers.java:285) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateDeserializer.deserialize(DateDeserializers.java:268) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:129) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:369) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:159) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4202) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3258) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:239) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	... 75 common frames omitted
+
+2020-01-20 21:43:52.275  WARN 7816 --- [http-nio-8081-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.Date` from String "2020-01-17T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-17T16:00:00.000Z': Unparseable date: "2020-01-17T16:00:00.000Z"); nested exception is com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2020-01-17T16:00:00.000Z": not a valid representation (error: Failed to parse Date value '2020-01-17T16:00:00.000Z': Unparseable date: "2020-01-17T16:00:00.000Z")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])]
+2020-01-20 21:51:03.883  INFO 7816 --- [http-nio-8081-exec-5] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:51:20.382  INFO 7816 --- [http-nio-8081-exec-4] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:51:20.418 ERROR 7816 --- [http-nio-8081-exec-4] c.g.h.exception.GlobalExceptionHandler   : 未知异常：
+
+org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.Date` from String "2019-11-06": not a valid representation (error: Failed to parse Date value '2019-11-06': Unparseable date: "2019-11-06"); nested exception is com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2019-11-06": not a valid representation (error: Failed to parse Date value '2019-11-06': Unparseable date: "2019-11-06")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:245) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.read(AbstractJackson2HttpMessageConverter.java:227) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:205) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:158) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:131) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:121) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:167) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:134) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:888) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPut(FrameworkServlet.java:920) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:663) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:61) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.executeChain(AdviceFilter.java:108) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AdviceFilter.doFilterInternal(AdviceFilter.java:137) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.ProxiedFilterChain.doFilter(ProxiedFilterChain.java:66) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:387) [shiro-core-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125) [shiro-web-1.4.0.jar:1.4.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardContextValve.__invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:41002) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1591) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_191]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_191]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.29.jar:9.0.29]
+	at java.lang.Thread.run(Thread.java:748) [na:1.8.0_191]
+Caused by: com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2019-11-06": not a valid representation (error: Failed to parse Date value '2019-11-06': Unparseable date: "2019-11-06")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])
+	at com.fasterxml.jackson.databind.exc.InvalidFormatException.from(InvalidFormatException.java:67) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.DeserializationContext.weirdStringException(DeserializationContext.java:1676) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.DeserializationContext.handleWeirdStringValue(DeserializationContext.java:932) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer._parseDate(StdDeserializer.java:550) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer._parseDate(StdDeserializer.java:491) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateBasedDeserializer._parseDate(DateDeserializers.java:195) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateDeserializer.deserialize(DateDeserializers.java:285) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.std.DateDeserializers$DateDeserializer.deserialize(DateDeserializers.java:268) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:129) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:369) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:159) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4202) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3258) ~[jackson-databind-2.10.1.jar:2.10.1]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:239) ~[spring-web-5.2.2.RELEASE.jar:5.2.2.RELEASE]
+	... 75 common frames omitted
+
+2020-01-20 21:51:20.423  WARN 7816 --- [http-nio-8081-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.util.Date` from String "2019-11-06": not a valid representation (error: Failed to parse Date value '2019-11-06': Unparseable date: "2019-11-06"); nested exception is com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.util.Date` from String "2019-11-06": not a valid representation (error: Failed to parse Date value '2019-11-06': Unparseable date: "2019-11-06")
+ at [Source: (PushbackInputStream); line: 1, column: 69] (through reference chain: com.gxf.his.vo.CashierUserVo["entryDate"])]
+2020-01-20 21:52:49.172  INFO 7816 --- [http-nio-8081-exec-10] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:53:58.019  INFO 7816 --- [http-nio-8081-exec-2] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjc2MTM3NTMiLCJleHAiOjE1Nzk1MzQ4MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.1fIv546WNh73mpUnXkz8XZWzTwyd9TigtJawewdYq8I   当前登录的用户名是：admin
+2020-01-20 21:53:58.066  INFO 7816 --- [http-nio-8081-exec-2] c.gxf.his.controller.CashierController   : 当前更新的收银员信息为：CashierUserVo(cashierId=8, name=褚政谦, phone=13902695352, entryDate=Mon Jan 06 00:00:00 CST 2020, department=Department(departmentId=15, departmentCode=0015, departmentName=财务科, departmentIntroduction=负责医院收支情况的汇总、分析、收银等工作, departmentParentId=-2), user=User(userId=610, userName=testCashier7, userSalt=7465737431353739343338373136343433746573744361736869657237, userPassword=, userStatus=1, userCreateDate=Sun Jan 19 20:58:36 CST 2020, appId=1), isAccurate=null, searchAttribute=null, value=null)
+2020-01-20 21:53:58.395  INFO 7816 --- [http-nio-8081-exec-2] c.gxf.his.service.impl.UserServiceImpl   : 当前用户密码为空！
+2020-01-20 21:55:25.877  INFO 7816 --- [http-nio-8081-exec-7] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg1MjE2NzQiLCJleHAiOjE1Nzk1MzU3MjEsInVzZXJuYW1lIjoiYWRtaW4ifQ.ryA2lSyJK1ebxSl4kAHQMEelVF9nlmmCz6CLNRkzXlA   当前登录的用户名是：admin
+2020-01-20 21:55:27.542  INFO 7816 --- [http-nio-8081-exec-10] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg1MjE2NzQiLCJleHAiOjE1Nzk1MzU3MjEsInVzZXJuYW1lIjoiYWRtaW4ifQ.ryA2lSyJK1ebxSl4kAHQMEelVF9nlmmCz6CLNRkzXlA   当前登录的用户名是：admin
+2020-01-20 21:56:14.033  INFO 7816 --- [http-nio-8081-exec-1] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg1MjE2NzQiLCJleHAiOjE1Nzk1MzU3MjEsInVzZXJuYW1lIjoiYWRtaW4ifQ.ryA2lSyJK1ebxSl4kAHQMEelVF9nlmmCz6CLNRkzXlA   当前登录的用户名是：admin
+2020-01-20 21:56:14.068  INFO 7816 --- [http-nio-8081-exec-1] c.gxf.his.controller.CashierController   : 当前更新的收银员信息为：CashierUserVo(cashierId=8, name=褚政谦, phone=13902695352, entryDate=Tue Jan 07 00:00:00 CST 2020, department=Department(departmentId=15, departmentCode=0015, departmentName=财务科, departmentIntroduction=负责医院收支情况的汇总、分析、收银等工作, departmentParentId=-2), user=User(userId=610, userName=testCashier7, userSalt=7465737431353739343338373136343433746573744361736869657237, userPassword=, userStatus=1, userCreateDate=Sun Jan 19 20:58:36 CST 2020, appId=1), isAccurate=null, searchAttribute=null, value=null)
+2020-01-20 21:56:14.220  INFO 7816 --- [http-nio-8081-exec-1] c.gxf.his.service.impl.UserServiceImpl   : 当前用户密码为空！
+2020-01-20 21:58:55.209  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Elasticsearch repositories in DEFAULT mode.
+2020-01-20 21:58:55.318  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 108ms. Found 0 Elasticsearch repository interfaces.
+2020-01-20 21:58:55.362  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive Elasticsearch repositories in DEFAULT mode.
+2020-01-20 21:58:55.380  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17ms. Found 0 Reactive Elasticsearch repository interfaces.
+2020-01-20 21:58:55.380  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-01-20 21:58:55.395  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14ms. Found 0 Redis repository interfaces.
+2020-01-20 21:58:55.766  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-01-20 21:58:55.767  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Elasticsearch repositories in DEFAULT mode.
+2020-01-20 21:58:55.814  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 47ms. Found 0 Elasticsearch repository interfaces.
+2020-01-20 21:58:55.816  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-01-20 21:58:55.816  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive Elasticsearch repositories in DEFAULT mode.
+2020-01-20 21:58:55.834  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19ms. Found 0 Reactive Elasticsearch repository interfaces.
+2020-01-20 21:58:55.839  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-01-20 21:58:55.839  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-01-20 21:58:55.856  INFO 7816 --- [File Watcher] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16ms. Found 0 Redis repository interfaces.
+2020-01-20 22:01:31.158  INFO 7816 --- [http-nio-8081-exec-5] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg1MjE2NzQiLCJleHAiOjE1Nzk1MzU3MjEsInVzZXJuYW1lIjoiYWRtaW4ifQ.ryA2lSyJK1ebxSl4kAHQMEelVF9nlmmCz6CLNRkzXlA   当前登录的用户名是：admin
+2020-01-20 22:01:51.446  INFO 7816 --- [http-nio-8081-exec-4] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg1MjE2NzQiLCJleHAiOjE1Nzk1MzU3MjEsInVzZXJuYW1lIjoiYWRtaW4ifQ.ryA2lSyJK1ebxSl4kAHQMEelVF9nlmmCz6CLNRkzXlA   当前登录的用户名是：admin
+2020-01-20 22:02:01.354  INFO 7816 --- [http-nio-8081-exec-9] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:04:33.846  INFO 7816 --- [http-nio-8081-exec-2] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Elasticsearch repositories in DEFAULT mode.
+2020-01-20 22:04:33.864  INFO 7816 --- [http-nio-8081-exec-2] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17ms. Found 0 Elasticsearch repository interfaces.
+2020-01-20 22:04:33.888  WARN 7816 --- [http-nio-8081-exec-2] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.gxf.his.mapper]' package. Please check your configuration.
+2020-01-20 22:04:33.888  INFO 7816 --- [http-nio-8081-exec-2] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive Elasticsearch repositories in DEFAULT mode.
+2020-01-20 22:04:33.900  INFO 7816 --- [http-nio-8081-exec-2] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 13ms. Found 0 Reactive Elasticsearch repository interfaces.
+2020-01-20 22:04:33.900  INFO 7816 --- [http-nio-8081-exec-2] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-01-20 22:04:33.913  INFO 7816 --- [http-nio-8081-exec-2] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 12ms. Found 0 Redis repository interfaces.
+2020-01-20 22:04:33.943  INFO 7816 --- [http-nio-8081-exec-3] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:04:47.635  INFO 7816 --- [http-nio-8081-exec-6] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:04:47.692  INFO 7816 --- [http-nio-8081-exec-6] c.gxf.his.controller.CashierController   : 当前更新的收银员信息为：CashierUserVo(cashierId=8, name=褚政谦, phone=13902695352, entryDate=Thu Jan 09 00:00:00 CST 2020, department=Department(departmentId=15, departmentCode=0015, departmentName=财务科, departmentIntroduction=负责医院收支情况的汇总、分析、收银等工作, departmentParentId=-2), user=User(userId=610, userName=testCashier7, userSalt=7465737431353739343338373136343433746573744361736869657237, userPassword=, userStatus=1, userCreateDate=Sun Jan 19 20:58:36 CST 2020, appId=1), isAccurate=null, searchAttribute=null, value=null)
+2020-01-20 22:04:47.818  INFO 7816 --- [http-nio-8081-exec-6] c.gxf.his.service.impl.UserServiceImpl   : 当前用户密码为空！
+2020-01-20 22:05:28.422  INFO 7816 --- [http-nio-8081-exec-7] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:05:42.137  INFO 7816 --- [http-nio-8081-exec-10] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:05:43.898  INFO 7816 --- [http-nio-8081-exec-1] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:05:47.111  INFO 7816 --- [http-nio-8081-exec-3] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:05:47.949  INFO 7816 --- [http-nio-8081-exec-6] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:05:58.417  INFO 7816 --- [http-nio-8081-exec-7] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:05:59.466  INFO 7816 --- [http-nio-8081-exec-10] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:06:14.790  INFO 7816 --- [http-nio-8081-exec-1] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:06:16.867  INFO 7816 --- [http-nio-8081-exec-3] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:06:19.527  INFO 7816 --- [http-nio-8081-exec-6] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:06:39.990  INFO 7816 --- [http-nio-8081-exec-7] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:07:12.307  INFO 7816 --- [http-nio-8081-exec-10] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:07:48.244  INFO 7816 --- [http-nio-8081-exec-1] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:07:52.706  INFO 7816 --- [http-nio-8081-exec-3] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:07:54.699  INFO 7816 --- [http-nio-8081-exec-6] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:07:59.261  INFO 7816 --- [http-nio-8081-exec-7] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:08:05.584  INFO 7816 --- [http-nio-8081-exec-10] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:08:05.866  INFO 7816 --- [http-nio-8081-exec-1] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:08:10.969  INFO 7816 --- [http-nio-8081-exec-3] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:08:17.843  INFO 7816 --- [http-nio-8081-exec-6] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:08:17.883  INFO 7816 --- [http-nio-8081-exec-6] c.gxf.his.controller.CashierController   : 当前更新的收银员信息为：CashierUserVo(cashierId=19, name=滕亨奇, phone=13602455649, entryDate=Sun Jan 19 00:00:00 CST 2020, department=Department(departmentId=15, departmentCode=0015, departmentName=财务科, departmentIntroduction=负责医院收支情况的汇总、分析、收银等工作, departmentParentId=-2), user=User(userId=621, userName=testCashier18, userSalt=746573743135373934333837313830363674657374436173686965723138, userPassword=, userStatus=0, userCreateDate=Sun Jan 19 20:58:38 CST 2020, appId=1), isAccurate=null, searchAttribute=null, value=null)
+2020-01-20 22:08:17.884  INFO 7816 --- [http-nio-8081-exec-6] c.gxf.his.service.impl.UserServiceImpl   : 当前用户密码为空！
+2020-01-20 22:08:34.314  INFO 7816 --- [http-nio-8081-exec-7] loginLog                                 : 进行认证的Token是:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWduVGltZSI6IjE1Nzk1Mjg5MTkwNzgiLCJleHAiOjE1Nzk1MzYxMTksInVzZXJuYW1lIjoiYWRtaW4ifQ.Fu8Y75FWOvqN7AIYpESYHd5xIWeqc8icPWp8ACKoM3Y   当前登录的用户名是：admin
+2020-01-20 22:08:34.351  INFO 7816 --- [http-nio-8081-exec-7] c.gxf.his.controller.CashierController   : 当前更新的收银员信息为：CashierUserVo(cashierId=19, name=滕亨奇AA, phone=13602455649, entryDate=Sun Jan 19 00:00:00 CST 2020, department=Department(departmentId=15, departmentCode=0015, departmentName=财务科, departmentIntroduction=负责医院收支情况的汇总、分析、收银等工作, departmentParentId=-2), user=User(userId=621, userName=testCashier18, userSalt=746573743135373934333837313830363674657374436173686965723138, userPassword=, userStatus=1, userCreateDate=Sun Jan 19 20:58:38 CST 2020, appId=1), isAccurate=null, searchAttribute=null, value=null)
+2020-01-20 22:08:34.505  INFO 7816 --- [http-nio-8081-exec-7] c.gxf.his.service.impl.UserServiceImpl   : 当前用户密码为空！
