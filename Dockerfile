@@ -1,5 +1,5 @@
 FROM java:8-jdk-alpine
-LABEL maintainer="www.gxf727031867.top"
+LABEL maintainer="gxf"
 ARG JAR_FILE
 VOLUME /tmp
 ADD target/${JAR_FILE} app.jar

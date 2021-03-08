@@ -9,13 +9,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.gxf</groupId>
-    <artifactId>HIS</artifactId>
+    <artifactId>his</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>HIS</name>
     <description>高校医疗门诊信息管理系统</description>
 
     <properties>
         <java.version>1.8</java.version>
+        <docker.registry>tartarus.com</docker.registry>
+        <docker.image.prefix>gxf</docker.image.prefix>
     </properties>
     <dependencies>
         <dependency>
@@ -230,7 +232,27 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.2.2.RELEASE</version>
             </plugin>
-
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
             <!--PDF字体资源打包-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
