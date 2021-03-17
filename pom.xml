@@ -11,7 +11,7 @@
     <groupId>com.gxf</groupId>
     <artifactId>his</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>HIS</name>
+    <name>his</name>
     <description>高校医疗门诊信息管理系统</description>
 
     <properties>

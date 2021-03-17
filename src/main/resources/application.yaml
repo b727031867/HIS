@@ -36,7 +36,7 @@ spring:
   datasource:
     ## useAffectedRows=true 表示返回数据库操作影响的行数
     #本地开发的url链接
-    url: jdbc:mysql://localhost:3306/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:mysql://192.168.174.129:3306/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
     #打包发布后的url链接
 #    url: jdbc:mysql://host.docker.internal:3307/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
     password: root
@@ -92,13 +92,13 @@ spring:
     database: 0
     # Redis服务器地址
     #本地开发的地址
-    host: 127.0.0.1
+    host: 192.168.174.129
     #发布后的地址
 #    host: host.docker.internal
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    password: "root"
+    password: "123GONG123"
     # 连接超时时间（毫秒）
     timeout: 5000
     jedis:
@@ -134,7 +134,7 @@ pagehelper:
 # Activiti 配置
 activiti:
   datasource:
-    url: jdbc:mysql://localhost:3306/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:mysql://192.168.174.129:3306/his?useSSL=false&&serverTimezone=GMT%2B8&characterEncoding=utf-8&useAffectedRows=true&autoReconnect=true&failOverReadOnly=false
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
